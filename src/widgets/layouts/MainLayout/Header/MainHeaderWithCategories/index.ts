@@ -1,0 +1,1 @@
+export { MainHeaderWithCategories } from './ui';
