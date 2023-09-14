@@ -1,4 +1,4 @@
-import { FC, useRef, useState } from "react";
+import React, { FC, useRef, useState } from 'react';
 import {
   Option,
   OptionsList,
@@ -7,10 +7,9 @@ import {
   SelectLabel,
   IconCont,
   ErrorText,
-} from "./styles";
-import { ChevronDown } from "react-feather";
-import useOutsideClick from "@/shared/lib/hooks/useOutsideClick";
-import { NEUTRAL } from "@/shared/lib/consts/styles";
+} from './styles';
+import { ChevronDown } from 'react-feather';
+import useOutsideClick from '@/shared/lib/hooks/useOutsideClick';
 
 type SelectProps = {
   options: any[];
@@ -60,13 +59,13 @@ const CustomSelect: FC<SelectProps> = ({
     >
       {inputLabel && <SelectLabel>{inputLabel}</SelectLabel>}
       <SelectedOption
-        className={`${isActive ? "active" : ""} ${inputLabel ? "mt-2" : ""}  ${
-          error ? "error" : ""
+        className={`${isActive ? 'active' : ''} ${inputLabel ? 'mt-2' : ''}  ${
+          error ? 'error' : ''
         }`}
         onClick={() => setIsOpen(!isOpen)}
       >
         {options.find((option) => option[fieldValue] === value)?.[fieldTitle] ||
-          placeholder}{" "}
+          placeholder}{' '}
         <IconCont open={isOpen}>
           <ChevronDown />
         </IconCont>

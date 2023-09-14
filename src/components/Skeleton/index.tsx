@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import React, { FC } from 'react';
 import { StyledSkeleton } from './styles';
 
 export interface SkeletonProps {

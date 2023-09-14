@@ -1,5 +1,5 @@
-import styled from 'styled-components';
 import * as palette from '@/shared/lib/consts/styles';
+import styled from 'styled-components';
 
 export const ChangePasswordCont = styled.div`
   display: flex;

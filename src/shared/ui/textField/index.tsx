@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, ReactNode, useRef, useState } from 'react';
+import React, { ChangeEvent, FC, ReactNode, useRef, useState } from 'react';
 import {
   EndAdornmentCont,
   TFErrorText,
@@ -59,9 +59,17 @@ const TextField: FC<TextFieldProps> = ({
           {...others}
         />
 
-        {endAdornment && <EndAdornmentCont className={`${isActive}`}>{endAdornment}</EndAdornmentCont>}
+        {endAdornment && (
+          <EndAdornmentCont className={`${isActive}`}>
+            {endAdornment}
+          </EndAdornmentCont>
+        )}
       </TextFieldCont>
-      {errorMessage ? <TFErrorText>{errorMessage}</TFErrorText> : <TFHelperText>{helperText}</TFHelperText>}
+      {errorMessage ? (
+        <TFErrorText>{errorMessage}</TFErrorText>
+      ) : (
+        <TFHelperText>{helperText}</TFHelperText>
+      )}
     </TextFieldWrapper>
   );
 };

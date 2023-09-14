@@ -1,11 +1,11 @@
-import styled from "styled-components";
-import * as palette from "@/shared/lib/consts/styles";
+import styled from 'styled-components';
+import * as palette from '@/shared/lib/consts/styles';
 
 export const ChevronDownIconCont = styled.div<{ open: boolean }>`
   cursor: pointer;
   position: absolute;
   right: 15px;
-  transform: ${({ open }) => (open ? "rotate(180deg)" : "rotate(0deg)")};
+  transform: ${({ open }) => (open ? 'rotate(180deg)' : 'rotate(0deg)')};
   transition: all 0.1s ease-in-out;
   color: ${palette.NEUTRAL[400]};
 
@@ -20,7 +20,7 @@ export const ChevronDownIconCont = styled.div<{ open: boolean }>`
 
 export const AutocompleteWrapper = styled.div<{ width: string | undefined }>`
   position: relative;
-  max-width: ${({ width }) => (width ? width : "255px")};
+  max-width: ${({ width }) => (width ? width : '255px')};
   width: 100%;
   display: flex;
   flex-direction: column;

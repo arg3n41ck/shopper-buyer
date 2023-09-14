@@ -1,4 +1,4 @@
-import {
+import React, {
   useState,
   useMemo,
   useEffect,
@@ -6,7 +6,7 @@ import {
   useCallback,
   FC,
   ChangeEvent,
-} from "react";
+} from 'react';
 import {
   AutocompleteInput,
   AutocompleteItem,
@@ -15,8 +15,8 @@ import {
   ChevronDownIconCont,
   InputLabel,
   ErrorText,
-} from "./styles";
-import { ChevronDown } from "react-feather";
+} from './styles';
+import { ChevronDown } from 'react-feather';
 
 type AutocompleteProps = {
   options: any[];
@@ -43,7 +43,7 @@ const Autocomplete: FC<AutocompleteProps> = ({
   fieldTitle,
   fieldValue,
 }) => {
-  const [inputValue, setInputValue] = useState<string>("");
+  const [inputValue, setInputValue] = useState<string>('');
   const [showOptions, setShowOptions] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const timerIdRef = useRef<number | null>(null);
@@ -51,8 +51,9 @@ const Autocomplete: FC<AutocompleteProps> = ({
   const isActive = focused || value || inputValue;
 
   const filteredOptions = useMemo<any[]>(() => {
-    return options.filter((option) =>
-      option[fieldTitle]?.toLowerCase().includes(inputValue?.toLowerCase())
+    return options.filter(
+      (option) =>
+        option[fieldTitle]?.toLowerCase().includes(inputValue?.toLowerCase()),
     );
   }, [options, inputValue]);
 
@@ -62,7 +63,7 @@ const Autocomplete: FC<AutocompleteProps> = ({
       setInputValue(value);
       setShowOptions(true);
     },
-    []
+    [],
   );
 
   const handleItemClick = (option: any) => {
@@ -95,7 +96,7 @@ const Autocomplete: FC<AutocompleteProps> = ({
         width={width}
         onFocus={() => setFocus(true)}
         onBlur={() => setFocus(false)}
-        className={`${inputLabel ? "mt-2" : ""}`}
+        className={`${inputLabel ? 'mt-2' : ''}`}
       >
         <AutocompleteInput
           type="text"
@@ -109,12 +110,12 @@ const Autocomplete: FC<AutocompleteProps> = ({
           onChange={handleInputChange}
           onFocus={() => setShowOptions(true)}
           onBlur={handleBlur}
-          className={`${isActive ? "active" : ""} ${error ? "error" : ""}`}
+          className={`${isActive ? 'active' : ''} ${error ? 'error' : ''}`}
         />
         <ChevronDownIconCont
           onClick={() => setShowOptions((prev) => !prev)}
           open={showOptions}
-          className={`${isActive ? "active" : ""} ${error ? "error" : ""}`}
+          className={`${isActive ? 'active' : ''} ${error ? 'error' : ''}`}
         >
           <ChevronDown />
         </ChevronDownIconCont>

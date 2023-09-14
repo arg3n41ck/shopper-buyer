@@ -15,7 +15,7 @@ import {
 } from './styles';
 import LogoIcon from '@/assets/icons/svg/LogoIcon';
 import TextField from '@/shared/ui/textField';
-import ShowAndHideIcon from '@/components/PasswordShowAndHideIcon';
+import ShowAndHideIcon from '@/components/passwordShowAndHideIcon';
 import FacebookIcon from '@/assets/icons/png/facebook.png';
 import GoogleIcon from '@/assets/icons/png/google.png';
 import { ImageFromNext } from '@/shared/styles/styles';

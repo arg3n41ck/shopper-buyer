@@ -1,29 +1,29 @@
 import React, { FC, useState } from 'react';
-import Modal from '@/shared/ui/modal';
-import {
-  ModalInnerContainer,
-  SubmitButton,
-  LoginInfoContainer,
-  TextInModal,
-  SelectYourPreferencesText,
-  SelectYourPreferencesExtraInfoText,
-  SelectYourPreferencesBlock,
-  SelectYourPreferencesInfoTextsContainer,
-  SelectYourPreferencesInfoImagesContainer,
-  PreferenceBlock,
-  PreferenceBlockInnerText,
-  PreferenceBlockImage,
-  PreferenceBlockCheckbox,
-} from './styles';
-import TextField from '@/shared/ui/textField';
-import ShowAndHideIcon from '@/components/PasswordShowAndHideIcon';
-import { PasswordHandlerCont } from '@/pages/auth/styles';
-import { passwordLengthCheck } from '@/shared/utils/password';
-import { useFormik } from 'formik';
-import * as yup from 'yup';
-import { useTranslation } from 'react-i18next';
-import { AlertCircle, Check } from 'react-feather';
+import ShowAndHideIcon from '@/components/passwordShowAndHideIcon';
 import Checkbox from '@/shared/ui/checkbox';
+import Modal from '@/shared/ui/modal';
+import TextField from '@/shared/ui/textField';
+import { passwordLengthCheck } from '@/shared/utils/password';
+import { PasswordHandlerCont } from '@/widgets/auth/styles';
+import { useFormik } from 'formik';
+import { AlertCircle, Check } from 'react-feather';
+import { useTranslation } from 'react-i18next';
+import * as yup from 'yup';
+import {
+  LoginInfoContainer,
+  ModalInnerContainer,
+  PreferenceBlock,
+  PreferenceBlockCheckbox,
+  PreferenceBlockImage,
+  PreferenceBlockInnerText,
+  SelectYourPreferencesBlock,
+  SelectYourPreferencesExtraInfoText,
+  SelectYourPreferencesInfoImagesContainer,
+  SelectYourPreferencesInfoTextsContainer,
+  SelectYourPreferencesText,
+  SubmitButton,
+  TextInModal,
+} from './styles';
 
 interface RegisterModalProps {
   open: boolean;
@@ -184,13 +184,13 @@ export const RegisterModal: FC<RegisterModalProps> = ({ open, onClose }) => {
             <PreferenceBlock
               key={preference.id}
               $active={formik.values.preferred_clothing.includes(
-                preference.value
+                preference.value,
               )}
             >
               <PreferenceBlockCheckbox>
                 <Checkbox
                   checked={formik.values.preferred_clothing.includes(
-                    preference.value
+                    preference.value,
                   )}
                   onChange={() => handleCheckboxChange(preference.value)}
                 />

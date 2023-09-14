@@ -1,6 +1,6 @@
-import { FC, ReactNode } from "react";
-import { ChildWrapper, MainWrapper } from "./styles";
-import Header from "@/components/Headers/AuthHeader";
+import React, { FC, ReactNode } from 'react';
+import Header from '@/components/headers/authHeader';
+import { ChildWrapper, MainWrapper } from './styles';
 
 interface AuthLayoutProps {
   children: ReactNode;

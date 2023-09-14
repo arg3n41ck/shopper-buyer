@@ -1,4 +1,13 @@
-import { useState, useRef, useEffect, useMemo, useCallback, FC, ChangeEvent, KeyboardEvent } from 'react';
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useMemo,
+  useCallback,
+  FC,
+  ChangeEvent,
+  KeyboardEvent,
+} from 'react';
 import { ChevronDown, X } from 'react-feather';
 import {
   AutocompleteContainer,
@@ -24,17 +33,25 @@ interface AutocompleteProps {
   onChange: (value: Option[]) => void;
 }
 
-const MultiAutocomplete: FC<AutocompleteProps> = ({ options, inputLabel, error, onChange }) => {
+const MultiAutocomplete: FC<AutocompleteProps> = ({
+  options,
+  inputLabel,
+  error,
+  onChange,
+}) => {
   const [inputValue, setInputValue] = useState('');
   const [selectedOptions, setSelectedOptions] = useState<Option[]>([]);
   const [showOptions, setShowOptions] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleInputChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    setInputValue(value);
-    setShowOptions(true);
-  }, []);
+  const handleInputChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      const value = event.target.value;
+      setInputValue(value);
+      setShowOptions(true);
+    },
+    [],
+  );
 
   const handleOptionClick = useCallback(
     (option: Option) => {
@@ -48,14 +65,20 @@ const MultiAutocomplete: FC<AutocompleteProps> = ({ options, inputLabel, error, 
 
   const handleRemoveOption = useCallback(
     (option: Option) => {
-      setSelectedOptions(selectedOptions.filter((selectedOption) => selectedOption.id !== option.id));
+      setSelectedOptions(
+        selectedOptions.filter(
+          (selectedOption) => selectedOption.id !== option.id,
+        ),
+      );
     },
     [selectedOptions, options],
   );
 
   const filteredOptions = useMemo<Option[]>(() => {
     return options.filter(
-      (option) => option.label.toLowerCase().includes(inputValue.toLowerCase()) && !selectedOptions.includes(option),
+      (option) =>
+        option.label.toLowerCase().includes(inputValue.toLowerCase()) &&
+        !selectedOptions.includes(option),
     );
   }, [options, inputValue, selectedOptions]);
 
@@ -91,7 +114,11 @@ const MultiAutocomplete: FC<AutocompleteProps> = ({ options, inputLabel, error, 
           selectedOptions.map((option) => (
             <SelectedOption key={option.id}>
               {option.label}
-              <X onClick={() => handleRemoveOption(option)} size={18} cursor="pointer" />
+              <X
+                onClick={() => handleRemoveOption(option)}
+                size={18}
+                cursor="pointer"
+              />
             </SelectedOption>
           ))}
       </SelectedOptionCont>
@@ -109,7 +136,10 @@ const MultiAutocomplete: FC<AutocompleteProps> = ({ options, inputLabel, error, 
             error={error}
           />
 
-          <ChevronDownIconCont onClick={() => setShowOptions((prev) => !prev)} open={showOptions}>
+          <ChevronDownIconCont
+            onClick={() => setShowOptions((prev) => !prev)}
+            open={showOptions}
+          >
             <ChevronDown />
           </ChevronDownIconCont>
         </AutocompleteIconCont>

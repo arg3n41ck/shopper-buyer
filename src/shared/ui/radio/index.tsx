@@ -1,4 +1,4 @@
-import { FC, ReactNode } from 'react';
+import React, { FC, ReactNode } from 'react';
 import { ChildrenText, RadioInput, RadioLabel, RadioWrapper } from './styles';
 
 interface CustomRadioProps {

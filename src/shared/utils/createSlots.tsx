@@ -7,8 +7,8 @@ import React, {
   useRef,
   ReactNode,
   ComponentType,
-} from "react";
-import useForceUpdate from "@/shared/lib/hooks/useForceUpdate";
+} from 'react';
+import useForceUpdate from '@/shared/lib/hooks/useForceUpdate';
 
 type SlotsContextType = {
   registerSlot: (name: string, contents: ReactNode) => void;
@@ -62,7 +62,7 @@ const createSlots = (slotNames: string[]): CreateSlotsReturnType => {
 
         if (isMounted) rerenderWithSlots();
       },
-      [isMounted, rerenderWithSlots]
+      [isMounted, rerenderWithSlots],
     );
 
     const unregisterSlot = useCallback(
@@ -70,7 +70,7 @@ const createSlots = (slotNames: string[]): CreateSlotsReturnType => {
         slotsRef.current[name] = null;
         rerenderWithSlots();
       },
-      [rerenderWithSlots]
+      [rerenderWithSlots],
     );
 
     const slots = slotsRef.current;
@@ -88,7 +88,7 @@ const createSlots = (slotNames: string[]): CreateSlotsReturnType => {
     useLayoutEffect(() => {
       ctx.registerSlot(
         name,
-        typeof children === "function" ? children(ctx.context) : children
+        typeof children === 'function' ? children(ctx.context) : children,
       );
       return () => ctx.unregisterSlot(name);
     }, [name, children, ctx.registerSlot, ctx.unregisterSlot, ctx.context]);

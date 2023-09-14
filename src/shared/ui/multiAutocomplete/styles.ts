@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import * as palette from "@/shared/lib/consts/styles";
+import styled from 'styled-components';
+import * as palette from '@/shared/lib/consts/styles';
 
 export const AutocompleteContainer = styled.div<{ error: boolean | undefined }>`
   max-width: 255px;
@@ -80,6 +80,6 @@ export const ChevronDownIconCont = styled.div<{ open: boolean }>`
   right: 0;
   right: 20px;
   z-index: 1;
-  transform: ${({ open }) => (open ? "rotate(180deg)" : "rotate(0deg)")};
+  transform: ${({ open }) => (open ? 'rotate(180deg)' : 'rotate(0deg)')};
   transition: all 0.1s ease-in-out;
 `;

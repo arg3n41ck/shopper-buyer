@@ -31,7 +31,7 @@ export class AuthClient {
     try {
       const { data } = await ApiClient.post<any>(
         `/auth/password-reset-request/`,
-        { email }
+        { email },
       );
       return data;
     } catch (error) {
@@ -61,7 +61,7 @@ export class AuthClient {
     try {
       const { data } = await ApiClient.patch<any>(
         '/users/settings/change-password/',
-        body
+        body,
       );
       return data;
     } catch (error) {
@@ -73,7 +73,7 @@ export class AuthClient {
     try {
       const { data } = await ApiClient.patch<any>(
         '/users/settings/change-email/',
-        body
+        body,
       );
       return data;
     } catch (error) {

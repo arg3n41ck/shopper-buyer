@@ -1,4 +1,4 @@
-import { ButtonHTMLAttributes, FC, ReactNode } from 'react';
+import React, { ButtonHTMLAttributes, FC, ReactNode } from 'react';
 import {
   PrimaryCTAButton,
   PrimaryCTAIndigoButton,
@@ -22,7 +22,7 @@ interface CustomButtonProps {
 }
 
 const variantOfButton = (
-  variant: ButtonVariant | undefined
+  variant: ButtonVariant | undefined,
 ): FC<ButtonHTMLAttributes<HTMLButtonElement>> => {
   switch (variant) {
     case BUTTON_STYLES.primaryCta:

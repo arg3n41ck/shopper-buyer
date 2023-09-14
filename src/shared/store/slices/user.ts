@@ -1,6 +1,6 @@
-import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { AuthClient } from "@/shared/apis/authClient";
-import { TypeUser } from "@/shared/lib/types/authTypes";
+import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { AuthClient } from '@/shared/apis/authClient';
+import { TypeUser } from '@/shared/lib/types/authTypes';
 
 const authClient = new AuthClient();
 
@@ -12,7 +12,7 @@ type UserSliceState = {
 };
 
 export const fetchMe: any = createAsyncThunk(
-  "user/get",
+  'user/get',
   async (_, { rejectWithValue }) => {
     try {
       const data = await authClient.getMe();
@@ -20,18 +20,18 @@ export const fetchMe: any = createAsyncThunk(
     } catch (error: any) {
       return rejectWithValue(error.response.status);
     }
-  }
+  },
 );
 
 const initialState: UserSliceState = {
-  role: "",
+  role: '',
   user: null,
   error: null,
   userAuthenticated: false,
 };
 
 const userSlice = createSlice({
-  name: "user",
+  name: 'user',
   initialState,
   reducers: {
     logOut(state) {

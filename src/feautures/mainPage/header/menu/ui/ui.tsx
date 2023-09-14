@@ -8,7 +8,7 @@ import {
   MobileMenuContainer,
   MobileMenuIconsBlock,
 } from './styles';
-import { Heart, Menu, Search } from 'react-feather';
+import { Heart, Menu } from 'react-feather';
 import LogoIcon from '@/assets/icons/svg/LogoIcon';
 import {
   ForSomeoneFilter,
@@ -183,7 +183,7 @@ const categories = [
 export const MobileMenu = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeFilter, setActiveFilter] = useState<string>(
-    filterOptions[0].value
+    filterOptions[0].value,
   );
   const [modalActive, setModalActive] = useState('');
 

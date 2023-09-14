@@ -1,18 +1,18 @@
-import { FC } from 'react';
+import React, { FC } from 'react';
+import { SUCCESS } from '@/shared/lib/consts/styles';
+import { PATH_AUTH } from '@/shared/routes/paths';
+import { useRouter } from 'next/router';
+import { Check } from 'react-feather';
+import { Trans } from 'react-i18next';
+import Button from '../../shared/ui/button';
+import AuthLayout from '../layouts/authLayout/authLayout';
 import {
+  CheckBackground,
   CheckCircleIconCont,
   CheckIconBlock,
   HeaderText,
   SuccessActionCont,
-  CheckBackground,
 } from './styles';
-import { Check } from 'react-feather';
-import Button from '../../shared/ui/button';
-import { Trans } from 'react-i18next';
-import { SUCCESS } from '@/shared/lib/consts/styles';
-import { PATH_AUTH } from '@/shared/routes/paths';
-import { useRouter } from 'next/router';
-import AuthLayout from '../Layouts/AuthLayout/AuthLayout';
 
 const SuccessAction: FC = () => {
   const router = useRouter();

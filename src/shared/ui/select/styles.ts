@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import * as palette from "@/shared/lib/consts/styles";
+import styled from 'styled-components';
+import * as palette from '@/shared/lib/consts/styles';
 
 export const SelectWrapper = styled.div`
   position: relative;
@@ -62,7 +62,7 @@ export const Option = styled.li`
 export const IconCont = styled.div<{ open: boolean }>`
   position: absolute;
   right: 15px;
-  transform: ${({ open }) => (open ? "rotate(180deg)" : "rotate(0deg)")};
+  transform: ${({ open }) => (open ? 'rotate(180deg)' : 'rotate(0deg)')};
   transition: all 0.1s ease-in-out;
 `;
 

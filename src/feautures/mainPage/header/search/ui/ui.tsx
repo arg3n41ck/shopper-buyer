@@ -35,7 +35,7 @@ export const HeaderSearchPopup: React.FC<SearchPopupProps> = () => {
   const [search, setSearch] = useState('');
   const [activePopup, setActivePopup] = useState(false);
   const [activeFilter, setActiveFilter] = useState<string>(
-    filterOptions[0].value
+    filterOptions[0].value,
   );
 
   const handleChangeSearch = (value: string) => setSearch(value);
@@ -82,7 +82,7 @@ export const HeaderSearchPopup: React.FC<SearchPopupProps> = () => {
                   onClick={() => setActivePopup(true)}
                   startAdornment={<Search color="#676767" size={24} />}
                   placeholder={`Поиск по разделу «${filterOptions.find(
-                    (item) => item.value === activeFilter
+                    (item) => item.value === activeFilter,
                   )?.label}»`}
                 />
 

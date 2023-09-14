@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import React, { FC } from 'react';
 import { NavContainer } from './styles';
 import LogoIcon from '@/assets/icons/svg/LogoIcon';
 

@@ -12,7 +12,8 @@ const passwordComplexityCheck = ({ password }: PasswordStrengthProps) => {
   const hasUppercase = /[A-Z]/.test(password);
   const hasLowercase = /[a-z]/.test(password);
   const hasNumeral = /\d/.test(password);
-  const isPasswordHasUppercaseLowercaseNumeral = hasUppercase && hasLowercase && hasNumeral;
+  const isPasswordHasUppercaseLowercaseNumeral =
+    hasUppercase && hasLowercase && hasNumeral;
 
   return isPasswordHasUppercaseLowercaseNumeral;
 };

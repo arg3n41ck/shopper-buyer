@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import React, { FC } from 'react';
 import { Eye, EyeOff } from 'react-feather';
 
 type TypePasswordTypeIcon = {
@@ -7,7 +7,15 @@ type TypePasswordTypeIcon = {
   onShow: () => void;
 };
 
-const ShowAndHideIcon: FC<TypePasswordTypeIcon> = ({ show, onHide, onShow }) => {
-  return show ? <EyeOff onClick={onHide} cursor="pointer" /> : <Eye onClick={onShow} cursor="pointer" />;
+const ShowAndHideIcon: FC<TypePasswordTypeIcon> = ({
+  show,
+  onHide,
+  onShow,
+}) => {
+  return show ? (
+    <EyeOff onClick={onHide} cursor="pointer" />
+  ) : (
+    <Eye onClick={onShow} cursor="pointer" />
+  );
 };
 export default ShowAndHideIcon;

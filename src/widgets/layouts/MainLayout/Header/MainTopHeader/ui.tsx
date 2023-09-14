@@ -17,7 +17,7 @@ const filterOptions = [
 
 export const MainTopHeader = () => {
   const [activeOption, setActiveOption] = useState<string>(
-    filterOptions[0].value
+    filterOptions[0].value,
   );
 
   const handleFilterChange = (filter: string) => setActiveOption(filter);
