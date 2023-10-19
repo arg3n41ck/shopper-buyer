@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 import LogoIcon from '@/shared/assets/icons/svg/LogoIcon';
-import FacebookIcon from '@/assets/icons/png/facebook.png';
-import GoogleIcon from '@/assets/icons/png/google.png';
+import FacebookIcon from '@/shared/assets/icons/png/facebook.png';
+import GoogleIcon from '@/shared/assets/icons/png/google.png';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { useTranslation } from 'react-i18next';
