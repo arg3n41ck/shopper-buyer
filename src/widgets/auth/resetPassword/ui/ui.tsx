@@ -1,21 +1,14 @@
 import React, { FC, useEffect, useState } from 'react';
-import AuthLayout from '@/components/layouts/authLayout/authLayout';
-import Button from '@/shared/ui/button';
-import Checkbox from '@/shared/ui/checkbox';
-import LoaderIcon from '@/shared/ui/loader';
-import TextField from '@/shared/ui/textField';
+import AuthLayout from '@/widgets/layouts/authLayout/authLayout';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import { Clock } from 'react-feather';
 import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
-import { ButtonCont, ButtonInfoCont, HeadingText } from '../../styles';
-import {
-  ResendSMSText,
-  ResetPasswordContainer,
-  TextFieldContainer,
-  TimerContainer,
-} from './styles';
+import TextField from '@/shared/ui/inputs/textField';
+import Checkbox from '@/shared/ui/inputs/checkbox';
+import { Button } from '@/shared/ui/buttons';
+import { LoaderIcon } from '@/shared/ui/loaders';
 
 interface ResetPasswordProps {}
 
@@ -23,8 +16,6 @@ const validationSchema = (t: (key: string) => string) =>
   yup.object({
     email: yup.string().email(t('auth.validation.email.invalid')),
   });
-
-// const authClient = new AuthClient();
 
 export const ResetPasswordPage: FC<ResetPasswordProps> = () => {
   const router = useRouter();
@@ -91,20 +82,19 @@ export const ResetPasswordPage: FC<ResetPasswordProps> = () => {
 
   return (
     <AuthLayout>
-      <ResetPasswordContainer>
+      <div className="max-w-[436px] w-full mx-auto flex flex-col gap-5">
         <form onSubmit={formik.handleSubmit}>
-          <HeadingText>
-            {/* <Trans i18nKey={'auth.resetPassword.headText'} /> */}
+          <p className="font-semibold text-[32px] text-[#000] mb-5 text-center">
             Восстановление пароля
-          </HeadingText>
-          <TextFieldContainer>
+          </p>
+          <div className="relative mx-auto w-full flex flex-col gap-5">
             <TextField
-              // error={formik.touched.email && Boolean(formik.errors.email)}
-              // errorMessage={
-              //   formik.touched.email && formik.errors.email
-              //     ? formik.errors.email
-              //     : ''
-              // }
+              error={formik.touched.email && Boolean(formik.errors.email)}
+              errorMessage={
+                formik.touched.email && formik.errors.email
+                  ? formik.errors.email
+                  : ''
+              }
               value={
                 checkedSMS ? formik.values.phoneNumber : formik.values.email
               }
@@ -116,14 +106,16 @@ export const ResetPasswordPage: FC<ResetPasswordProps> = () => {
             />
 
             {timeLeft !== 0 && (
-              <TimerContainer>
+              <div className="flex items-center gap-[6px] text-[#676767] absolute right-[-80px] top-[10px]">
                 <Clock size={24} />
 
                 <p>{formatTime(timeLeft)}</p>
-              </TimerContainer>
+              </div>
             )}
             {smsSent ? (
-              <ResendSMSText>Отправить код еще раз</ResendSMSText>
+              <p className="text-[#b91c1c] text-[16px] font-semibold text-right">
+                Отправить код еще раз
+              </p>
             ) : (
               <Checkbox
                 label={'Отправить SMS'}
@@ -131,17 +123,17 @@ export const ResetPasswordPage: FC<ResetPasswordProps> = () => {
                 onChange={() => handleChangeSMS()}
               />
             )}
-          </TextFieldContainer>
-          <ButtonCont>
+          </div>
+          <div className="mt-5 mb-[62px] w-full flex justify-center">
             <Button type="submit" disabled={isLoading}>
-              <ButtonInfoCont>
+              <div className="flex items-center gap-[10px]">
                 <Trans i18nKey={'auth.resetPassword.submit'} />{' '}
                 <LoaderIcon loading={isLoading} size={24} />
-              </ButtonInfoCont>
+              </div>
             </Button>
-          </ButtonCont>
+          </div>
         </form>
-      </ResetPasswordContainer>
+      </div>
     </AuthLayout>
   );
 };

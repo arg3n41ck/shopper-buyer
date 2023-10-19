@@ -1,5 +1,4 @@
 import React from 'react';
-import { ForSomeoneFilterButton, ForSomeoneFilterContainer } from './styles';
 
 interface ForSomeoneFilterProps {
   activeOption: string;
@@ -13,16 +12,18 @@ export const ForSomeoneFilter: React.FC<ForSomeoneFilterProps> = ({
   handleChange,
 }) => {
   return (
-    <ForSomeoneFilterContainer>
+    <div className="flex items-center gap-[20px]">
       {options.map((option) => (
-        <ForSomeoneFilterButton
+        <button
           key={option.value}
           onClick={() => handleChange(option.value)}
-          $active={activeOption === option.value}
+          className={`text-16 ${
+            activeOption === option.value ? 'font-semibold' : 'font-normal'
+          } uppercase`}
         >
           {option.label}
-        </ForSomeoneFilterButton>
+        </button>
       ))}
-    </ForSomeoneFilterContainer>
+    </div>
   );
 };

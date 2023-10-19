@@ -1,5 +1,4 @@
 import React from 'react';
-import { CarouselContainer } from './styles';
 import { FadeEffectCarousel } from '@/feautures/mainPage';
 
 interface CarouselProps {
@@ -16,13 +15,13 @@ export const Carousel: React.FC<CarouselProps> = ({
   buttonText,
 }) => {
   return (
-    <CarouselContainer>
+    <div className="relative overflow-x-hidden">
       <FadeEffectCarousel
         images={images}
         title={title}
         description={description}
         buttonText={buttonText}
       />
-    </CarouselContainer>
+    </div>
   );
 };

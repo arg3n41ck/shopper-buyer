@@ -6,7 +6,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { store } from '@/shared/store';
 import { AppPropsType } from 'next/dist/shared/lib/utils';
-import '@/localization';
+import 'src/shared/localization';
 import '@/app/index.scss';
 
 function App({ Component, pageProps }: AppPropsType) {

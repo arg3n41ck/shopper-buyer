@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
-import { LogoIconWrapper, MobileHeaderContainer } from './styles';
-import LogoIcon from '@/assets/icons/svg/LogoIcon';
+import LogoIcon from '@/shared/assets/icons/svg/LogoIcon';
 import { X } from 'react-feather';
 
 interface MobileHeaderProps {
@@ -9,12 +8,12 @@ interface MobileHeaderProps {
 
 export const MobileHeader: FC<MobileHeaderProps> = ({ onClose }) => {
   return (
-    <MobileHeaderContainer>
-      <LogoIconWrapper>
+    <div className="w-full px-6 py-3 flex items-center border-b-1 border-[#ecdcec]">
+      <div className="flex items-center justify-center flex-grow">
         <LogoIcon />
-      </LogoIconWrapper>
+      </div>
 
       <X onClick={onClose} />
-    </MobileHeaderContainer>
+    </div>
   );
 };

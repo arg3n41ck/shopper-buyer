@@ -1,22 +1,10 @@
 import React, { useState } from 'react';
-import { AnimatePresence } from 'framer-motion';
-import TextField from '@/shared/ui/textField';
+import { AnimatePresence, motion } from 'framer-motion';
 import { Search, X } from 'react-feather';
 import { ForSomeoneFilter } from '../..';
-import LogoIcon from '@/assets/icons/svg/LogoIcon';
-import {
-  FakeSearchInputBlock,
-  FakeSearchInputText,
-  HeaderSearchContainer,
-  HistoryBlock,
-  HistorySearchText,
-  HistoryTitle,
-  LogoIconBlock,
-  PopupContent,
-  PopupOverlay,
-} from './styles';
+import LogoIcon from '@/shared/assets/icons/svg/LogoIcon';
 import { MobileHeader } from '../../menu/mobileHeader';
-import { LaptopVersion, MobileVersion } from '@/shared/styles/styles';
+import TextField from '@/shared/ui/inputs/textField';
 
 interface FilterOption {
   value: string;
@@ -44,38 +32,45 @@ export const HeaderSearchPopup: React.FC<SearchPopupProps> = () => {
 
   return (
     <>
-      <MobileVersion>
+      <div className="hidden md:block">
         <Search onClick={handlePopup} size={24} />
-      </MobileVersion>
+      </div>
 
-      <LaptopVersion>
-        <FakeSearchInputBlock onClick={handlePopup}>
+      <div className="block md:hidden">
+        <div
+          className="w-[267px] flex items-center gap-[8px] py-[9px] px-[16px] border border-[#676767] cursor-pointer"
+          onClick={handlePopup}
+        >
           <Search color="#676767" size={24} />
-          <FakeSearchInputText>Поиск</FakeSearchInputText>
-        </FakeSearchInputBlock>
-      </LaptopVersion>
+          <p className="text-[#676767] text-[16px] font-[400]">Поиск</p>
+        </div>
+      </div>
 
       <AnimatePresence>
         {activePopup && (
-          <PopupOverlay onClick={handlePopup}>
-            <PopupContent
+          <div
+            className="fixed z-[20] top-0 left-1/2 transform -translate-x-1/2 w-full h-full bg-opacity-50 bg-[#000] flex justify-center items-start md:items-normal"
+            onClick={handlePopup}
+          >
+            <motion.div
+              className="bg-[#fff] w-full shadow-md max-w-[1440px]"
               onClick={(e) => e.stopPropagation()}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.1 }}
             >
-              <MobileVersion>
+              <div className="hidden md:block">
                 <MobileHeader onClose={handlePopup} />
-              </MobileVersion>
+              </div>
 
-              <LaptopVersion>
-                <LogoIconBlock>
+              <div className="block md:hidden">
+                <div className="flex justify-center pt-[12px]">
                   <LogoIcon />
-                </LogoIconBlock>
-              </LaptopVersion>
+                </div>
+              </div>
 
-              <HeaderSearchContainer>
+              <div className="max-w-[657px] w-full mx-auto my-[36px] grid grid-cols-1 gap-[24px] px-[48px] md:px-[20px]">
                 <TextField
                   value={search}
                   onChange={(e) => handleChangeSearch(e.target.value)}
@@ -92,15 +87,19 @@ export const HeaderSearchPopup: React.FC<SearchPopupProps> = () => {
                   handleChange={handleFilterChange}
                 />
 
-                <HistorySearchText>История поиска</HistorySearchText>
+                <p className="text-[#676767] text-[16] font-[400]">
+                  История поиска
+                </p>
 
-                <HistoryBlock>
-                  <HistoryTitle>adidas adi2000</HistoryTitle>
+                <div className="flex items-center justify-between gap-[20px] py-[11px] px-[12px] cursor-pointer hover:bg-[#f5f5f5]">
+                  <p className="text-[#171717] text-[16px] font-[400]">
+                    adidas adi2000
+                  </p>
                   <X size={16} />
-                </HistoryBlock>
-              </HeaderSearchContainer>
-            </PopupContent>
-          </PopupOverlay>
+                </div>
+              </div>
+            </motion.div>
+          </div>
         )}
       </AnimatePresence>
     </>

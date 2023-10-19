@@ -1,9 +1,17 @@
-export const BUTTON_STYLES = {
-  primaryCta: 'primary-cta',
-  primaryCtaIndigo: 'primary-cta-indigo',
-  secondaryCtaIndigo: 'secondary-cta-indigo',
-  withoutBackground: 'without-background',
-};
+export type ButtonVariant =
+  | 'PrimaryCTAButton'
+  | 'PrimaryCTAIndigoButton'
+  | 'SecondaryCTAButton'
+  | 'WithoutBackgroundButton'
+  | 'OnlyTextButton'
+
+export const BUTTON_STYLES: Record<string, ButtonVariant> = {
+  primaryCta: 'PrimaryCTAButton',
+  primaryCtaIndigo: 'PrimaryCTAIndigoButton',
+  secondaryCtaIndigo: 'SecondaryCTAButton',
+  withoutBackground: 'WithoutBackgroundButton',
+  onlyText: 'OnlyTextButton',
+}
 
 export const NEUTRAL = {
   50: '#FAFAFA',
@@ -16,7 +24,7 @@ export const NEUTRAL = {
   700: '#404040',
   800: '#262626',
   900: '#171717',
-};
+}
 
 export const PRIMARY = {
   dashboard: {
@@ -33,7 +41,7 @@ export const PRIMARY = {
     800: '#27272a',
     900: '#18181b',
   },
-};
+}
 
 export const SECONDARY = {
   50: '#fffbeb',
@@ -41,7 +49,7 @@ export const SECONDARY = {
   600: '#d97706',
   800: '#92400e',
   900: '#713f12',
-};
+}
 
 export const SUCCESS = {
   50: '#f0fdf4',
@@ -49,7 +57,7 @@ export const SUCCESS = {
   500: '#22c55e',
   700: '#15803d',
   900: '#14532d',
-};
+}
 
 export const WARNING = {
   50: '#fff7ed',
@@ -57,7 +65,7 @@ export const WARNING = {
   500: '#f97316',
   700: '#c2410c',
   900: '#7c2d12',
-};
+}
 
 export const ERROR = {
   50: '#fef2f2',
@@ -65,9 +73,9 @@ export const ERROR = {
   500: '#ef4444',
   700: '#b91c1c',
   900: '#7f1d1d',
-};
+}
 
 export const SHADES = {
   50: '#FFFFFF',
   100: '#000000',
-};
+}

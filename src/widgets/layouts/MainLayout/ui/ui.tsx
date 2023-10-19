@@ -1,11 +1,6 @@
 import React, { ReactNode, useEffect, useState } from 'react';
 import { MainHeader } from '../Header';
 import { MainFooter } from '../Footer';
-import {
-  ItsTimeForShoppingContainer,
-  ItsTimeForShoppingText,
-  MainLayoutChildrenContainer,
-} from './styles';
 
 interface MainLayoutProps {
   children: ReactNode;
@@ -31,18 +26,24 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
 
   return (
     <div>
-      <ItsTimeForShoppingContainer className={isStickyHeader ? 'sticky' : ''}>
-        <ItsTimeForShoppingText>Время шоппинга!</ItsTimeForShoppingText>
-        <ItsTimeForShoppingText className={'underline'}>
+      <div
+        className={`w-full flex justify-center items-center  bg-blue-100 gap-1 p-2`}
+      >
+        <p className="text-[#171717] text-[14px] font-normal">
+          Время шоппинга!
+        </p>
+        <p className="text-[#171717] text-[14px] font-normal underline">
           Лучшее из новых коллекций
-        </ItsTimeForShoppingText>
-      </ItsTimeForShoppingContainer>
+        </p>
+      </div>
 
       <div>
         <MainHeader isStickyHeader={isStickyHeader} />
       </div>
 
-      <MainLayoutChildrenContainer>{children}</MainLayoutChildrenContainer>
+      <div className="flex flex-col gap-[80px] md:px-5 px-[48px]">
+        {children}
+      </div>
 
       <MainFooter />
     </div>

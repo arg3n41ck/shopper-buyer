@@ -1,25 +1,26 @@
 import React, { FC } from 'react';
-import { MainHeaderContainer } from './styles';
 import { MainTopHeader } from '../MainTopHeader';
 import { MainHeaderWithCategories } from '../MainHeaderWithCategories';
 import { MobileMenu } from '@/feautures/mainPage';
-import { LaptopVersion, MobileVersion } from '@/shared/styles/styles';
-
 interface MainHeaderProps {
   isStickyHeader?: boolean;
 }
 
 export const MainHeader: FC<MainHeaderProps> = ({ isStickyHeader }) => {
   return (
-    <MainHeaderContainer className={isStickyHeader ? 'sticky' : ''}>
-      <LaptopVersion>
+    <div
+      className={`max-w-[1440px] w-full px-[48px] md:px-[20px] bg-[#fff] border-b border-[#ececec] ${
+        isStickyHeader ? 'fixed z-[15] top-[0]' : ''
+      }`}
+    >
+      <div className="block md:hidden">
         <MainTopHeader />
         <MainHeaderWithCategories />
-      </LaptopVersion>
+      </div>
 
-      <MobileVersion>
+      <div className="hidden md:block">
         <MobileMenu />
-      </MobileVersion>
-    </MainHeaderContainer>
+      </div>
+    </div>
   );
 };

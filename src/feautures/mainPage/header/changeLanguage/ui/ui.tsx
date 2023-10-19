@@ -1,22 +1,11 @@
 import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Check, Globe } from 'react-feather';
-import useOutsideClick from '@/shared/lib/hooks/useOutsideClick';
-import {
-  ChangeLanguageContainer,
-  ChangeLanguageInfo,
-  ChangeLanguageInfoText,
-  PopupLanguageContainer,
-  PopupLanguageItem,
-  PopupLanguageItemText,
-} from './styles';
-import {
-  LaptopVersion,
-  MobileVersion,
-  PopupContent,
-} from '@/shared/styles/styles';
+
 import { AnimatePresence } from 'framer-motion';
-import Accordion from '@/shared/ui/accordion';
+import { motion } from 'framer-motion';
+import useOutsideClick from '@/shared/lib/hooks/useOutsideClick';
+import { Accordion } from '@/shared/ui/accordions';
 
 const languages = [
   { name: 'Кыргызча', code: 'kg' },
@@ -41,59 +30,71 @@ export const HeaderChangeLanguage: React.FC = () => {
   };
 
   return (
-    <ChangeLanguageContainer ref={changeLanguageRef}>
-      <LaptopVersion>
-        <ChangeLanguageInfo onClick={handleClickActive}>
+    <div className="relative" ref={changeLanguageRef}>
+      <div className="block md:hidden">
+        <div
+          className="flex items-center gap-[4px] cursor-pointer"
+          onClick={handleClickActive}
+        >
           <Globe size={24} />
-          <ChangeLanguageInfoText>{i18n.language}</ChangeLanguageInfoText>
-        </ChangeLanguageInfo>
+          <p className="text-[#676767] text-[16px] font-[500]">
+            {i18n.language}
+          </p>
+        </div>
 
         <AnimatePresence>
           {active && (
-            <PopupContent
+            <motion.div
+              className="absolute mt-2 right-0 bg-[#fff] p-5 border border-solid border-[#676767] z-[11]"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
             >
-              <PopupLanguageContainer>
+              <div className="flex flex-col gap-[12px]">
                 {languages.map((language) => (
-                  <PopupLanguageItem
+                  <div
                     key={language.code}
                     onClick={() => handleLanguageChange(language.code)}
+                    className="flex py-[11px] px-[12px] items-center justify-between gap-[80px] cursor-pointer transition-background hover:bg-[#f5f5f5]"
                   >
-                    <PopupLanguageItemText>
+                    <p className="text-[#171717] text-[16px] font-[400]">
                       {language.name}
-                    </PopupLanguageItemText>
+                    </p>
                     {i18n.language === language.code && <Check size={16} />}
-                  </PopupLanguageItem>
+                  </div>
                 ))}
-              </PopupLanguageContainer>
-            </PopupContent>
+              </div>
+            </motion.div>
           )}
         </AnimatePresence>
-      </LaptopVersion>
+      </div>
 
-      <MobileVersion>
+      <div className="hidden md:block">
         <Accordion
           title={
-            <ChangeLanguageInfo>
+            <div className="flex items-center gap-[4px] cursor-pointer">
               <Globe size={24} />
-              <ChangeLanguageInfoText>{i18n.language}</ChangeLanguageInfoText>
-            </ChangeLanguageInfo>
+              <p className="text-[#676767] text-[16px] font-[500]">
+                {i18n.language}
+              </p>
+            </div>
           }
         >
           {languages.map((language) => (
-            <PopupLanguageItem
+            <div
+              className="flex py-[11px] px-[12px] items-center justify-between gap-[80px] cursor-pointer transition-background hover:bg-[#f5f5f5]"
               key={language.code}
               onClick={() => handleLanguageChange(language.code)}
             >
-              <PopupLanguageItemText>{language.name}</PopupLanguageItemText>
+              <p className="text-[#171717] text-[16px] font-[400]">
+                {language.name}
+              </p>
               {i18n.language === language.code && <Check size={16} />}
-            </PopupLanguageItem>
+            </div>
           ))}
         </Accordion>
-      </MobileVersion>
-    </ChangeLanguageContainer>
+      </div>
+    </div>
   );
 };
