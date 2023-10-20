@@ -1,30 +1,18 @@
 import React, { FC, useState } from 'react';
-import Modal from '@/shared/ui/modal';
-import {
-  ForgotPasswordText,
-  ModalInnerContainer,
-  SubmitButton,
-  LoginInfoContainer,
-  TextInModal,
-  LoginWithAnotherAction,
-  LoginWithAnotherActionsContainer,
-  LoginWithAnotherActionText,
-  LoginWithAnotherActionIntroTextBlock,
-  Line,
-  LogoIconBlock,
-} from './styles';
-import LogoIcon from '@/assets/icons/svg/LogoIcon';
-import TextField from '@/shared/ui/textField';
-import ShowAndHideIcon from '@/components/passwordShowAndHideIcon';
-import FacebookIcon from '@/assets/icons/png/facebook.png';
-import GoogleIcon from '@/assets/icons/png/google.png';
-import { ImageFromNext } from '@/shared/styles/styles';
+import LogoIcon from '@/shared/assets/icons/svg/LogoIcon';
+import FacebookIcon from '@/shared/assets/icons/png/facebook.png';
+import GoogleIcon from '@/shared/assets/icons/png/google.png';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from 'next/router';
-import { PATH_AUTH } from '@/shared/routes/paths';
-import { CustomButtonWithBackground } from '@/shared/ui/buttonWithoutBackground';
+import { PATH_AUTH } from '@/shared/config';
+import TextField from '@/shared/ui/inputs/textField';
+import Image from 'next/image';
+import { Button } from '@/shared/ui/buttons';
+import { BUTTON_STYLES } from '@/shared/lib/consts/styles';
+import { Modal } from '@/shared/ui/modals';
+import { ShowAndHideIcon } from '@/shared/ui/templates';
 
 interface LoginModalProps {
   open: boolean;
@@ -73,14 +61,16 @@ export const LoginModal: FC<LoginModalProps> = ({
 
   return (
     <Modal open={open} onClose={onClose}>
-      <ModalInnerContainer>
-        <LogoIconBlock>
+      <div className="p-10 flex flex-col gap-5">
+        <div className="w-full flex justify-center">
           <LogoIcon />
-        </LogoIconBlock>
+        </div>
 
-        <TextInModal>Добро пожаловать!</TextInModal>
+        <p className="text-[#000] text-[24px] font-semibold text-center">
+          Добро пожаловать!
+        </p>
 
-        <LoginInfoContainer>
+        <div className="w-full flex flex-col gap-3">
           <TextField
             value={formik.values.email}
             onChange={formik.handleChange}
@@ -101,59 +91,58 @@ export const LoginModal: FC<LoginModalProps> = ({
             placeholder="Пароль"
           />
 
-          <ForgotPasswordText onClick={navigateToResetPasswordPage}>
+          <p
+            className="text-[#b91c1c] text-[16px] font-semibold text-right cursor-pointer"
+            onClick={navigateToResetPasswordPage}
+          >
             Забыли пароль?
-          </ForgotPasswordText>
-        </LoginInfoContainer>
+          </p>
+        </div>
 
-        <SubmitButton onClick={() => formik.handleSubmit()}>Войти</SubmitButton>
+        <Button
+          variant={BUTTON_STYLES.primaryCTA}
+          onClick={() => formik.handleSubmit()}
+        >
+          Войти
+        </Button>
 
-        <LoginInfoContainer>
-          <LoginWithAnotherActionIntroTextBlock>
-            <Line />
+        <div className="w-full flex flex-col gap-3">
+          <div className="grid grid-cols-[1fr_221px_1fr] items-center gap-2">
+            <div className="w-[95%] max-w-full h-[1px] border border-[#676767]" />
 
-            <LoginWithAnotherActionText>
+            <p className="text-[#676767] text-[16px] font-normal">
               Или войдите через соц. сети
-            </LoginWithAnotherActionText>
+            </p>
 
-            <Line />
-          </LoginWithAnotherActionIntroTextBlock>
+            <div className="w-[95%] max-w-full h-[1px] border border-[#676767]" />
+          </div>
 
-          <LoginWithAnotherActionsContainer>
-            <LoginWithAnotherAction>
-              <ImageFromNext
-                src={GoogleIcon}
-                width={20}
-                height={20}
-                alt="google"
-              />
+          <div className="flex items-center gap-5">
+            <div className="w-full flex items-center py-3 px-4 border border-[#676767] gap-2">
+              <Image src={GoogleIcon} width={20} height={20} alt="google" />
 
-              <LoginWithAnotherActionText>Google</LoginWithAnotherActionText>
-            </LoginWithAnotherAction>
+              <p className="text-[#676767] text-[16px] font-normal">Google</p>
+            </div>
 
-            <LoginWithAnotherAction>
-              <ImageFromNext
-                src={FacebookIcon}
-                width={20}
-                height={20}
-                alt="facebook"
-              />
+            <div className="w-full flex items-center py-3 px-4 border border-[#676767] gap-2">
+              <Image src={FacebookIcon} width={20} height={20} alt="facebook" />
 
-              <LoginWithAnotherActionText>Facebook</LoginWithAnotherActionText>
-            </LoginWithAnotherAction>
-          </LoginWithAnotherActionsContainer>
-        </LoginInfoContainer>
+              <p className="text-[#676767] text-[16px] font-normal">Facebook</p>
+            </div>
+          </div>
+        </div>
 
-        <TextInModal>Новый пользователь?</TextInModal>
+        <p className="text-[#000] text-[24px] font-semibold text-center">
+          Новый пользователь?
+        </p>
 
-        <CustomButtonWithBackground
-          $width="100%"
-          $padding="12px 0"
+        <Button
+          variant={BUTTON_STYLES.withoutBackground}
           onClick={() => onClickModal('register')}
         >
           Зарегистрироваться
-        </CustomButtonWithBackground>
-      </ModalInnerContainer>
+        </Button>
+      </div>
     </Modal>
   );
 };

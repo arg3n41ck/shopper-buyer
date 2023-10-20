@@ -1,7 +1,6 @@
 import React, { ReactNode } from 'react';
 import SwiperCore from 'swiper';
 import { Swiper } from 'swiper/react';
-import { CustomPrevButton, CustomNextButton } from './styles';
 import { ChevronLeft, ChevronRight } from 'react-feather';
 import { Navigation, Pagination } from 'swiper/modules';
 
@@ -39,17 +38,17 @@ export const HorizontalCarousel: React.FC<CarouselProductProps> = ({
         {children}
       </Swiper>
 
-      <CustomPrevButton
-        className={`product-carousel-slider-prev-${uniqueCarouselId}`}
+      <button
+        className={`absolute top-1/2 left-[20px] -translate-y-1/2 flex items-center justify-center text-[18px] w-[72px] h-[72px] bg-[#171717] text-[#fff] border-none rounded-full cursor-pointer z-10 product-carousel-slider-prev-${uniqueCarouselId}`}
       >
         <ChevronLeft size={40} />
-      </CustomPrevButton>
+      </button>
 
-      <CustomNextButton
-        className={`product-carousel-slider-next-${uniqueCarouselId}`}
+      <button
+        className={`absolute top-1/2 right-[20px] -translate-y-1/2 flex items-center justify-center text-[18px] w-[72px] h-[72px] bg-[#171717] text-[#fff] border-none rounded-full cursor-pointer z-10 product-carousel-slider-next-${uniqueCarouselId}`}
       >
         <ChevronRight size={40} />
-      </CustomNextButton>
+      </button>
     </>
   );
 };

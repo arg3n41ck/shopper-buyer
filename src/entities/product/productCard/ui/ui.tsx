@@ -1,14 +1,4 @@
 import React, { FC } from 'react';
-import {
-  ProductCollectionTypeText,
-  ProductCardContainer,
-  ProductInfo,
-  ProductNameText,
-  ProductDescription,
-  ProductPrice,
-  HeartBlock,
-  DiscountBlock,
-} from './styles';
 import Image from 'next/image';
 import { Heart } from 'react-feather';
 
@@ -18,12 +8,14 @@ interface ProductCardProps {
 
 export const ProductCard: FC<ProductCardProps> = ({ item }) => {
   return (
-    <ProductCardContainer>
-      <HeartBlock>
+    <div className="relative grid justify-center grid-gap-[4px]">
+      <div className="absolute right-[3px] top-[3px] cursor-pointer">
         <Heart fill={true && '#B91C1C'} color={true && '#B91C1C'} />
-      </HeartBlock>
+      </div>
 
-      <DiscountBlock>-35%</DiscountBlock>
+      <div className="absolute top-[3px] left-[0] bg-[#B91C1C] py-[2px] px-[8px] text-[#fff] text-sm font-medium">
+        -35%
+      </div>
 
       <Image
         src={item.image}
@@ -33,15 +25,17 @@ export const ProductCard: FC<ProductCardProps> = ({ item }) => {
         priority
       />
 
-      <ProductInfo>
-        <ProductCollectionTypeText>{item.name}</ProductCollectionTypeText>
+      <div className="flex flex-col">
+        <p className="text-gray-600 text-sm font-normal">{item.name}</p>
 
-        <ProductNameText>{item.name}</ProductNameText>
+        <p className="text-black text-xl font-semibold">{item.name}</p>
 
-        <ProductDescription>{item.description}</ProductDescription>
+        <p className="text-gray-700 text-base font-normal">
+          {item.description}
+        </p>
 
-        <ProductPrice className={`mt-1`}>от 18000 сом</ProductPrice>
-      </ProductInfo>
-    </ProductCardContainer>
+        <p className="mt-1 text-black text-base font-semibold">от 18000 сом</p>
+      </div>
+    </div>
   );
 };

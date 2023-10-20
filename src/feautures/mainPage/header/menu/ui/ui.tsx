@@ -1,15 +1,6 @@
 import React, { useState } from 'react';
-import {
-  ButtonsContainer,
-  LanguageAndTypeText,
-  MenuContent,
-  MenuInnerContentContainer,
-  MenuOverlay,
-  MobileMenuContainer,
-  MobileMenuIconsBlock,
-} from './styles';
 import { Heart, Menu } from 'react-feather';
-import LogoIcon from '@/assets/icons/svg/LogoIcon';
+import LogoIcon from '@/shared/assets/icons/svg/LogoIcon';
 import {
   ForSomeoneFilter,
   HeaderCategories,
@@ -17,10 +8,11 @@ import {
   HeaderSearchPopup,
   HeaderShoppingBag,
 } from '../..';
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { MobileHeader } from '../mobileHeader';
-import { CustomButtonWithBackground } from '@/shared/ui/buttonWithoutBackground/ui';
 import { LoginModal, RegisterModal } from '../../userInfo/modals';
+import { Button } from '@/shared/ui/buttons';
+import { BUTTON_STYLES } from '@/shared/lib/consts/styles';
 
 interface FilterOption {
   value: string;
@@ -201,32 +193,33 @@ export const MobileMenu = () => {
 
   return (
     <>
-      <MobileMenuContainer>
-        <MobileMenuIconsBlock>
+      <div className="flex items-center justify-between my-[12px]">
+        <div className="flex items-center gap-5">
           <Menu onClick={handleOpenMenu} />
           <HeaderSearchPopup />
-        </MobileMenuIconsBlock>
+        </div>
 
         <LogoIcon />
 
-        <MobileMenuIconsBlock>
+        <div className="flex items-center gap-5">
           <Heart />
           <HeaderShoppingBag />
-        </MobileMenuIconsBlock>
-      </MobileMenuContainer>
+        </div>
+      </div>
 
       <AnimatePresence>
         {isMenuOpen && (
-          <MenuOverlay
+          <motion.div
+            className="fixed top-0 left-0 w-full h-full bg-opacity-50 bg-[#000] flex items-center z-[11]"
             initial={{ opacity: 0, x: '-100%' }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: '-100%' }}
             transition={{ duration: 0.2, ease: 'easeInOut' }}
           >
-            <MenuContent>
+            <div className="bg-[#fff] w-full h-full overflow-y-scroll">
               <MobileHeader onClose={handleCloseMenu} />
 
-              <MenuInnerContentContainer>
+              <div className="py-5 px-6 grid grid-cols-1 gap-5">
                 <ForSomeoneFilter
                   options={filterOptions}
                   activeOption={activeFilter}
@@ -235,31 +228,30 @@ export const MobileMenu = () => {
 
                 <HeaderCategories categories={categories} />
 
-                <ButtonsContainer>
-                  <CustomButtonWithBackground
-                    $width="100%"
-                    $padding="12px 0"
-                    $background="#171717"
+                <div className="grid grid-cols-1 gap-3">
+                  <Button
+                    variant={BUTTON_STYLES.primaryCta}
                     onClick={() => handleOpenModalActive('login')}
                   >
                     Войти
-                  </CustomButtonWithBackground>
+                  </Button>
 
-                  <CustomButtonWithBackground
-                    $width="100%"
-                    $padding="12px 0"
+                  <Button
+                    variant={BUTTON_STYLES.withoutBackground}
                     onClick={() => handleOpenModalActive('register')}
                   >
                     Зарегистрироваться
-                  </CustomButtonWithBackground>
-                </ButtonsContainer>
+                  </Button>
+                </div>
 
-                <LanguageAndTypeText>Язык и регион</LanguageAndTypeText>
+                <p className="text-[#171717] text-[16px] font-500">
+                  Язык и регион
+                </p>
 
                 <HeaderChangeLanguage />
-              </MenuInnerContentContainer>
-            </MenuContent>
-          </MenuOverlay>
+              </div>
+            </div>
+          </motion.div>
         )}
       </AnimatePresence>
 

@@ -1,17 +1,10 @@
 import React, { useRef, useState } from 'react';
-import { AnimatePresence } from 'framer-motion'; // Импорт motion и AnimatePresence
+import { AnimatePresence, motion } from 'framer-motion'; // Импорт motion и AnimatePresence
 import { User } from 'react-feather';
 import useOutsideClick from '@/shared/lib/hooks/useOutsideClick';
-import {
-  LogInButton,
-  PopupUserInfoContainer,
-  PopupUserInfoItem,
-  PopupUserInfoItemText,
-  UserInfoBlock,
-  UserInfoContainer,
-} from './styles';
-import { PopupContent } from '@/shared/styles/styles';
 import { LoginModal, RegisterModal } from '../modals';
+import { BUTTON_STYLES } from '@/shared/lib/consts/styles';
+import { Button } from '@/shared/ui/buttons';
 
 interface MenuItem {
   text: string;
@@ -45,34 +38,44 @@ export const HeaderUserInfo: React.FC<HeaderUserInfoProps> = () => {
 
   return (
     <>
-      <UserInfoContainer ref={userInfoRef}>
-        <UserInfoBlock onClick={handleClickActive}>
+      <div className="relative" ref={userInfoRef}>
+        <div
+          className="flex items-center gap-[4px] cursor-pointer"
+          onClick={handleClickActive}
+        >
           <User size={24} />
-        </UserInfoBlock>
+        </div>
 
         <AnimatePresence>
           {active && (
-            <PopupContent
+            <motion.div
+              className="absolute mt-2 right-0 bg-[#fff] p-5 border border-solid border-[#676767] z-[11]"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
             >
-              <PopupUserInfoContainer>
-                <LogInButton onClick={() => handleOpenModalActive('login')}>
+              <div className="flex flex-col gap-[12px] w-[295px]">
+                <Button
+                  variant={BUTTON_STYLES.primaryCta}
+                  onClick={() => handleOpenModalActive('login')}
+                >
                   Войти
-                </LogInButton>
+                </Button>
 
                 {menuItems.map((item) => (
-                  <PopupUserInfoItem key={item.key}>
-                    <PopupUserInfoItemText>{item.text}</PopupUserInfoItemText>
-                  </PopupUserInfoItem>
+                  <div
+                    key={item.key}
+                    className="flex items-center justify-between p-[11px] cursor-pointer hover:bg-[#f5f5f5]"
+                  >
+                    <p className="text-[16px] font-normal">{item.text}</p>
+                  </div>
                 ))}
-              </PopupUserInfoContainer>
-            </PopupContent>
+              </div>
+            </motion.div>
           )}
         </AnimatePresence>
-      </UserInfoContainer>
+      </div>
 
       {modalActive === 'login' && (
         <LoginModal

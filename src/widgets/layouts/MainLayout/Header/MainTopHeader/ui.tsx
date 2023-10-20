@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { MainHeaderInnerContainer } from '../ui/styles';
 import {
   ForSomeoneFilter,
   HeaderChangeLanguage,
   HeaderShoppingBag,
   HeaderUserInfo,
 } from '@/feautures/mainPage';
-import LogoIcon from '@/assets/icons/svg/LogoIcon';
+import LogoIcon from '@/shared/assets/icons/svg/LogoIcon';
 import { Heart } from 'react-feather';
 
 const filterOptions = [
@@ -23,7 +22,7 @@ export const MainTopHeader = () => {
   const handleFilterChange = (filter: string) => setActiveOption(filter);
 
   return (
-    <MainHeaderInnerContainer>
+    <div className="w-full py-3 flex items-center justify-between">
       <div>
         <ForSomeoneFilter
           activeOption={activeOption}
@@ -42,6 +41,6 @@ export const MainTopHeader = () => {
         <Heart size={24} />
         <HeaderShoppingBag />
       </div>
-    </MainHeaderInnerContainer>
+    </div>
   );
 };

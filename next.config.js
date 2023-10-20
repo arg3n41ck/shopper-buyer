@@ -6,9 +6,6 @@ const nextConfig = {
   images: {
     domains: ['www.google.com'],
   },
-  compiler: {
-    styledComponents: true,
-  },
 };
 
 module.exports = nextConfig;

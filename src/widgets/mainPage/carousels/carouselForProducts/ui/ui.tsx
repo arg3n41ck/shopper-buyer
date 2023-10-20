@@ -1,21 +1,13 @@
 import React from 'react';
 import SwiperCore from 'swiper';
 import { SwiperSlide } from 'swiper/react';
-import {
-  SlideContainer,
-  SliderHeaderContainer,
-  SliderHeaderMainText,
-  SliderHeaderDescriptionText,
-  CarouselContainer,
-  MobileStyleOfButton,
-} from './styles';
 import { ChevronRight } from 'react-feather';
 import { Navigation, Pagination } from 'swiper/modules';
-import { CustomButtonWithBackground } from '@/shared/ui/buttonWithoutBackground';
 import { ProductCard } from '@/entities/product';
 import { HorizontalCarousel } from '@/feautures/mainPage';
 import 'swiper/css/bundle';
-import { LaptopVersion, MobileVersion } from '@/shared/styles/styles';
+import { Button } from '@/shared/ui/buttons';
+import { BUTTON_STYLES } from '@/shared/lib/consts/styles';
 
 SwiperCore.use([Navigation, Pagination]);
 
@@ -44,33 +36,38 @@ export const CarouselProducts: React.FC<CarouselProductProps> = ({
   extraInfo = null,
 }) => {
   return (
-    <CarouselContainer>
+    <div className="flex flex-col gap-[40px]">
       {extraInfo && (
-        <SliderHeaderContainer>
+        <div className="w-full flex justify-between items-start">
           <div>
-            {extraInfo?.title && (
-              <SliderHeaderMainText>{extraInfo.title}</SliderHeaderMainText>
+            {extraInfo.title && (
+              <p className="text-black text-[32px] font-medium">
+                {extraInfo.title}
+              </p>
             )}
 
-            {extraInfo?.description && (
-              <SliderHeaderDescriptionText>
+            {extraInfo.description && (
+              <p className="text-gray-600 text-[16px] font-normal">
                 {extraInfo.description}
-              </SliderHeaderDescriptionText>
+              </p>
             )}
           </div>
 
-          {extraInfo?.buttonText && uniqueCarouselId !== 'looks-products' && (
-            <LaptopVersion>
-              <CustomButtonWithBackground onClick={extraInfo.onClick}>
+          {extraInfo.buttonText && uniqueCarouselId !== 'looks-products' && (
+            <div className="block md:hidden">
+              <Button
+                variant={BUTTON_STYLES.withoutBackground}
+                onClick={extraInfo.onClick}
+              >
                 {extraInfo.buttonText}
                 <ChevronRight />
-              </CustomButtonWithBackground>
-            </LaptopVersion>
+              </Button>
+            </div>
           )}
-        </SliderHeaderContainer>
+        </div>
       )}
 
-      <SlideContainer className="mt-8">
+      <div className="mt-8 relative">
         <HorizontalCarousel uniqueCarouselId={uniqueCarouselId}>
           {products.map((item, index) => (
             <SwiperSlide key={index}>
@@ -78,18 +75,21 @@ export const CarouselProducts: React.FC<CarouselProductProps> = ({
             </SwiperSlide>
           ))}
         </HorizontalCarousel>
-      </SlideContainer>
+      </div>
 
-      <MobileVersion>
-        <MobileStyleOfButton>
+      <div className="hidden md:block">
+        <div className="flex justify-center">
           {extraInfo?.buttonText && (
-            <CustomButtonWithBackground onClick={extraInfo.onClick}>
+            <Button
+              variant={BUTTON_STYLES.withoutBackground}
+              onClick={extraInfo.onClick}
+            >
               {extraInfo.buttonText}
               <ChevronRight />
-            </CustomButtonWithBackground>
+            </Button>
           )}
-        </MobileStyleOfButton>
-      </MobileVersion>
-    </CarouselContainer>
+        </div>
+      </div>
+    </div>
   );
 };

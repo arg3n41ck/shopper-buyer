@@ -1,28 +1,19 @@
 import React, { FC, useState } from 'react';
-import ShowAndHideIcon from '@/components/passwordShowAndHideIcon';
-import AuthLayout from '@/components/layouts/authLayout/authLayout';
+import AuthLayout from '@/widgets/layouts/authLayout/authLayout';
 import { AuthClient } from '@/shared/apis/authClient';
 import { TypeResetPassword } from '@/shared/lib/types/authTypes';
-import { PATH_AUTH } from '@/shared/routes/paths';
-import Button from '@/shared/ui/button';
-import LoaderIcon from '@/shared/ui/loader';
-import TextField from '@/shared/ui/textField';
-import { passwordLengthCheck } from '@/shared/utils/password';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import { Clock, X } from 'react-feather';
 import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
-import {
-  ResetPasswordContainer,
-  TextFieldContainer,
-} from '../../resetPassword/ui/styles';
-import {
-  ButtonCont,
-  ButtonInfoCont,
-  HeadingText,
-  PasswordHandlerCont,
-} from '../../styles';
+import { PATH_AUTH } from '@/shared/config';
+import TextField from '@/shared/ui/inputs/textField';
+import { passwordLengthCheck } from '@/shared/lib/helpers';
+import { Button } from '@/shared/ui/buttons';
+import { LoaderIcon } from '@/shared/ui/loaders';
+import { ShowAndHideIcon } from '@/shared/ui/templates';
+import { ERROR, NEUTRAL, SUCCESS } from '@/shared/lib/consts/styles';
 
 interface FormValues {
   new_password: string;
@@ -99,13 +90,13 @@ export const NewPasswordPage: FC = () => {
 
   return (
     <AuthLayout>
-      <ResetPasswordContainer>
-        <HeadingText>
+      <div className="max-w-[436px] w-full mx-auto flex flex-col gap-5">
+        <p className="font-semibold text-[32px] text-[#000] mb-5 text-center">
           <Trans i18nKey={'auth.resetPassword.headTextNewPassword'} />
-        </HeadingText>
+        </p>
 
         <form onSubmit={formik.handleSubmit}>
-          <TextFieldContainer>
+          <div className="mx-auto w-full flex flex-col gap-5">
             <TextField
               error={
                 formik.touched.new_password &&
@@ -148,10 +139,13 @@ export const NewPasswordPage: FC = () => {
               placeholder={'Повторите пароль'}
             />
 
-            <PasswordHandlerCont
-              $error={passwordLengthCheck({
-                password: formik.values.new_password,
-              })}
+            <div
+              className={`
+            flex items-center gap-[5px] text-[${
+              passwordLengthCheck({ password: formik.values.new_password })
+                ? SUCCESS[700]
+                : ERROR[500]
+            }]`}
             >
               {passwordLengthCheck({ password: formik.values.new_password }) ? (
                 <Clock size={18} />
@@ -159,19 +153,19 @@ export const NewPasswordPage: FC = () => {
                 <X size={18} />
               )}
               <p>Ваш пароль должен содержать мин. 8 букв</p>
-            </PasswordHandlerCont>
-          </TextFieldContainer>
+            </div>
+          </div>
 
-          <ButtonCont>
+          <div className="mt-5 mb-[62px] w-full flex justify-center">
             <Button type="submit" disabled={isLoading}>
-              <ButtonInfoCont>
+              <div className="flex items-center gap-[10px]">
                 <Trans i18nKey={'auth.resetPassword.submit'} />{' '}
                 <LoaderIcon loading={isLoading} size={24} />
-              </ButtonInfoCont>
+              </div>
             </Button>
-          </ButtonCont>
+          </div>
         </form>
-      </ResetPasswordContainer>
+      </div>
     </AuthLayout>
   );
 };

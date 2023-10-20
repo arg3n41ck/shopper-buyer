@@ -1,29 +1,21 @@
 import React, { FC, useState } from 'react';
-import ShowAndHideIcon from '@/components/passwordShowAndHideIcon';
-import Checkbox from '@/shared/ui/checkbox';
-import Modal from '@/shared/ui/modal';
-import TextField from '@/shared/ui/textField';
-import { passwordLengthCheck } from '@/shared/utils/password';
-import { PasswordHandlerCont } from '@/widgets/auth/styles';
 import { useFormik } from 'formik';
 import { AlertCircle, Check } from 'react-feather';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
+import { Modal } from '@/shared/ui/modals';
+import TextField from '@/shared/ui/inputs/textField';
+import { passwordLengthCheck } from '@/shared/lib/helpers';
+import Checkbox from '@/shared/ui/inputs/checkbox';
+import Image from 'next/image';
+import { Button } from '@/shared/ui/buttons';
 import {
-  LoginInfoContainer,
-  ModalInnerContainer,
-  PreferenceBlock,
-  PreferenceBlockCheckbox,
-  PreferenceBlockImage,
-  PreferenceBlockInnerText,
-  SelectYourPreferencesBlock,
-  SelectYourPreferencesExtraInfoText,
-  SelectYourPreferencesInfoImagesContainer,
-  SelectYourPreferencesInfoTextsContainer,
-  SelectYourPreferencesText,
-  SubmitButton,
-  TextInModal,
-} from './styles';
+  BUTTON_STYLES,
+  ERROR,
+  NEUTRAL,
+  SUCCESS,
+} from '@/shared/lib/consts/styles';
+import { ShowAndHideIcon } from '@/shared/ui/templates';
 
 interface RegisterModalProps {
   open: boolean;
@@ -104,10 +96,12 @@ export const RegisterModal: FC<RegisterModalProps> = ({ open, onClose }) => {
 
   return (
     <Modal open={open} onClose={onClose}>
-      <ModalInnerContainer>
-        <TextInModal>Новый пользователь</TextInModal>
+      <div className="p-10 flex flex-col gap-5">
+        <p className="text-[#000] text-[24px] font-semibold text-center">
+          Новый пользователь
+        </p>
 
-        <LoginInfoContainer>
+        <div className="w-full flex flex-col gap-3">
           <TextField
             value={formik.values.email}
             onChange={formik.handleChange}
@@ -128,10 +122,13 @@ export const RegisterModal: FC<RegisterModalProps> = ({ open, onClose }) => {
             placeholder="Пароль"
           />
 
-          <PasswordHandlerCont
-            $error={passwordLengthCheck({
-              password: formik.values.password,
-            })}
+          <div
+            className={`
+  flex items-center gap-[5px] text-[${
+    passwordLengthCheck({ password: formik.values.password })
+      ? SUCCESS[700]
+      : NEUTRAL[500]
+  }]`}
           >
             {passwordLengthCheck({ password: formik.values.password }) ? (
               <Check size={16} />
@@ -139,39 +136,28 @@ export const RegisterModal: FC<RegisterModalProps> = ({ open, onClose }) => {
               <AlertCircle size={16} />
             )}
 
-            <p>Ваш пароль должен содержать мин. 8 букв</p>
-          </PasswordHandlerCont>
+            <p className={`text-[${ERROR[700]}]`}>
+              Ваш пароль должен содержать мин. 8 букв
+            </p>
+          </div>
+        </div>
 
-          {/* <TextField
-            value={formik.values.repeat_password}
-            onChange={formik.handleChange}
-            name="repeat_password"
-            type={showPassword.repeat_password ? 'text' : 'password'}
-            endAdornment={ShowAndHideIcon({
-              show: showPassword.repeat_password,
-              onHide: () => handlePasswordToggle('repeat_password'),
-              onShow: () => handlePasswordToggle('repeat_password'),
-            })}
-            placeholder="Повторите пароль"
-          /> */}
-        </LoginInfoContainer>
-
-        <SelectYourPreferencesInfoTextsContainer>
-          <SelectYourPreferencesBlock>
-            <SelectYourPreferencesText>
+        <div className="flex flex-col gap-1">
+          <div className="flex items-center gap-2">
+            <p className="text-[#000] text-[20px] font-semibold md:text-[16px] sm:text-[12px]">
               Укажите ваши предпочтения
-            </SelectYourPreferencesText>
+            </p>
 
-            <SelectYourPreferencesExtraInfoText>
+            <p className="text-[#676767] text-[16px] font-normal sm:text-[12px]">
               (Не обязательно)
-            </SelectYourPreferencesExtraInfoText>
-          </SelectYourPreferencesBlock>
+            </p>
+          </div>
 
-          <SelectYourPreferencesExtraInfoText>
+          <p className="text-[#676767] text-[16px] font-normal sm:text-[12px]">
             Мы используем эту информацию чтобы предоставлять более
             персонализированные рекомендации
-          </SelectYourPreferencesExtraInfoText>
-        </SelectYourPreferencesInfoTextsContainer>
+          </p>
+        </div>
 
         <Checkbox
           label={'Выбрать все'}
@@ -179,42 +165,48 @@ export const RegisterModal: FC<RegisterModalProps> = ({ open, onClose }) => {
           onChange={handleSelectAllCheckbox}
         />
 
-        <SelectYourPreferencesInfoImagesContainer>
+        <div className="w-full flex justify-between gap-4">
           {clothes.map((preference) => (
-            <PreferenceBlock
+            <div
               key={preference.id}
-              $active={formik.values.preferred_clothing.includes(
-                preference.value,
-              )}
+              className={`max-w-[134px] w-full h-full relative border-[2px] ${
+                formik.values.preferred_clothing.includes(preference.value)
+                  ? 'border-[#171717]'
+                  : 'border-transparent'
+              }`}
             >
-              <PreferenceBlockCheckbox>
+              <div className="absolute top-[10px] left-[10px]">
                 <Checkbox
                   checked={formik.values.preferred_clothing.includes(
                     preference.value,
                   )}
                   onChange={() => handleCheckboxChange(preference.value)}
                 />
-              </PreferenceBlockCheckbox>
+              </div>
 
-              <PreferenceBlockImage
+              <Image
                 src={preference.img}
                 width={134}
                 height={137}
                 alt={preference.title}
                 layout=""
+                className="h-[137px]"
               />
 
-              <PreferenceBlockInnerText>
+              <p className="text-[#fff] text-[14px] font-semibold absolute left-[10px] bottom-[10px]">
                 {preference.title}
-              </PreferenceBlockInnerText>
-            </PreferenceBlock>
+              </p>
+            </div>
           ))}
-        </SelectYourPreferencesInfoImagesContainer>
+        </div>
 
-        <SubmitButton onClick={() => formik.handleSubmit()}>
+        <Button
+          variant={BUTTON_STYLES.primaryCta}
+          onClick={() => formik.handleSubmit()}
+        >
           Зарегистрироваться
-        </SubmitButton>
-      </ModalInnerContainer>
+        </Button>
+      </div>
     </Modal>
   );
 };

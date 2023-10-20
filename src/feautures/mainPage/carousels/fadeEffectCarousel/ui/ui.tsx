@@ -4,13 +4,6 @@ import 'swiper/css/effect-fade';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperCore from 'swiper';
 import { Navigation, Pagination, EffectFade } from 'swiper/modules';
-import {
-  SlideContainer,
-  SlideImage,
-  CustomPrevButton,
-  CustomNextButton,
-  CustomPagination,
-} from './styles';
 import { CarouselInfo } from '@/entities/mainPage';
 import { ChevronLeft, ChevronRight } from 'react-feather';
 
@@ -23,6 +16,12 @@ interface FadeEffectCarouselProps {
   buttonText?: string;
 }
 
+const renderCustomBullet = (index: number, className: string) => {
+  return `<span key=${index} class="!w-[80px] !h-[4px] !bg-[#171717] !rounded-none
+  ${className} 
+  "></span>`;
+};
+
 export const FadeEffectCarousel: React.FC<FadeEffectCarouselProps> = ({
   images,
   title,
@@ -30,7 +29,7 @@ export const FadeEffectCarousel: React.FC<FadeEffectCarouselProps> = ({
   buttonText,
 }) => {
   return (
-    <SlideContainer>
+    <div className="w-full h-[584px] relative overflow-hidden">
       <CarouselInfo
         title={title}
         description={description}
@@ -46,26 +45,31 @@ export const FadeEffectCarousel: React.FC<FadeEffectCarouselProps> = ({
         pagination={{
           el: '.swiper-pagination',
           clickable: true,
+          renderBullet: renderCustomBullet,
         }}
         loop
         speed={500}
       >
         {images.map((image, index) => (
           <SwiperSlide key={index}>
-            <SlideImage src={image} alt={`Slide ${index}`} />
+            <img
+              className="w-full h-[584px] object-cover"
+              src={image}
+              alt={`Slide ${index}`}
+            />
           </SwiperSlide>
         ))}
       </Swiper>
 
-      <CustomPrevButton className="swiper-prev">
+      <button className="absolute top-1/2 left-[20px] -translate-y-1/2 flex items-center justify-center text-[18px] w-[72px] h-[72px] bg-[#171717] text-[#fff] border-none rounded-full cursor-pointer z-10 swiper-prev">
         <ChevronLeft size={40} />
-      </CustomPrevButton>
+      </button>
 
-      <CustomNextButton className="swiper-next">
+      <button className="absolute top-1/2 right-[20px] -translate-y-1/2 flex items-center justify-center text-[18px] w-[72px] h-[72px] bg-[#171717] text-[#fff] border-none rounded-full cursor-pointer z-10 swiper-next">
         <ChevronRight size={40} />
-      </CustomNextButton>
+      </button>
 
-      <CustomPagination className="swiper-pagination" />
-    </SlideContainer>
+      <div className="!w-max !bottom-[15%] !left-[12%] md:!bottom-[10px] md:!left-[10px] swiper-pagination" />
+    </div>
   );
 };

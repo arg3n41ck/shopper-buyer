@@ -1,56 +1,41 @@
 import React from 'react';
-import {
-  ProductInBagColorText,
-  ProductInBagContainer,
-  ProductInBagDescriptionText,
-  ProductInBagDiscountPriceText,
-  ProductInBagInfoContainer,
-  ProductInBagNameText,
-  ProductInBagPriceText,
-  ProductInBagTextsBlock,
-} from './styles';
 import { Trash2 } from 'react-feather';
-import { ImageFromNext } from '@/shared/styles/styles';
+import Image from 'next/image';
 
 const ProductItemInBag = () => {
   return (
-    <ProductInBagContainer>
-      <ImageFromNext
-        src={'/sumka.png'}
-        width={120}
-        height={120}
-        alt="lacoste"
-      />
+    <div className="w-full flex items-start justify-between">
+      <Image src={'/sumka.png'} width={120} height={120} alt="lacoste" />
 
-      <ProductInBagInfoContainer>
-        <ProductInBagNameText>Stella McCartney</ProductInBagNameText>
+      <div className="flex flex-col gap-1">
+        <p className="text-[#171717] text-[20px] font-semibold">
+          Stella McCartney
+        </p>
 
-        <ProductInBagDescriptionText>
+        <p className="text-[#676767] text-[16px] font-normal">
           брюки с разрезами
-        </ProductInBagDescriptionText>
+        </p>
 
-        <ProductInBagTextsBlock>
-          <ProductInBagDescriptionText>Цвет:</ProductInBagDescriptionText>
-          <ProductInBagColorText>Черный</ProductInBagColorText>
-        </ProductInBagTextsBlock>
+        <div className="flex items-center gap-1">
+          <p className="text-[#676767] text-[16px] font-normal">Цвет:</p>
+          <p className="text-[#171717] text-[16px] font-normal">Черный</p>
+        </div>
 
-        <ProductInBagTextsBlock>
-          <ProductInBagDescriptionText>Кол-во:</ProductInBagDescriptionText>
-        </ProductInBagTextsBlock>
+        <div className="flex items-center gap-1">
+          <p className="text-[#676767] text-[16px] font-normal">Кол-во:</p>
+        </div>
 
-        <ProductInBagTextsBlock>
-          <ProductInBagPriceText>
-            от <span>18 650 сом</span>
-          </ProductInBagPriceText>
+        <div className="flex items-center gap-1">
+          <p className="text-[#171717] text-[16px] font-semibold">
+            от <span className="line-through">18 650 сом</span>
+          </p>
 
-          <ProductInBagDiscountPriceText>
-            18 650 сом
-          </ProductInBagDiscountPriceText>
-        </ProductInBagTextsBlock>
-      </ProductInBagInfoContainer>
+          <p className="text-[#b91c1c] text-[16px] font-semibold">18 650 сом</p>
+        </div>
+      </div>
 
       <Trash2 size={24} />
-    </ProductInBagContainer>
+    </div>
   );
 };
 

@@ -1,21 +1,5 @@
 import React, { useRef } from 'react';
-import { AnimatePresence } from 'framer-motion';
-import {
-  MenuOverlay,
-  MenuContent,
-  HeaderMenuContentText,
-  HeaderMenuContent,
-  Line,
-  MenuContentItem,
-  FooterMenuContent,
-  FooterMenuContentTextsBlock,
-  FooterMenuContentText,
-  FooterMenuContentTextsContainer,
-  FooterMenuContentBoldText,
-  PayButton,
-  MainMenuContentProductsContainer,
-  ProductsInBagContainer,
-} from './styles';
+import { AnimatePresence, motion } from 'framer-motion';
 import useOutsideClick from '@/shared/lib/hooks/useOutsideClick';
 import { X } from 'react-feather';
 import ProductItemInBag from './ProductItemInBag';
@@ -39,69 +23,85 @@ const HeaderShoppingBagMenu: React.FC<MenuProps> = ({ isOpen, onClose }) => {
   return (
     <AnimatePresence>
       {isOpen && (
-        <MenuOverlay
+        <motion.div
+          className="fixed top-0 right-0 w-full h-full bg-opacity-50 bg-[#000] flex items-end justify-end z-[50]"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2, ease: 'easeInOut' }}
         >
-          <MenuContent
+          <motion.div
+            className="fixed top-0 right-0 w-full h-full max-w-[480px] bg-[#fff] transform translate-x-full transition-transform duration-[300] z-[50]"
             ref={headerShoppingBugRef}
             initial={{ x: '100%' }}
             animate={{ x: '0' }}
             exit={{ x: '100%' }}
           >
-            <MenuContentItem>
-              <HeaderMenuContent>
+            <div className="p-5">
+              <div className="flex items-center">
                 <X size={24} onClick={onClose} />
 
-                <HeaderMenuContentText>Корзина</HeaderMenuContentText>
-              </HeaderMenuContent>
-            </MenuContentItem>
+                <p className="w-full text-[#171717] text-[24px] font-semibold text-center">
+                  Корзина
+                </p>
+              </div>
+            </div>
 
-            <Line />
+            <div className="border border-[#ececec]" />
 
-            <MenuContentItem>
-              <MainMenuContentProductsContainer>
-                <ProductsInBagContainer>{productItems}</ProductsInBagContainer>
-              </MainMenuContentProductsContainer>
-            </MenuContentItem>
+            <div className="p-5">
+              <div className="h-[calc(100vh-300px)] overflow-y-scroll touch-none scrollbar-none">
+                <div className="flex flex-col gap-5">{productItems}</div>
+              </div>
+            </div>
 
-            <FooterMenuContent>
-              <Line />
+            <div className="fixed bottom-0 w-full">
+              <div className="border border-[#ececec]" />
 
-              <MenuContentItem>
-                <FooterMenuContentTextsContainer>
-                  <FooterMenuContentTextsBlock>
-                    <FooterMenuContentText>
+              <div className="p-5">
+                <div className="flex flex-col gap-2">
+                  <div className="flex items-center justify-between">
+                    <p className="text-[#171717] text-[16px] font-normal">
                       Промежуточный итог
-                    </FooterMenuContentText>
+                    </p>
 
-                    <FooterMenuContentText>56 984 сом</FooterMenuContentText>
-                  </FooterMenuContentTextsBlock>
+                    <p className="text-[#171717] text-[16px] font-normal">
+                      56 984 сом
+                    </p>
+                  </div>
 
-                  <FooterMenuContentTextsBlock>
-                    <FooterMenuContentText>Доставка</FooterMenuContentText>
+                  <div className="flex items-center justify-between">
+                    <p className="text-[#171717] text-[16px] font-normal">
+                      Доставка
+                    </p>
 
-                    <FooterMenuContentText>1 200 сом</FooterMenuContentText>
-                  </FooterMenuContentTextsBlock>
+                    <p className="text-[#171717] text-[16px] font-normal">
+                      1 200 сом
+                    </p>
+                  </div>
 
-                  <FooterMenuContentTextsBlock>
-                    <FooterMenuContentBoldText>Итог</FooterMenuContentBoldText>
+                  <div className="flex items-center justify-between">
+                    <p className="text-[#171717] text-[20px] font-semibold">
+                      Итог
+                    </p>
 
-                    <FooterMenuContentBoldText>
+                    <p className="text-[#171717] text-[20px] font-semibold">
                       58 184 сом
-                    </FooterMenuContentBoldText>
-                  </FooterMenuContentTextsBlock>
+                    </p>
+                  </div>
 
-                  <PayButton className={'mt-[12px]'}>
+                  <button
+                    className={
+                      'w-full flex items-center justify-center py-[12px] px-[55px] bg-[#171717] text-[#fff] text-[16px] font-semibold cursor-pointer mt-[12px]'
+                    }
+                  >
                     Перейти к оплате
-                  </PayButton>
-                </FooterMenuContentTextsContainer>
-              </MenuContentItem>
-            </FooterMenuContent>
-          </MenuContent>
-        </MenuOverlay>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </motion.div>
       )}
     </AnimatePresence>
   );
