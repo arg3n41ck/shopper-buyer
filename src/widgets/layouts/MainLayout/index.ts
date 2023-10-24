@@ -1,2 +1,2 @@
-import MainLayout from './ui/ui';
+import MainLayout from './ui';
 export { MainLayout };

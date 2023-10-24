@@ -1,21 +1,21 @@
-import React, { FC, useRef, useState } from 'react'
-import { ChevronDown } from 'react-feather'
-import useOutsideClick from '@/shared/lib/hooks/useOutsideClick'
-import cn from 'classnames'
+import React, { useRef, useState } from 'react';
+import { ChevronDown } from 'react-feather';
+import useOutsideClick from '@/shared/lib/hooks/useOutsideClick';
+import cn from 'classnames';
 
 type SelectProps = {
-  options: any[]
-  value: string
-  inputLabel?: string
-  placeholder?: string
-  error?: boolean
-  errorMessage?: any
-  onChange: (value: string) => void
-  width?: string
-  fieldTitle: string
-  fieldValue: string
-  className?: string
-}
+  options: any[];
+  value: string;
+  inputLabel?: string;
+  placeholder?: string;
+  error?: boolean;
+  errorMessage?: any;
+  onChange: (value: string) => void;
+  width?: string;
+  fieldTitle: string;
+  fieldValue: string;
+  className?: string;
+};
 
 const CustomSelect = ({
   options,
@@ -30,19 +30,19 @@ const CustomSelect = ({
   fieldValue,
   className,
 }: SelectProps) => {
-  const [isOpen, setIsOpen] = useState(false)
-  const selectRef = useRef(null)
-  const [focused, setFocus] = useState(false)
-  const isActive = focused || value
+  const [isOpen, setIsOpen] = useState(false);
+  const selectRef = useRef(null);
+  const [focused, setFocus] = useState(false);
+  const isActive = focused || value;
 
   const handleSelect = (optionValue: any) => {
-    setIsOpen(false)
-    onChange(optionValue[fieldValue])
-  }
+    setIsOpen(false);
+    onChange(optionValue[fieldValue]);
+  };
 
   useOutsideClick(selectRef, () => {
-    setIsOpen(false)
-  })
+    setIsOpen(false);
+  });
 
   return (
     <div
@@ -52,18 +52,30 @@ const CustomSelect = ({
       onBlur={() => setFocus(false)}
       className={cn('relative', className)}
     >
-      {inputLabel && <label className="leading-[16px] text-[13p.33px] text-neutral-900">{inputLabel}</label>}
+      {inputLabel && (
+        <label className="leading-[16px] text-[13p.33px] text-neutral-900">
+          {inputLabel}
+        </label>
+      )}
 
       <div
         className={cn(
           'flex h-[48px] w-full cursor-pointer items-center border-[1px] border-neutral-300 px-[9px] py-[8px]',
-          { ['border-neutral-900 text-neutral-900']: isActive, ['mt-2']: inputLabel, ['border-error500']: error },
+          {
+            ['border-neutral-900 text-neutral-900']: isActive,
+            ['mt-2']: inputLabel,
+            ['border-error500']: error,
+          },
         )}
         onClick={() => setIsOpen(!isOpen)}
       >
-        {options.find((option) => option[fieldValue] === value)?.[fieldTitle] || placeholder}
+        {options.find((option) => option[fieldValue] === value)?.[fieldTitle] ||
+          placeholder}
         <div
-          className={cn('absolute right-[15px] transition-all duration-[0.1s] ease-in-out', { ['rotate-180']: isOpen })}
+          className={cn(
+            'absolute right-[15px] transition-all duration-[0.1s] ease-in-out',
+            { ['rotate-180']: isOpen },
+          )}
         >
           <ChevronDown />
         </div>
@@ -86,9 +98,11 @@ const CustomSelect = ({
           )}
         </>
       )}
-      {errorMessage && <label className="text-[11.11px] text-error500">{errorMessage}</label>}
+      {errorMessage && (
+        <label className="text-[11.11px] text-error500">{errorMessage}</label>
+      )}
     </div>
-  )
-}
+  );
+};
 
-export default CustomSelect
+export default CustomSelect;

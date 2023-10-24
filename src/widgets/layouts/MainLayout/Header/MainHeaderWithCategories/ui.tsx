@@ -1,5 +1,5 @@
-import { HeaderCategories, HeaderSearchPopup } from '@/feautures/mainPage';
 import React from 'react';
+import { HeaderCategories, HeaderSearchPopup } from '@/feautures/header';
 
 const categories = [
   {

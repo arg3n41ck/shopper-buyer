@@ -1,2 +1,2 @@
-import MainFooter from './ui/ui';
+import MainFooter from './ui';
 export { MainFooter };
