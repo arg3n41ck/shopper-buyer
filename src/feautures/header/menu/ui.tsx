@@ -193,7 +193,7 @@ export const MobileMenu = () => {
 
   return (
     <>
-      <div className="flex items-center justify-between my-[12px]">
+      <div className="flex items-center justify-between py-[12px]">
         <div className="flex items-center gap-5">
           <Menu onClick={handleOpenMenu} />
           <HeaderSearchPopup />

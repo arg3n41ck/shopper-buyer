@@ -11,7 +11,7 @@ import TextField from '@/shared/ui/inputs/textField';
 import Image from 'next/image';
 import { Button } from '@/shared/ui/buttons';
 import { BUTTON_STYLES } from '@/shared/lib/consts/styles';
-import { Modal } from '@/shared/ui/modals';
+import { Modal } from '../../../../shared/ui/modal-windows';
 import { ShowAndHideIcon } from '@/shared/ui/templates';
 
 interface LoginModalProps {

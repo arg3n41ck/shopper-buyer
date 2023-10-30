@@ -7,7 +7,8 @@ import { ProductCard } from '@/entities/product';
 import 'swiper/css/bundle';
 import { Button } from '@/shared/ui/buttons';
 import { BUTTON_STYLES } from '@/shared/lib/consts/styles';
-import {HorizontalCarousel} from "@/shared/ui/carousels";
+import { HorizontalCarousel } from '@/shared/ui/carousels';
+import { Product } from '@/shared/api/gen';
 
 SwiperCore.use([Navigation, Pagination]);
 
@@ -18,14 +19,8 @@ interface ExtraInfo {
   onClick?: () => void;
 }
 
-interface Product {
-  name: string;
-  description: string;
-  image: string;
-}
-
 interface CarouselProductProps {
-  products: Product[];
+  products: Product[] | undefined;
   uniqueCarouselId: string;
   extraInfo?: ExtraInfo;
 }
@@ -69,7 +64,7 @@ export const CarouselProducts: React.FC<CarouselProductProps> = ({
 
       <div className="mt-8 relative">
         <HorizontalCarousel uniqueCarouselId={uniqueCarouselId}>
-          {products.map((item, index) => (
+          {products?.map((item, index) => (
             <SwiperSlide key={index}>
               <ProductCard item={item} />
             </SwiperSlide>

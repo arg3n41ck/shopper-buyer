@@ -3,7 +3,7 @@ import { useFormik } from 'formik';
 import { AlertCircle, Check } from 'react-feather';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
-import { Modal } from '@/shared/ui/modals';
+import { Modal } from '../../../../shared/ui/modal-windows';
 import TextField from '@/shared/ui/inputs/textField';
 import { passwordLengthCheck } from '@/shared/lib/helpers';
 import Checkbox from '@/shared/ui/inputs/checkbox';

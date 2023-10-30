@@ -12,9 +12,8 @@ type SelectProps = {
   errorMessage?: any;
   onChange: (value: string) => void;
   width?: string;
-  fieldTitle: string;
-  fieldValue: string;
-  className?: string;
+  fields?: { label: string; value: string };
+  classNames?: { wrapper?: string; select?: string; dropdown?: string };
 };
 
 const CustomSelect = ({
@@ -26,9 +25,8 @@ const CustomSelect = ({
   width,
   error,
   errorMessage,
-  fieldTitle,
-  fieldValue,
-  className,
+  fields = { label: 'label', value: 'value' },
+  classNames,
 }: SelectProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const selectRef = useRef(null);
@@ -37,7 +35,7 @@ const CustomSelect = ({
 
   const handleSelect = (optionValue: any) => {
     setIsOpen(false);
-    onChange(optionValue[fieldValue]);
+    onChange(optionValue[fields.value]);
   };
 
   useOutsideClick(selectRef, () => {
@@ -50,7 +48,7 @@ const CustomSelect = ({
       style={{ width }}
       onFocus={() => setFocus(true)}
       onBlur={() => setFocus(false)}
-      className={cn('relative', className)}
+      className={cn('relative', classNames?.wrapper)}
     >
       {inputLabel && (
         <label className="leading-[16px] text-[13p.33px] text-neutral-900">
@@ -60,7 +58,8 @@ const CustomSelect = ({
 
       <div
         className={cn(
-          'flex h-[48px] w-full cursor-pointer items-center border-[1px] border-neutral-300 px-[9px] py-[8px]',
+          'flex w-full cursor-pointer justify-between items-center border-[1px] border-neutral-300 px-[9px] py-[11px]',
+          classNames?.select,
           {
             ['border-neutral-900 text-neutral-900']: isActive,
             ['mt-2']: inputLabel,
@@ -69,13 +68,14 @@ const CustomSelect = ({
         )}
         onClick={() => setIsOpen(!isOpen)}
       >
-        {options.find((option) => option[fieldValue] === value)?.[fieldTitle] ||
-          placeholder}
+        {options.find((option) => option[fields.value] === value)?.[
+          fields.label
+        ] || placeholder}
+
         <div
-          className={cn(
-            'absolute right-[15px] transition-all duration-[0.1s] ease-in-out',
-            { ['rotate-180']: isOpen },
-          )}
+          className={cn('transition-all duration-[0.1s] ease-in-out', {
+            ['rotate-180']: isOpen,
+          })}
         >
           <ChevronDown />
         </div>
@@ -84,14 +84,19 @@ const CustomSelect = ({
       {isOpen && (
         <>
           {!!options.length && (
-            <ul className="absolute left-0 z-[1] m-0 max-h-[200px] w-full list-none overflow-y-auto border-[1px] border-neutral-300 bg-white p-0">
+            <ul
+              className={cn(
+                'absolute left-0 z-[1] m-0 max-h-[200px] w-full list-none overflow-y-auto border-[1px] border-neutral-300 bg-white p-0',
+                classNames?.dropdown,
+              )}
+            >
               {options.map((option) => (
                 <li
                   className="block h-auto cursor-pointer p-[8px] transition-all hover:bg-neutral-300"
                   key={option.id}
                   onClick={() => handleSelect(option)}
                 >
-                  {option[fieldTitle]}
+                  {option[fields.label]}
                 </li>
               ))}
             </ul>

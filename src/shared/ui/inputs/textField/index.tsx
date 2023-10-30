@@ -40,7 +40,7 @@ const TextField = ({
       <div
         onClick={() => inputRef.current && inputRef.current.focus()}
         className={cn(
-          'relative flex cursor-text items-center gap-4 border border-neutral-300 px-[16px] py-[13px] text-black',
+          'relative flex cursor-text items-center gap-[8px] border border-neutral-300 px-[16px] py-[13px] text-black',
           {
             ['!border-[#B91C1C]']: error,
             ['!border-neutral-900']: isActive,

@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Search, X } from 'react-feather';
-import {ForSomeoneFilter, MobileHeader} from '../index';
+import { ForSomeoneFilter, MobileHeader } from '../index';
 import LogoIcon from '@/shared/assets/icons/svg/LogoIcon';
-
 import TextField from '@/shared/ui/inputs/textField';
 
 interface FilterOption {

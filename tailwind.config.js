@@ -9,6 +9,10 @@ module.exports = {
       maxWidth: {
         '8xl': '1920px',
       },
+      fontFamily: {
+        jost: 'var(--fontJost)',
+        mazzard: 'var(--fontMazzard)',
+      },
       colors: {
         black: 'var(--black)',
         white: 'var(--white)',

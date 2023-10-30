@@ -2,23 +2,26 @@ import React from 'react';
 import { CarouselProducts } from '@/widgets/product';
 import { Carousel } from '@/shared/ui/carousels';
 import { Looks } from '@/shared/ui/templates/looks';
+import { useQuery } from '@tanstack/react-query';
+import { $apiProductsApi } from '@/shared/api';
 
 const images = ['/213.webp', '/12.jpg'];
 
-const products = [
-  { name: 'Товар 1', description: 'Описание товара 1', image: '/sumka.png' },
-  { name: 'Товар 2', description: 'Описание товара 2', image: '/sumka.png' },
-  { name: 'Товар 3', description: 'Описание товара 3', image: '/sumka.png' },
-  { name: 'Товар 4', description: 'Описание товара 4', image: '/sumka.png' },
-  { name: 'Товар 5', description: 'Описание товара 5', image: '/sumka.png' },
-  { name: 'Товар 6', description: 'Описание товара 6', image: '/sumka.png' },
-  { name: 'Товар 7', description: 'Описание товара 7', image: '/sumka.png' },
-  { name: 'Товар 8', description: 'Описание товара 8', image: '/sumka.png' },
-  { name: 'Товар 9', description: 'Описание товара 9', image: '/sumka.png' },
-  { name: 'Товар 10', description: 'Описание товара 10', image: '/sumka.png' },
-];
-
 export const HomeMainSection = () => {
+  const { data } = useQuery({
+    queryFn: async () => {
+      const { data } = await $apiProductsApi.productsCustomerProductsList(
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        25,
+      );
+      return data;
+    },
+    queryKey: [''],
+  });
   return (
     <>
       <Carousel
@@ -31,7 +34,7 @@ export const HomeMainSection = () => {
       />
 
       <CarouselProducts
-        products={products}
+        products={data?.results}
         uniqueCarouselId={'special-for-user-products'}
         extraInfo={{
           title: 'Отобрано специально для вас',
@@ -45,7 +48,7 @@ export const HomeMainSection = () => {
         <Looks />
 
         <CarouselProducts
-          products={products}
+          products={data?.results}
           uniqueCarouselId={'looks-products'}
           extraInfo={{
             buttonText: 'Смотреть подборку',
@@ -55,7 +58,7 @@ export const HomeMainSection = () => {
       </div>
 
       <CarouselProducts
-        products={products}
+        products={data?.results}
         uniqueCarouselId={'popular-products'}
         extraInfo={{
           title: 'Популярное',
@@ -65,7 +68,7 @@ export const HomeMainSection = () => {
       />
 
       <CarouselProducts
-        products={products}
+        products={data?.results}
         uniqueCarouselId={'watched-products'}
         extraInfo={{
           title: 'Вы смотрели',
