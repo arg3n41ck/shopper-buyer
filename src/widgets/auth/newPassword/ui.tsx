@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 import { AuthLayout } from '@/widgets/layouts/authLayout';
-import { AuthClient } from '@/shared/apis/authClient';
-import { TypeResetPassword } from '@/shared/lib/types/authTypes';
+// import { AuthClient } from '@/shared/apis/authClient';
+// import { TypeResetPassword } from '@/shared/lib/types/authTypes';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import { Clock, X } from 'react-feather';
@@ -40,13 +40,13 @@ const initialValues: FormValues = {
   repeat_password: '',
 };
 
-const authClient = new AuthClient();
+// const authClient = new AuthClient();
 
 export const NewPasswordPage: FC = () => {
   const router = useRouter();
   const { t } = useTranslation();
 
-  const token = (router.query.token as string) || '';
+  // const token = (router.query.token as string) || '';
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const [showPassword, setShowPassword] = useState<{
@@ -60,17 +60,17 @@ export const NewPasswordPage: FC = () => {
   const formik = useFormik({
     initialValues,
     validationSchema: validationSchema(t),
-    onSubmit: async ({ new_password }) => {
+    onSubmit: async () => {
       setIsLoading(true);
-      const body: TypeResetPassword = {
-        token,
-        new_password,
-      };
+      // const body: TypeResetPassword = {
+      //   token,
+      //   new_password,
+      // };
 
       try {
-        await authClient.resetPassword(body);
+        // await authClient.resetPassword(body);
         setIsLoading(false);
-        router.push({
+        await router.push({
           pathname: PATH_AUTH.authSuccess,
           query: {
             title: t('auth.resetPassword.successChangePassword'),
@@ -79,7 +79,7 @@ export const NewPasswordPage: FC = () => {
         });
       } catch (error) {
         setIsLoading(false);
-        console.log(error);
+        // console.log(error);
       }
     },
   });

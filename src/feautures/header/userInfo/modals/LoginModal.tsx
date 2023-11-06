@@ -11,8 +11,11 @@ import TextField from '@/shared/ui/inputs/textField';
 import Image from 'next/image';
 import { Button } from '@/shared/ui/buttons';
 import { BUTTON_STYLES } from '@/shared/lib/consts/styles';
-import { Modal } from '../../../../shared/ui/modal-windows';
+import { Modal } from '@/shared/ui/modal-windows';
 import { ShowAndHideIcon } from '@/shared/ui/templates';
+import { toast } from 'react-toastify';
+import { $apiAccountsApi } from '@/shared/api';
+import Cookies from 'js-cookie';
 
 interface LoginModalProps {
   open: boolean;
@@ -22,7 +25,7 @@ interface LoginModalProps {
 
 const validationSchema = (t: (key: string) => string) =>
   yup.object({
-    email: yup
+    username: yup
       .string()
       .email(t('auth.validation.email.invalid'))
       .required(t('auth.validation.email.required')),
@@ -46,16 +49,24 @@ export const LoginModal: FC<LoginModalProps> = ({
 
   const formik = useFormik({
     initialValues: {
-      email: '',
+      username: '',
       password: '',
     },
     validationSchema: validationSchema(t),
     onSubmit: async (values) => {
-      try {
-        console.log(values);
-      } catch (error) {
-        console.log(error);
-      }
+      const loginFetch = async () => {
+        const { data } = await $apiAccountsApi.accountsAuthTokenCreate(values);
+        Cookies.set('access_token', (data as any)?.access);
+        Cookies.set('refresh_token', (data as any)?.refresh);
+      };
+
+      await toast.promise(loginFetch(), {
+        pending: 'Вход...',
+        success: 'Вход успешно выполнен!',
+        error: 'Неверный логин или пароль',
+      });
+
+      await onClose();
     },
   });
 
@@ -72,9 +83,9 @@ export const LoginModal: FC<LoginModalProps> = ({
 
         <div className="w-full flex flex-col gap-3">
           <TextField
-            value={formik.values.email}
+            value={formik.values.username}
             onChange={formik.handleChange}
-            name="email"
+            name="username"
             placeholder={'Адрес электронной почты или номер телефона'}
           />
 

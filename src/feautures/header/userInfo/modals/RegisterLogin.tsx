@@ -65,11 +65,11 @@ export const RegisterModal: FC<RegisterModalProps> = ({ open, onClose }) => {
       preferred_clothing: [] as string[],
     },
     validationSchema: validationSchema(t),
-    onSubmit: async (values) => {
+    onSubmit: async () => {
       try {
-        console.log(values);
+        // console.log(values);
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
   });

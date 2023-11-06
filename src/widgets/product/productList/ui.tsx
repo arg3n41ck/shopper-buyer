@@ -3,27 +3,22 @@ import { ProductCard } from '@/entities/product';
 import { Button } from '@/shared/ui/buttons';
 import { LoaderIcon } from '@/shared/ui/loaders';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { $apiProductsApi } from '@/shared/api';
+import { $apiElasticApi } from '@/shared/api';
 import { pageToOffset } from '@/shared/lib/helpers';
 import { PaginationProgressBar } from '@/shared/ui/templates';
+import { Product } from '@/shared/api/gen';
 
 export const ProductList = () => {
   const { data, fetchNextPage, hasNextPage, isFetching } = useInfiniteQuery({
     initialPageParam: 1,
-    queryKey: ['productsCustomerProductsList'],
+    queryKey: ['elasticProductsList'],
     queryFn: async ({ pageParam = 1 }) => {
-      const { data } = await $apiProductsApi.productsCustomerProductsList(
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
+      const { data } = await $apiElasticApi.elasticProductsList(
         16,
         pageToOffset(pageParam, 16),
       );
       return data;
     },
-
     getNextPageParam: (lastPage, allPages, lastPageParam) =>
       lastPage?.next ? lastPageParam + 1 : undefined,
   });
@@ -47,7 +42,7 @@ export const ProductList = () => {
                   wrapper: 'max-w-[220px]',
                   image: 'max-h-[220px]',
                 }}
-                item={product}
+                item={product as unknown as Product}
                 key={product.slug}
               />
             )),

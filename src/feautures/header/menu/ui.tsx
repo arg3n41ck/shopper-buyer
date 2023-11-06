@@ -13,6 +13,7 @@ import { MobileHeader } from './mobile';
 import { LoginModal, RegisterModal } from '../userInfo/modals';
 import { Button } from '@/shared/ui/buttons';
 import { BUTTON_STYLES } from '@/shared/lib/consts/styles';
+import Link from 'next/link';
 
 interface FilterOption {
   value: string;
@@ -199,7 +200,9 @@ export const MobileMenu = () => {
           <HeaderSearchPopup />
         </div>
 
-        <LogoIcon />
+        <Link href="/">
+          <LogoIcon />
+        </Link>
 
         <div className="flex items-center gap-5">
           <Heart />

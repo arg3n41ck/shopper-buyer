@@ -44,7 +44,7 @@ export const ResetPasswordPage: FC<ResetPasswordProps> = () => {
       }
 
       try {
-        console.log(values);
+        // console.log(values);
         // const { user_exists } =
         //   await authClient.checkUserByEmailForResetPassword({ email });
         setIsLoading(false);
@@ -55,7 +55,7 @@ export const ResetPasswordPage: FC<ResetPasswordProps> = () => {
         //   });
       } catch (error) {
         setIsLoading(false);
-        console.log(error);
+        // console.log(error);
       }
     },
   });

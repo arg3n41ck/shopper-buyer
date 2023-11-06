@@ -123,60 +123,65 @@ const socialMediaIcons = (
 const MainFooter = () => {
   return (
     <div className="w-full bg-[#f8f8f8] mt-[80px]">
-      <div className="px-[48px] md:px-[20px] py-[52px] md:py-[20px] flex items-end flex-wrap gap-[40px] justify-between border-t border-[#dbdbdb] w-90% md:flex-col md:items-start md:gap-[20px]">
-        <FooterSection title="Помощь">
-          {footerTexts.map((item) => (
-            <p
-              className="text-[#676767] text-[16px] font-normal cursor-pointer"
-              key={item.id}
-            >
-              {item.title}
-            </p>
-          ))}
-        </FooterSection>
+      <div className="main-container">
+        <div className="px-[48px] md:px-[20px] py-[52px] md:py-[20px] flex items-end flex-wrap gap-[40px] justify-between border-t border-[#dbdbdb] w-90% md:flex-col md:items-start md:gap-[20px]">
+          <FooterSection title="Помощь">
+            {footerTexts.map((item) => (
+              <p
+                className="text-[#676767] text-[16px] font-normal cursor-pointer"
+                key={item.id}
+              >
+                {item.title}
+              </p>
+            ))}
+          </FooterSection>
 
-        <FooterSection title="Продавай на SHOPPER">
-          {footerTexts.map((item) => (
-            <p
-              className="text-[#676767] text-[16px] font-normal cursor-pointer"
-              key={item.id}
-            >
-              {item.title}
-            </p>
-          ))}
-        </FooterSection>
+          <FooterSection title="Продавай на SHOPPER">
+            {footerTexts.map((item) => (
+              <p
+                className="text-[#676767] text-[16px] font-normal cursor-pointer"
+                key={item.id}
+              >
+                {item.title}
+              </p>
+            ))}
+          </FooterSection>
 
-        <FooterSection title="Контакты">
-          {footerTexts.map((item) => (
-            <p
-              className="text-[#676767] text-[16px] font-normal cursor-pointer"
-              key={item.id}
-            >
-              {item.title}
-            </p>
-          ))}
-        </FooterSection>
+          <FooterSection title="Контакты">
+            {footerTexts.map((item) => (
+              <p
+                className="text-[#676767] text-[16px] font-normal cursor-pointer"
+                key={item.id}
+              >
+                {item.title}
+              </p>
+            ))}
+          </FooterSection>
 
-        <div className="flex flex-col gap-4">
-          <FooterIconsSection title="Способы доставки" icons={deliveryIcons} />
+          <div className="flex flex-col gap-4">
+            <FooterIconsSection
+              title="Способы доставки"
+              icons={deliveryIcons}
+            />
 
-          <FooterIconsSection
-            title="Мы принимаем к оплате"
-            icons={paymentIcons}
-          />
+            <FooterIconsSection
+              title="Мы принимаем к оплате"
+              icons={paymentIcons}
+            />
 
-          <FooterIconsSection
-            title="Подпишись на нас в социальных сетях"
-            icons={socialMediaIcons}
-          />
+            <FooterIconsSection
+              title="Подпишись на нас в социальных сетях"
+              icons={socialMediaIcons}
+            />
+          </div>
         </div>
-      </div>
 
-      <div className="py-[16px] px-[48px] md:py-[16px] md:px-[20px] flex justify-between  flex-wrap gap-[15px] border-t-1 border-[#dbdbdb]">
-        <LogoIcon />
-        <p className="text-[#676767] text-[16px] font-400">
-          © 2022 Shopper Inc. Все права защищены
-        </p>
+        <div className="py-[16px] px-[48px] md:py-[16px] md:px-[20px] flex justify-between  flex-wrap gap-[15px] border-t-1 border-[#dbdbdb]">
+          <LogoIcon />
+          <p className="text-[#676767] text-[16px] font-400">
+            © 2022 Shopper Inc. Все права защищены
+          </p>
+        </div>
       </div>
     </div>
   );

@@ -44,7 +44,8 @@
     "swiper": "^10.1.0",
     "tw-merge": "^0.0.1-alpha.3",
     "typescript": "5.1.6",
-    "yup": "^1.2.0"
+    "yup": "^1.2.0",
+    "zustand": "^4.4.6"
   },
   "devDependencies": {
     "@openapitools/openapi-generator-cli": "^2.5.2",

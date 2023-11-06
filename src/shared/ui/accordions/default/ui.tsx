@@ -8,9 +8,9 @@ interface AccordionProps {
   children: ReactNode;
   defaultOpen?: boolean;
   classNames?: {
-    accordionClassName?: string;
-    contentClassName?: string;
-    labelClassName?: string;
+    accordion?: string;
+    content?: string;
+    label?: string;
   };
 }
 
@@ -29,14 +29,11 @@ export const Accordion: React.FC<AccordionProps> = ({
     <div
       className={cn(
         'overflow-hidden px-[12px] md:px-[0]',
-        classNames?.accordionClassName,
+        classNames?.accordion,
       )}
     >
       <div
-        className={cn(
-          'flex cursor-pointer items-center',
-          classNames?.labelClassName,
-        )}
+        className={cn('flex cursor-pointer items-center', classNames?.label)}
         onClick={handleAccordionClick}
       >
         <h3 className="m-0 flex-1 text-[18px] font-[600px] leading-[22px] text-neutral-900">
@@ -58,7 +55,7 @@ export const Accordion: React.FC<AccordionProps> = ({
             exit={{ height: 0, opacity: 0 }}
             className="overflow-hidden"
           >
-            <div className={cn('pt-[10px]', classNames?.contentClassName)}>
+            <div className={cn('pt-[10px]', classNames?.content)}>
               {children}
             </div>
           </motion.div>

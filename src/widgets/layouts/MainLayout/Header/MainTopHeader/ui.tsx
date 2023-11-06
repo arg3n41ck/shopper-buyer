@@ -7,6 +7,7 @@ import {
   HeaderShoppingBag,
   HeaderUserInfo,
 } from '@/feautures/header';
+import Link from 'next/link';
 
 const filterOptions = [
   { value: 'for-her', label: 'Для Нее' },
@@ -31,9 +32,9 @@ export const MainTopHeader = () => {
         />
       </div>
 
-      <div>
+      <Link href="/">
         <LogoIcon />
-      </div>
+      </Link>
 
       <div className={'flex gap-[20px]'}>
         <HeaderChangeLanguage />

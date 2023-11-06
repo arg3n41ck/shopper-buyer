@@ -27,8 +27,8 @@ export const FilterSidebar = ({ children }: IFilterSidebarProps) => {
 
           <Accordion
             classNames={{
-              accordionClassName: 'border-b border-[#DBDBDB]',
-              labelClassName: 'py-[11px]',
+              accordion: 'border-b border-[#DBDBDB]',
+              label: 'py-[11px]',
             }}
             title="БРЕНДЫ"
             defaultOpen
@@ -79,8 +79,8 @@ export const FilterSidebar = ({ children }: IFilterSidebarProps) => {
 
           <Accordion
             classNames={{
-              accordionClassName: 'border-b border-[#DBDBDB]',
-              labelClassName: 'py-[11px]',
+              accordion: 'border-b border-[#DBDBDB]',
+              label: 'py-[11px]',
             }}
             title="КАТЕГОРИЯ"
             defaultOpen

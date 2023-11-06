@@ -5,7 +5,7 @@ import ArrowIcon from 'public/images/icons/arrows/chevron-right.svg';
 import cn from 'classnames';
 
 interface IDefaultBreadcrumbProps extends ComponentPropsWithRef<'div'> {
-  items: { label: string; link?: string }[];
+  items: { label: string | undefined; link?: string }[];
 }
 
 export const DefaultBreadcrumb = ({
