@@ -65,7 +65,7 @@ export const ProductVariantChoose = () => {
 
       {/*price*/}
       <div className="font-jost flex gap-[8px] items-center">
-        {data?.discount && currentSize?.price && (
+        {!!data?.discount && !!currentSize?.price && (
           <p className="text-neutral-900 text-[16px] font-[500] line-through">
             {currentSize?.price}
             сом
@@ -80,11 +80,11 @@ export const ProductVariantChoose = () => {
             : `от ${currentVariant?.price_min} до ${currentVariant?.price_max}`}{' '}
           сом
         </p>
-        {data?.discount && (
+        {data?.discount ? (
           <p className="px-[8px] py-[2px] text-white bg-red">
             -{data.discount}%
           </p>
-        )}
+        ) : null}
       </div>
 
       {/*variants*/}

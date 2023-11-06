@@ -28,11 +28,11 @@ export const ProductCard = ({
         <Heart fill="#B91C1C" color="#B91C1C" />
       </div>
 
-      {item?.discount && (
+      {item?.discount ? (
         <div className="absolute top-[3px] left-[0] bg-[#B91C1C] py-[2px] px-[8px] text-[#fff] text-sm font-medium">
           -{item.discount}%
         </div>
-      )}
+      ) : null}
 
       <Image
         src={

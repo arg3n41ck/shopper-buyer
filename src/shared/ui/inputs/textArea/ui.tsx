@@ -1,17 +1,17 @@
-import { ChangeEvent, FC, ReactNode, useRef, useState } from 'react'
-import cn from 'classnames'
+import { ChangeEvent, FC, ReactNode, useRef, useState } from 'react';
+import cn from 'classnames';
 
 interface TextAreaProps {
-  startAdornment?: ReactNode
-  endAdornment?: ReactNode
-  value: string
-  label?: string | ReactNode
-  onChange?: (event: ChangeEvent<HTMLTextAreaElement>) => void
-  error?: boolean
-  errorMessage?: any
-  helperText?: string
-  className?: string
-  [x: string]: any
+  startAdornment?: ReactNode;
+  endAdornment?: ReactNode;
+  value: string;
+  label?: string | ReactNode;
+  onChange?: (event: ChangeEvent<HTMLTextAreaElement>) => void;
+  error?: boolean;
+  errorMessage?: any;
+  helperText?: string;
+  className?: string;
+  [x: string]: any;
 }
 
 const TextArea: FC<TextAreaProps> = ({
@@ -26,13 +26,15 @@ const TextArea: FC<TextAreaProps> = ({
   className,
   ...others
 }) => {
-  const textareaRef = useRef<HTMLTextAreaElement>(null)
-  const [focused, setFocus] = useState(false)
-  const isActive = focused || value ? 'active' : ''
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const [focused, setFocus] = useState(false);
+  const isActive = focused || value ? 'active' : '';
 
   return (
     <div className={cn('relative w-full', className)}>
-      {label && <label className="text-[13.33px] text-neutral-900">{label}</label>}
+      {label ? (
+        <label className="text-[13.33px] text-neutral-900">{label}</label>
+      ) : null}
 
       <div
         onClick={() => textareaRef.current && textareaRef.current.focus()}
@@ -60,7 +62,13 @@ const TextArea: FC<TextAreaProps> = ({
         />
 
         {endAdornment && (
-          <div className={cn('text-neutral-400', { ['text-neutral-900']: isActive })}>{endAdornment}</div>
+          <div
+            className={cn('text-neutral-400', {
+              ['text-neutral-900']: isActive,
+            })}
+          >
+            {endAdornment}
+          </div>
         )}
       </div>
 
@@ -70,7 +78,7 @@ const TextArea: FC<TextAreaProps> = ({
         <label className="text-[11.11px] text-neutral-400">{helperText}</label>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default TextArea
+export default TextArea;

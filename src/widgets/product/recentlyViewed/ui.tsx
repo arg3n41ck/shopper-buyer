@@ -17,8 +17,8 @@ export const RecentlyViewed = () => {
         {products.map((item) => (
           <ProductCard
             classNames={{
-              image: '!h-[288px] md:!h-[260px] bg-neutral-100',
-              wrapper: '!min-w-[288px] md:!min-w-[200px]',
+              image: '!h-[288px] md:!h-[260px]',
+              wrapper: '!w-[288px] md:!w-[200px]',
             }}
             key={`RecentlyViewed ${item.slug}`}
             item={item}
