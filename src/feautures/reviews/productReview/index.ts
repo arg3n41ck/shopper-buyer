@@ -1,0 +1,1 @@
+export { ProductReviewCard } from './ui';

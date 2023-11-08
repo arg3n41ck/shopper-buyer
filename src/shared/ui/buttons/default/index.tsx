@@ -27,7 +27,7 @@ export const Button = ({
     <button
       {...other}
       className={cn(
-        '!w-full',
+        '!w-full disabled:cursor-not-allowed',
         styles.Button,
         styles[variant],
         sizeOfButton[size],

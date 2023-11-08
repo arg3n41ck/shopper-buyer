@@ -1,0 +1,1 @@
+export { CarouselProducts } from './ui';

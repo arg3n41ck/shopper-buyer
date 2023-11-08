@@ -1,0 +1,1 @@
+export { useProductVariant } from './model';

@@ -1,2 +1,2 @@
-export { env } from './API'
-export * from './paths'
+export { env } from './API';
+export * from './paths';

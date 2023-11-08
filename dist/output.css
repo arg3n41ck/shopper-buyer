@@ -122,9 +122,9 @@ input[type='number'] {
 1. Use a consistent sensible line-height in all browsers.
 2. Prevent adjustments of font size after orientation changes in iOS.
 3. Use a more readable tab size.
-4. Use the user's configured `sans` font-family by default.
-5. Use the user's configured `sans` font-feature-settings by default.
-6. Use the user's configured `sans` font-variation-settings by default.
+4. Use the user's configured `sans` font-family by modal.
+5. Use the user's configured `sans` font-feature-settings by modal.
+6. Use the user's configured `sans` font-variation-settings by modal.
 */
 
 html {
@@ -174,7 +174,7 @@ body {
 /*
 1. Add the correct height in Firefox.
 2. Correct the inheritance of border color in Firefox. (https://bugzilla.mozilla.org/show_bug.cgi?id=190655)
-3. Ensure horizontal rules are visible by default.
+3. Ensure horizontal rules are visible by modal.
 */
 
 hr {
@@ -196,7 +196,7 @@ abbr:where([title]) {
 }
 
 /*
-Remove the default font size and weight for headings.
+Remove the modal font size and weight for headings.
 */
 
 h1,
@@ -228,7 +228,7 @@ strong {
 }
 
 /*
-1. Use the user's configured `mono` font family by default.
+1. Use the user's configured `mono` font family by modal.
 2. Correct the odd `em` font sizing in all browsers.
 */
 
@@ -274,7 +274,7 @@ sup {
 /*
 1. Remove text indentation from table contents in Chrome and Safari. (https://bugs.chromium.org/p/chromium/issues/detail?id=999088, https://bugs.webkit.org/show_bug.cgi?id=201297)
 2. Correct table border color inheritance in all Chrome and Safari. (https://bugs.chromium.org/p/chromium/issues/detail?id=935729, https://bugs.webkit.org/show_bug.cgi?id=195016)
-3. Remove gaps between table borders by default.
+3. Remove gaps between table borders by modal.
 */
 
 table {
@@ -289,7 +289,7 @@ table {
 /*
 1. Change the font styles in all browsers.
 2. Remove the margin in Firefox and Safari.
-3. Remove default padding in all browsers.
+3. Remove modal padding in all browsers.
 */
 
 button,
@@ -328,7 +328,7 @@ select {
 
 /*
 1. Correct the inability to style clickable types in iOS and Safari.
-2. Remove default button styles.
+2. Remove modal button styles.
 */
 
 button,
@@ -417,7 +417,7 @@ summary {
 }
 
 /*
-Removes the default spacing and border for appropriate elements.
+Removes the modal spacing and border for appropriate elements.
 */
 
 blockquote,
@@ -454,7 +454,7 @@ menu {
 }
 
 /*
-Reset default styling for dialogs.
+Reset modal styling for dialogs.
 */
 
 dialog {
@@ -462,7 +462,7 @@ dialog {
 }
 
 /*
-Prevent resizing textareas horizontally by default.
+Prevent resizing textareas horizontally by modal.
 */
 
 textarea {
@@ -470,8 +470,8 @@ textarea {
 }
 
 /*
-1. Reset the default placeholder opacity in Firefox. (https://github.com/tailwindlabs/tailwindcss/issues/3300)
-2. Set the default placeholder color to the user's configured gray 400 color.
+1. Reset the modal placeholder opacity in Firefox. (https://github.com/tailwindlabs/tailwindcss/issues/3300)
+2. Set the modal placeholder color to the user's configured gray 400 color.
 */
 
 input::-moz-placeholder,
@@ -491,7 +491,7 @@ textarea::placeholder {
 }
 
 /*
-Set the default cursor for buttons.
+Set the modal cursor for buttons.
 */
 
 button,
@@ -508,8 +508,8 @@ Make sure disabled buttons don't get the pointer cursor.
 }
 
 /*
-1. Make replaced elements `display: block` by default. (https://github.com/mozdevs/cssremedy/issues/14)
-2. Add `vertical-align: middle` to align replaced elements more sensibly by default. (https://github.com/jensimmons/cssremedy/issues/14#issuecomment-634934210)
+1. Make replaced elements `display: block` by modal. (https://github.com/mozdevs/cssremedy/issues/14)
+2. Add `vertical-align: middle` to align replaced elements more sensibly by modal. (https://github.com/jensimmons/cssremedy/issues/14#issuecomment-634934210)
    This can trigger a poorly considered lint error in some tools but is included by design.
 */
 
@@ -537,7 +537,7 @@ video {
   height: auto;
 } */
 
-/* Make elements with the HTML hidden attribute stay hidden by default */
+/* Make elements with the HTML hidden attribute stay hidden by modal */
 
 [hidden] {
   display: none;

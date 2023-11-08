@@ -1,1 +1,1 @@
-export { ResetPasswordPage } from './ui/ui';
+export { ResetPasswordPage } from './ui';
