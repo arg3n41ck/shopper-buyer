@@ -3,7 +3,7 @@ import SwiperCore from 'swiper';
 import { SwiperSlide } from 'swiper/react';
 import { ChevronRight } from 'react-feather';
 import { Navigation, Pagination } from 'swiper/modules';
-import { ProductCard } from '@/entities/product';
+import { ProductCard } from '@/feautures/product';
 import 'swiper/css/bundle';
 import { Button } from '@/shared/ui/buttons';
 import { BUTTON_STYLES } from '@/shared/lib/consts/styles';

@@ -8,6 +8,7 @@ import {
   HeaderUserInfo,
 } from '@/feautures/header';
 import Link from 'next/link';
+import { IconButton } from '@/shared/ui/buttons';
 
 const filterOptions = [
   { value: 'for-her', label: 'Для Нее' },
@@ -36,10 +37,12 @@ export const MainTopHeader = () => {
         <LogoIcon />
       </Link>
 
-      <div className={'flex gap-[20px]'}>
+      <div className={'flex gap-[4px] items-center'}>
         <HeaderChangeLanguage />
         <HeaderUserInfo />
-        <Heart size={24} />
+        <IconButton>
+          <Heart size={24} />
+        </IconButton>
         <HeaderShoppingBag />
       </div>
     </div>

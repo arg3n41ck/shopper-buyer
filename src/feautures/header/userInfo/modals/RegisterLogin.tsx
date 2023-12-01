@@ -1,11 +1,14 @@
 import React, { FC, useState } from 'react';
 import { useFormik } from 'formik';
 import { AlertCircle, Check } from 'react-feather';
-import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
-import { Modal } from '../../../../shared/ui/modal-windows';
+import { Modal } from '@/shared/ui/modal-windows';
 import TextField from '@/shared/ui/inputs/textField';
-import { passwordLengthCheck } from '@/shared/lib/helpers';
+import {
+  identifyContactType,
+  passwordLengthCheck,
+  getErrorMessage,
+} from '@/shared/lib/helpers';
 import Checkbox from '@/shared/ui/inputs/checkbox';
 import Image from 'next/image';
 import { Button } from '@/shared/ui/buttons';
@@ -16,6 +19,9 @@ import {
   SUCCESS,
 } from '@/shared/lib/consts/styles';
 import { ShowAndHideIcon } from '@/shared/ui/templates';
+import { $apiAccountsApi } from '@/shared/api';
+import { CustomerPreferencesEnum } from '@/shared/api/gen';
+import { toast } from 'react-toastify';
 
 interface RegisterModalProps {
   open: boolean;
@@ -25,32 +31,44 @@ interface RegisterModalProps {
 interface Preference {
   id: number;
   title: string;
-  value: string;
+  value: CustomerPreferencesEnum;
   img: string;
 }
 
 const clothes: Preference[] = [
-  { id: 1, title: 'Женская мода', value: 'women', img: '/party.png' },
-  { id: 2, title: 'Мужская мода', value: 'men', img: '/party.png' },
-  { id: 3, title: 'Детская мода', value: 'children', img: '/party.png' },
+  { id: 1, title: 'Женская мода', value: 'FEMALE', img: '/party.png' },
+  { id: 2, title: 'Мужская мода', value: 'MALE', img: '/party.png' },
+  { id: 3, title: 'Детская мода', value: 'BABY', img: '/party.png' },
 ];
 
-const validationSchema = (t: (key: string) => string) =>
+const validationSchema = () =>
   yup.object({
-    email: yup
+    email: yup.string().required('Заполните поле'),
+    password: yup
       .string()
-      .email(t('auth.validation.email.invalid'))
-      .required(t('auth.validation.email.required')),
+      .min(8, 'Пароль должен содержать как минимум 8 символов')
+      .test(
+        '',
+        'Заполните поле',
+        (value) => !!(value || ' ').replace(/\s/g, ''),
+      )
+      .required('Заполните поле пароля корректно'),
+    re_password: yup
+      .string()
+      .oneOf([yup.ref('password')], 'Пароли не совпадают')
+      .required('Заполните поле'),
+    customer: yup.object({
+      date_of_birth: yup.string().required('Заполните поле'),
+    }),
   });
 
 export const RegisterModal: FC<RegisterModalProps> = ({ open, onClose }) => {
-  const { t } = useTranslation();
   const [showPassword, setShowPassword] = useState<{
     password: boolean;
-    repeat_password: boolean;
+    re_password: boolean;
   }>({
     password: false,
-    repeat_password: false,
+    re_password: false,
   });
 
   const handlePasswordToggle = (field: keyof typeof showPassword) => {
@@ -61,42 +79,64 @@ export const RegisterModal: FC<RegisterModalProps> = ({ open, onClose }) => {
     initialValues: {
       email: '',
       password: '',
-      repeat_password: '',
-      preferred_clothing: [] as string[],
+      re_password: '',
+      customer: {
+        date_of_birth: '',
+        preferences: [] as CustomerPreferencesEnum[],
+      },
     },
-    validationSchema: validationSchema(t),
-    onSubmit: async () => {
+    validationSchema: validationSchema(),
+    onSubmit: async ({ email, ...other }, formikHelpers) => {
       try {
-        // console.log(values);
-      } catch (error) {
-        // console.log(error);
+        const contact = identifyContactType(email);
+        if (contact == 'unknown') {
+          formikHelpers.setFieldError('email', 'Заполните поле корректно');
+          return;
+        }
+
+        await toast.promise(
+          $apiAccountsApi.accountsUsersCreateCustomerCreate({
+            [contact]: email,
+            ...other,
+          }),
+          {
+            pending: 'Загрузка...',
+            success: 'Профиль успешно создан! Авторизуйтесь что-бы войти',
+          },
+        );
+        onClose();
+      } catch (e: any) {
+        toast.error(getErrorMessage(e));
       }
     },
   });
 
-  const handleCheckboxChange = (preferenceValue: string) => {
+  const handleCheckboxChange = (preferenceValue: CustomerPreferencesEnum) => {
     const isChecked =
-      formik.values.preferred_clothing.includes(preferenceValue);
-    const currentPreferences = formik.values.preferred_clothing;
+      formik.values.customer.preferences.includes(preferenceValue);
+    const currentPreferences = formik.values.customer.preferences;
 
     const updatedPreferences = isChecked
       ? currentPreferences.filter((value) => value !== preferenceValue)
       : [...currentPreferences, preferenceValue];
 
-    formik.setFieldValue('preferred_clothing', updatedPreferences);
+    formik.setFieldValue('customer.preferences', updatedPreferences);
   };
 
   const handleSelectAllCheckbox = () => {
     const isChecked =
-      formik.values.preferred_clothing.length === clothes.length;
+      formik.values.customer.preferences.length === clothes.length;
     const allPreferences = clothes.map((preference) => preference.value);
 
-    formik.setFieldValue('preferred_clothing', isChecked ? [] : allPreferences);
+    formik.setFieldValue(
+      'customer.preferences',
+      isChecked ? [] : allPreferences,
+    );
   };
 
   return (
     <Modal open={open} onClose={onClose}>
-      <div className="p-10 flex flex-col gap-5">
+      <form onSubmit={formik.handleSubmit} className="p-10 flex flex-col gap-5">
         <p className="text-[#000] text-[24px] font-semibold text-center">
           Новый пользователь
         </p>
@@ -107,6 +147,7 @@ export const RegisterModal: FC<RegisterModalProps> = ({ open, onClose }) => {
             onChange={formik.handleChange}
             placeholder={'Адрес электронной почты или номер телефона'}
             name="email"
+            errorMessage={formik.errors.email}
           />
 
           <TextField
@@ -140,6 +181,29 @@ export const RegisterModal: FC<RegisterModalProps> = ({ open, onClose }) => {
               Ваш пароль должен содержать мин. 8 букв
             </p>
           </div>
+
+          <TextField
+            value={formik.values.re_password}
+            onChange={formik.handleChange}
+            errorMessage={formik.errors.re_password}
+            name="re_password"
+            type={showPassword.password ? 'text' : 'password'}
+            endAdornment={ShowAndHideIcon({
+              show: showPassword.password,
+              onHide: () => handlePasswordToggle('password'),
+              onShow: () => handlePasswordToggle('password'),
+            })}
+            placeholder="Повторите пароль"
+          />
+
+          <TextField
+            label="Укажите дату своего рождения"
+            name="customer.date_of_birth"
+            onChange={formik.handleChange}
+            value={formik.values.customer.date_of_birth}
+            errorMessage={formik.errors.customer?.date_of_birth}
+            type="date"
+          />
         </div>
 
         <div className="flex flex-col gap-1">
@@ -161,7 +225,7 @@ export const RegisterModal: FC<RegisterModalProps> = ({ open, onClose }) => {
 
         <Checkbox
           label={'Выбрать все'}
-          checked={formik.values.preferred_clothing.length === clothes.length}
+          checked={formik.values.customer.preferences.length === clothes.length}
           onChange={handleSelectAllCheckbox}
         />
 
@@ -170,14 +234,14 @@ export const RegisterModal: FC<RegisterModalProps> = ({ open, onClose }) => {
             <div
               key={preference.id}
               className={`max-w-[134px] w-full h-full relative border-[2px] ${
-                formik.values.preferred_clothing.includes(preference.value)
+                formik.values.customer.preferences.includes(preference.value)
                   ? 'border-[#171717]'
                   : 'border-transparent'
               }`}
             >
               <div className="absolute top-[10px] left-[10px]">
                 <Checkbox
-                  checked={formik.values.preferred_clothing.includes(
+                  checked={formik.values.customer.preferences.includes(
                     preference.value,
                   )}
                   onChange={() => handleCheckboxChange(preference.value)}
@@ -200,13 +264,10 @@ export const RegisterModal: FC<RegisterModalProps> = ({ open, onClose }) => {
           ))}
         </div>
 
-        <Button
-          variant={BUTTON_STYLES.primaryCta}
-          onClick={() => formik.handleSubmit()}
-        >
+        <Button type="submit" variant={BUTTON_STYLES.primaryCta}>
           Зарегистрироваться
         </Button>
-      </div>
+      </form>
     </Modal>
   );
 };

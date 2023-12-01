@@ -8,14 +8,24 @@ import cn from 'classnames';
 import { Heart, ShoppingBag } from 'react-feather';
 import { Button } from '@/shared/ui/buttons';
 import { SizeChoose } from '@/feautures/product';
-import { User } from '@/shared/api/gen';
+import { ProductVariant, User } from '@/shared/api/gen';
 import { toast } from 'react-toastify';
+import { getErrorMessage } from '@/shared/lib/helpers';
+import { useCart } from '@/entities/cart';
+import { useUser } from '@/entities/user';
+import { useActiveModal } from '@/entities/modals';
+import { useCartQuery } from '@/feautures/cart';
 
 export const ProductVariantChoose = () => {
   const { query } = useRouter();
+  const isAuth = useUser((state) => state.isAuth);
   const [currentVariant, setVariant, currentSize] = useProductVariant(
     (state) => [state.currentVariant, state.setVariant, state.currentSize],
   );
+  const addToCart = useCart((state) => state.addProduct);
+  const setModalActive = useActiveModal((state) => state.setModalActive);
+  const { refetch, isFetching } = useCartQuery();
+
   const { data } = useQuery({
     queryKey: ['productsCustomerProductsRead', query],
     queryFn: async () => {
@@ -35,25 +45,45 @@ export const ProductVariantChoose = () => {
   });
 
   const handleFavourite = async () => {
-    if (!user) {
-      toast.warning('Требуется авторизация для добавления товар в избранное');
-      return;
+    if (!user) return setModalActive('login');
+
+    try {
+      await toast.promise(
+        $apiProductsApi.productsCustomerFavouritesCreate({
+          product: data?.id as number,
+        }),
+        {
+          pending: 'Сохранение',
+          success: 'Товар успешно добавлен в избранное!',
+        },
+      );
+    } catch (e) {
+      toast.error(getErrorMessage(e));
     }
-    await toast.promise(
-      $apiProductsApi.productsCustomerFavouritesCreate({
-        product: data?.id as number,
-      }),
-      {
-        pending: 'Сохранение',
-        success: 'Товар успешно добавлен в избранное!',
-        error: 'Ошибка!',
-      },
-    );
   };
 
   React.useEffect(() => {
     setVariant(data?.variants?.[0] || null);
   }, [data]);
+
+  const currentPrice = data?.discount
+    ? Number(currentSize?.price) -
+      ((data?.discount || 0) / 100) * Number(currentSize?.price)
+    : currentSize?.price;
+
+  const handleAddToCart = async () => {
+    addToCart(
+      {
+        product_variant: currentVariant as ProductVariant,
+        total: currentPrice as string,
+        quantity: 1,
+        size: currentSize?.size as string,
+        id: currentVariant?.id,
+      },
+      isAuth,
+    );
+    await refetch();
+  };
 
   return (
     <div className="grid gap-[24px] md:gap-[16px] items-start content-start">
@@ -73,10 +103,7 @@ export const ProductVariantChoose = () => {
         )}
         <p className="text-[24px] text-red font-[500]">
           {currentSize?.price
-            ? data?.discount
-              ? +currentSize?.price -
-                (data?.discount / 100) * +currentSize?.price
-              : currentSize?.price
+            ? currentPrice
             : `от ${currentVariant?.price_min} до ${currentVariant?.price_max}`}{' '}
           сом
         </p>
@@ -117,7 +144,8 @@ export const ProductVariantChoose = () => {
       {/*actions*/}
       <div className="grid gap-[12px]">
         <Button
-          disabled={!(currentSize && currentSize.quantity)}
+          onClick={handleAddToCart}
+          disabled={!(currentSize && currentSize.quantity && !isFetching)}
           className="gap-[8px]"
           variant="PrimaryCTAButton"
         >

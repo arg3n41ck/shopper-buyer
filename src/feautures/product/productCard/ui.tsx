@@ -1,9 +1,11 @@
 import React from 'react';
 import Image from 'next/image';
 import { Heart } from 'react-feather';
-import { Product } from '@/shared/api/gen';
 import cn from 'classnames';
 import Link from 'next/link';
+import { Product } from '@/shared/api/gen';
+import { useQuery } from '@tanstack/react-query';
+import { $apiProductsApi } from '@/shared/api';
 
 interface ProductCardProps {
   item: Product;
@@ -16,6 +18,30 @@ export const ProductCard = ({
   imageSize,
   classNames,
 }: ProductCardProps) => {
+  const { data } = useQuery({
+    queryKey: ['productsCustomerFavouritesList'],
+    queryFn: async () => {
+      const { data } = await $apiProductsApi.productsCustomerFavouritesList();
+      return data;
+    },
+  });
+
+  const [isFavourite, setIsFavourite] = React.useState(
+    !!data?.results?.find((product) => item?.id == product.product),
+  );
+
+  const handleFavourite = async () => {
+    if (isFavourite) {
+      await $apiProductsApi.productsCustomerFavouritesCreate({
+        product: item.id as number,
+      });
+
+      setIsFavourite(true);
+    } else {
+      // await $apiProductsApi.
+    }
+  };
+
   return (
     <Link
       href={`/products/${item.slug}`}
@@ -24,8 +50,11 @@ export const ProductCard = ({
         classNames?.wrapper,
       )}
     >
-      <div className="absolute right-[8px] top-[8px] cursor-pointer">
-        <Heart fill="#B91C1C" color="#B91C1C" />
+      <div
+        onClick={handleFavourite}
+        className="absolute right-[8px] top-[8px] cursor-pointer"
+      >
+        <Heart fill="#B91C1C" color={isFavourite ? '#B91C1C' : ''} />
       </div>
 
       {item?.discount ? (
@@ -39,7 +68,7 @@ export const ProductCard = ({
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           //@ts-ignore
           item?.variants?.[0]?.images?.[0].image ||
-          'https://www.gamewallpapers.com/members/getphonewallpaper.php?lowquality=1&titel=Sekiro%3A+Shadows+Die+Twice&nummer=04&phoneResId=3502&wallpaperType=vertical&qhdbeschikbaar=1&wallpaper_id=7036'
+          'https://w7.pngwing.com/pngs/365/575/png-transparent-hoodie-t-shirt-tracksuit-sweater-clothing-hoodie-white-hoodie-tracksuit.png'
         }
         className={cn('h-full object-contain self-center', classNames?.image)}
         width={imageSize?.w || 288}
@@ -53,7 +82,11 @@ export const ProductCard = ({
       <div className="flex self-end flex-col">
         {/*<p className="text-gray-600 text-sm font-normal">{item.title}</p>*/}
 
-        <p className="text-black text-xl font-semibold">{item.title}</p>
+        <p className="text-black text-xl font-semibold">
+          {item.title.length > 30
+            ? item.title.slice(0, 30) + '...'
+            : item.title}
+        </p>
 
         {/*<p className="text-gray-700 text-base font-normal">*/}
         {/*  {item.description}*/}

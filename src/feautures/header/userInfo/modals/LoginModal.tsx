@@ -16,19 +16,22 @@ import { ShowAndHideIcon } from '@/shared/ui/templates';
 import { toast } from 'react-toastify';
 import { $apiAccountsApi } from '@/shared/api';
 import Cookies from 'js-cookie';
+import { TActiveModalType } from '@/entities/modals';
+import { useUser } from '@/entities/user';
+import { useCartQuery } from '@/feautures/cart';
 
 interface LoginModalProps {
   open: boolean;
   onClose: () => void;
-  onClickModal: (type: string) => void;
+  onClickModal: (type: TActiveModalType) => void;
 }
 
 const validationSchema = (t: (key: string) => string) =>
   yup.object({
     username: yup
       .string()
-      .email(t('auth.validation.email.invalid'))
-      .required(t('auth.validation.email.required')),
+      .email(t('active-modal.validation.email.invalid'))
+      .required(t('active-modal.validation.email.required')),
   });
 
 export const LoginModal: FC<LoginModalProps> = ({
@@ -36,8 +39,10 @@ export const LoginModal: FC<LoginModalProps> = ({
   onClose,
   onClickModal,
 }) => {
+  const { postCart } = useCartQuery();
   const { t } = useTranslation();
   const router = useRouter();
+  const setIsAuth = useUser((state) => state.setIsAuth);
   const [showPassword, setShowPassword] = useState(false);
 
   const handlePasswordToggle = () => {
@@ -56,6 +61,7 @@ export const LoginModal: FC<LoginModalProps> = ({
     onSubmit: async (values) => {
       const loginFetch = async () => {
         const { data } = await $apiAccountsApi.accountsAuthTokenCreate(values);
+        setIsAuth(true);
         Cookies.set('access_token', (data as any)?.access);
         Cookies.set('refresh_token', (data as any)?.refresh);
       };
@@ -66,6 +72,7 @@ export const LoginModal: FC<LoginModalProps> = ({
         error: 'Неверный логин или пароль',
       });
 
+      await postCart();
       await onClose();
     },
   });

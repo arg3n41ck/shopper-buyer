@@ -1,5 +1,5 @@
 import React from 'react';
-import { ProductCard } from '@/entities/product';
+import { ProductCard } from '@/feautures/product';
 import { Button } from '@/shared/ui/buttons';
 import { LoaderIcon } from '@/shared/ui/loaders';
 import { useInfiniteQuery } from '@tanstack/react-query';

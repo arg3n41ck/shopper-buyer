@@ -14,6 +14,8 @@ import { LoginModal, RegisterModal } from '../userInfo/modals';
 import { Button } from '@/shared/ui/buttons';
 import { BUTTON_STYLES } from '@/shared/lib/consts/styles';
 import Link from 'next/link';
+import { TActiveModalType, useActiveModal } from '@/entities/modals';
+import Cookies from 'js-cookie';
 
 interface FilterOption {
   value: string;
@@ -174,13 +176,19 @@ const categories = [
 ];
 
 export const MobileMenu = () => {
+  const token = Cookies.get('refresh_token');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeFilter, setActiveFilter] = useState<string>(
     filterOptions[0].value,
   );
-  const [modalActive, setModalActive] = useState('');
 
-  const handleOpenModalActive = (type: string) => setModalActive(type);
+  const [modalActive, setModalActive] = useActiveModal((state) => [
+    state.modalActive,
+    state.setModalActive,
+  ]);
+
+  const handleOpenModalActive = (type: TActiveModalType) =>
+    setModalActive(type);
   const handleFilterChange = (filter: string) => setActiveFilter(filter);
   const handleCloseModalActive = () => setModalActive('');
 
@@ -231,21 +239,23 @@ export const MobileMenu = () => {
 
                 <HeaderCategories categories={categories} />
 
-                <div className="grid grid-cols-1 gap-3">
-                  <Button
-                    variant={BUTTON_STYLES.primaryCta}
-                    onClick={() => handleOpenModalActive('login')}
-                  >
-                    Войти
-                  </Button>
+                {!token && (
+                  <div className="grid grid-cols-1 gap-3">
+                    <Button
+                      variant={BUTTON_STYLES.primaryCta}
+                      onClick={() => handleOpenModalActive('login')}
+                    >
+                      Войти
+                    </Button>
 
-                  <Button
-                    variant={BUTTON_STYLES.withoutBackground}
-                    onClick={() => handleOpenModalActive('register')}
-                  >
-                    Зарегистрироваться
-                  </Button>
-                </div>
+                    <Button
+                      variant={BUTTON_STYLES.withoutBackground}
+                      onClick={() => handleOpenModalActive('register')}
+                    >
+                      Зарегистрироваться
+                    </Button>
+                  </div>
+                )}
 
                 <p className="text-[#171717] text-[16px] font-500">
                   Язык и регион

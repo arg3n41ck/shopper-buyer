@@ -5,7 +5,7 @@ import { MobileMenu } from '@/feautures/header';
 
 export const MainHeader = () => {
   return (
-    <div className="w-full px-[48px] md:px-[20px] bg-[#fff] border-b border-[#ececec]">
+    <div className="w-full md:px-[20px] bg-[#fff] border-b border-[#ececec]">
       <div className="block md:hidden main-container">
         <MainTopHeader />
         <MainHeaderWithCategories />

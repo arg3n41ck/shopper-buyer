@@ -59,7 +59,7 @@ const TextField = ({
           onChange={onChange}
           autoComplete="new-password"
           className={cn(
-            'w-full border-none bg-none text-[16px] font-[600] leading-[19px] text-neutral-900 outline-none placeholder:text-[16px] placeholder:font-[400]',
+            'w-full border-none bg-transparent text-[16px] font-[600] leading-[19px] text-neutral-900 outline-none placeholder:text-[16px] placeholder:font-[400]',
             { ['text-[#B91C1C]']: error },
           )}
           {...others}
