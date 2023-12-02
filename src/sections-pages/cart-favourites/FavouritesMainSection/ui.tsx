@@ -6,6 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 import { $apiProductsApi } from '@/shared/api';
 import { ProductCard } from '@/feautures/product';
 import { Product } from '@/shared/api/gen';
+import { LoaderIcon } from '@/shared/ui/loaders';
 
 export const FavouritesMainSection = () => {
   const { push, asPath } = useRouter();
@@ -16,7 +17,7 @@ export const FavouritesMainSection = () => {
     if (!token && !isAuth) push('/');
   }, [isAuth]);
 
-  const { data } = useQuery({
+  const { data, isFetching } = useQuery({
     queryKey: ['productsCustomerFavouritesList', asPath],
     queryFn: async () => {
       const { data } = await $apiProductsApi.productsCustomerFavouritesList();
@@ -31,6 +32,7 @@ export const FavouritesMainSection = () => {
         <p className="text-[16px]">{data?.count || 0} товара</p>
       </div>
 
+      <LoaderIcon loading={isFetching} />
       <div className="grid justify-items-center grid-cols-5 2xl:grid-cols-4 gap-x-[40px] md:gap-x-[16px] md:gap-y-[20px] gap-y-[60px] xl:grid-cols-3 md:grid-cols-2">
         {data?.results?.map((item) => (
           <ProductCard item={item.product as Product} key={item.id} />

@@ -3,12 +3,8 @@ import Image from 'next/image';
 import { Heart } from 'react-feather';
 import cn from 'classnames';
 import { Product } from '@/shared/api/gen';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { $apiProductsApi } from '@/shared/api';
 import { useRouter } from 'next/router';
-import { fetchWithErrorMessage } from '@/shared/lib/helpers';
-import { useUser } from '@/entities/user';
-import { useActiveModal } from '@/entities/modals';
+import { useFavouriteActions } from '@/entities/favourites';
 
 interface ProductCardProps {
   item: Product;
@@ -21,47 +17,11 @@ export const ProductCard = ({
   imageSize,
   classNames,
 }: ProductCardProps) => {
-  const { asPath, push } = useRouter();
-  const isAuth = useUser((state) => state.isAuth);
-  const setModalActive = useActiveModal((state) => state.setModalActive);
+  const { push } = useRouter();
+  const { favouriteToggle, isFavourite } = useFavouriteActions(item);
 
   const handleProductRedirect = async () =>
     await push(`/products/${item.slug}`);
-
-  const { data, refetch } = useQuery({
-    queryKey: ['productsCustomerFavouritesList', asPath],
-    queryFn: async () => {
-      const { data } = await $apiProductsApi.productsCustomerFavouritesList();
-      return data;
-    },
-    enabled: isAuth,
-  });
-
-  const [isFavourite, setIsFavourite] = React.useState<undefined | number>(
-    data?.results?.find(({ product }) => item?.id == product?.id)?.id,
-  );
-
-  const { mutate, isPending } = useMutation({
-    mutationFn: async () => {
-      if (!isAuth) setModalActive('login');
-      else if (!isFavourite) {
-        await fetchWithErrorMessage(
-          $apiProductsApi
-            .productsCustomerFavouritesCreate({
-              product: item.id as number,
-            })
-            .then(({ data }) => setIsFavourite(data.id as number)),
-        );
-      } else {
-        await fetchWithErrorMessage(
-          $apiProductsApi.productsCustomerFavouritesDelete(isFavourite),
-        );
-        setIsFavourite(undefined);
-      }
-
-      await refetch();
-    },
-  });
 
   return (
     <div
@@ -71,11 +31,11 @@ export const ProductCard = ({
       )}
     >
       <button
-        onClick={() => mutate()}
+        onClick={() => favouriteToggle.mutate()}
         className={cn('absolute right-[8px] top-[8px] cursor-pointer z-[1]', {
-          ['cursor-wait']: isPending,
+          ['cursor-wait']: favouriteToggle.isPending,
         })}
-        disabled={isPending}
+        disabled={favouriteToggle.isPending}
       >
         <Heart
           fill={isFavourite ? '#B91C1C' : 'white'}

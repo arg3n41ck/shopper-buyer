@@ -1,0 +1,1 @@
+export { useFavouriteActions } from './model';

@@ -2,19 +2,17 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { useProductVariant } from '@/entities/product';
 import { useQuery } from '@tanstack/react-query';
-import { $apiAccountsApi, $apiProductsApi } from '@/shared/api';
+import { $apiProductsApi } from '@/shared/api';
 import Image from 'next/image';
 import cn from 'classnames';
 import { Heart, ShoppingBag } from 'react-feather';
 import { Button } from '@/shared/ui/buttons';
 import { SizeChoose } from '@/feautures/product';
-import { ProductVariant, User } from '@/shared/api/gen';
-import { toast } from 'react-toastify';
-import { getErrorMessage } from '@/shared/lib/helpers';
+import { Product, ProductVariant } from '@/shared/api/gen';
 import { useCart } from '@/entities/cart';
 import { useUser } from '@/entities/user';
-import { useActiveModal } from '@/entities/modals';
 import { useCartQuery } from '@/feautures/cart';
+import { useFavouriteActions } from '@/entities/favourites';
 
 export const ProductVariantChoose = () => {
   const { query } = useRouter();
@@ -23,7 +21,6 @@ export const ProductVariantChoose = () => {
     (state) => [state.currentVariant, state.setVariant, state.currentSize],
   );
   const addToCart = useCart((state) => state.addProduct);
-  const setModalActive = useActiveModal((state) => state.setModalActive);
   const { refetch, isFetching } = useCartQuery();
 
   const { data } = useQuery({
@@ -36,31 +33,9 @@ export const ProductVariantChoose = () => {
     },
   });
 
-  const { data: user } = useQuery({
-    queryKey: ['accountsUsersMeRead'],
-    queryFn: async () => {
-      const { data } = await $apiAccountsApi.accountsUsersMeRead();
-      return data as unknown as User;
-    },
-  });
-
-  const handleFavourite = async () => {
-    if (!user) return setModalActive('login');
-
-    try {
-      await toast.promise(
-        $apiProductsApi.productsCustomerFavouritesCreate({
-          product: data?.id as number,
-        }),
-        {
-          pending: 'Сохранение',
-          success: 'Товар успешно добавлен в избранное!',
-        },
-      );
-    } catch (e) {
-      toast.error(getErrorMessage(e));
-    }
-  };
+  const { favouriteToggle, isFavourite, favouritesQuery } = useFavouriteActions(
+    data as Product,
+  );
 
   React.useEffect(() => {
     setVariant(data?.variants?.[0] || null);
@@ -75,15 +50,17 @@ export const ProductVariantChoose = () => {
     addToCart(
       {
         product_variant: currentVariant as ProductVariant,
-        total: currentPrice as string,
+        total: currentPrice as unknown as string,
         quantity: 1,
         size: currentSize?.size as string,
         id: currentVariant?.id,
       },
       isAuth,
     );
+
     await refetch();
   };
+  console.log(isFavourite);
 
   return (
     <div className="grid gap-[24px] md:gap-[16px] items-start content-start">
@@ -152,11 +129,16 @@ export const ProductVariantChoose = () => {
           <ShoppingBag /> В корзину
         </Button>
         <Button
-          onClick={handleFavourite}
+          onClick={() => favouriteToggle.mutate()}
+          disabled={favouriteToggle.isPending || favouritesQuery.isFetching}
           className="gap-[8px]"
           variant="WithoutBackgroundButton"
         >
-          <Heart /> В Избранное
+          <Heart
+            fill={isFavourite ? '#B91C1C' : 'none'}
+            color={isFavourite ? '#B91C1C' : '#676767'}
+          />{' '}
+          В Избранное
         </Button>
       </div>
     </div>
