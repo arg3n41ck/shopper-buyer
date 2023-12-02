@@ -60,7 +60,6 @@ export const ProductVariantChoose = () => {
 
     await refetch();
   };
-  console.log(isFavourite);
 
   return (
     <div className="grid gap-[24px] md:gap-[16px] items-start content-start">
