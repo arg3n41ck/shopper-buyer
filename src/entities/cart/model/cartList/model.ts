@@ -43,7 +43,8 @@ export const useCart = create<TState & TAction>()(
           if (token) {
             const findProduct = get()?.cart?.items?.find(
               (item) =>
-                item?.product_variant?.id == product?.product_variant?.id,
+                item?.product_variant?.id == product?.product_variant?.id &&
+                item.size == product.size,
             );
             if (findProduct) {
               await fetchWithErrorMessage(
@@ -70,7 +71,8 @@ export const useCart = create<TState & TAction>()(
 
               if (cartItem) {
                 state.cart.items = state.cart?.items?.filter(
-                  (item: CartItem) => item?.id != product?.id,
+                  (item: CartItem) =>
+                    item?.id != product?.id && item.size == product.size,
                 );
                 toast.success('Удалено из корзины!');
               } else {

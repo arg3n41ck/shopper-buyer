@@ -2,10 +2,13 @@ import React from 'react';
 import Image from 'next/image';
 import { Heart } from 'react-feather';
 import cn from 'classnames';
-import Link from 'next/link';
 import { Product } from '@/shared/api/gen';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { $apiProductsApi } from '@/shared/api';
+import { useRouter } from 'next/router';
+import { fetchWithErrorMessage } from '@/shared/lib/helpers';
+import { useUser } from '@/entities/user';
+import { useActiveModal } from '@/entities/modals';
 
 interface ProductCardProps {
   item: Product;
@@ -18,44 +21,67 @@ export const ProductCard = ({
   imageSize,
   classNames,
 }: ProductCardProps) => {
-  const { data } = useQuery({
-    queryKey: ['productsCustomerFavouritesList'],
+  const { asPath, push } = useRouter();
+  const isAuth = useUser((state) => state.isAuth);
+  const setModalActive = useActiveModal((state) => state.setModalActive);
+
+  const handleProductRedirect = async () =>
+    await push(`/products/${item.slug}`);
+
+  const { data, refetch } = useQuery({
+    queryKey: ['productsCustomerFavouritesList', asPath],
     queryFn: async () => {
       const { data } = await $apiProductsApi.productsCustomerFavouritesList();
       return data;
     },
+    enabled: isAuth,
   });
 
-  const [isFavourite, setIsFavourite] = React.useState(
-    !!data?.results?.find((product) => item?.id == product.product),
+  const [isFavourite, setIsFavourite] = React.useState<undefined | number>(
+    data?.results?.find(({ product }) => item?.id == product?.id)?.id,
   );
 
-  const handleFavourite = async () => {
-    if (isFavourite) {
-      await $apiProductsApi.productsCustomerFavouritesCreate({
-        product: item.id as number,
-      });
+  const { mutate, isPending } = useMutation({
+    mutationFn: async () => {
+      if (!isAuth) setModalActive('login');
+      else if (!isFavourite) {
+        await fetchWithErrorMessage(
+          $apiProductsApi
+            .productsCustomerFavouritesCreate({
+              product: item.id as number,
+            })
+            .then(({ data }) => setIsFavourite(data.id as number)),
+        );
+      } else {
+        await fetchWithErrorMessage(
+          $apiProductsApi.productsCustomerFavouritesDelete(isFavourite),
+        );
+        setIsFavourite(undefined);
+      }
 
-      setIsFavourite(true);
-    } else {
-      // await $apiProductsApi.
-    }
-  };
+      await refetch();
+    },
+  });
 
   return (
-    <Link
-      href={`/products/${item.slug}`}
+    <div
       className={cn(
-        'relative grid justify-center grid-gap-[4px] grid-rows-[1fr_auto]',
+        'relative grid items-start content-start gap-[16px]',
         classNames?.wrapper,
       )}
     >
-      <div
-        onClick={handleFavourite}
-        className="absolute right-[8px] top-[8px] cursor-pointer"
+      <button
+        onClick={() => mutate()}
+        className={cn('absolute right-[8px] top-[8px] cursor-pointer z-[1]', {
+          ['cursor-wait']: isPending,
+        })}
+        disabled={isPending}
       >
-        <Heart fill="#B91C1C" color={isFavourite ? '#B91C1C' : ''} />
-      </div>
+        <Heart
+          fill={isFavourite ? '#B91C1C' : 'white'}
+          color={isFavourite ? '#B91C1C' : '#676767'}
+        />
+      </button>
 
       {item?.discount ? (
         <div className="absolute top-[3px] left-[0] bg-[#B91C1C] py-[2px] px-[8px] text-[#fff] text-sm font-medium">
@@ -64,13 +90,17 @@ export const ProductCard = ({
       ) : null}
 
       <Image
+        onClick={handleProductRedirect}
         src={
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           //@ts-ignore
           item?.variants?.[0]?.images?.[0].image ||
           'https://w7.pngwing.com/pngs/365/575/png-transparent-hoodie-t-shirt-tracksuit-sweater-clothing-hoodie-white-hoodie-tracksuit.png'
         }
-        className={cn('h-full object-contain self-center', classNames?.image)}
+        className={cn(
+          'h-[220px] md:h-[200px] cursor-pointer object-contain object-center',
+          classNames?.image,
+        )}
         width={imageSize?.w || 288}
         height={imageSize?.h || 360}
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -79,12 +109,15 @@ export const ProductCard = ({
         priority
       />
 
-      <div className="flex self-end flex-col">
+      <div
+        onClick={handleProductRedirect}
+        className="flex flex-col cursor-pointer"
+      >
         {/*<p className="text-gray-600 text-sm font-normal">{item.title}</p>*/}
 
-        <p className="text-black text-xl font-semibold">
-          {item.title.length > 30
-            ? item.title.slice(0, 30) + '...'
+        <p className="text-black text-[20px] md:text-[16px] font-mazzard font-semibold">
+          {item.title.length > 40
+            ? item.title.slice(0, 40) + '...'
             : item.title}
         </p>
 
@@ -108,6 +141,6 @@ export const ProductCard = ({
           )}
         </div>
       </div>
-    </Link>
+    </div>
   );
 };

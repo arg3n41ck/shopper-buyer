@@ -3,17 +3,17 @@ import { CarouselProducts } from '@/widgets/product';
 import { Carousel } from '@/shared/ui/carousels';
 import { Looks } from '@/shared/ui/templates/looks';
 import { useQuery } from '@tanstack/react-query';
-import { $apiElasticApi } from '@/shared/api';
+import { $apiProductsApi } from '@/shared/api';
 
 const images = ['/213.webp', '/12.jpg'];
 
 export const HomeMainSection = () => {
   const { data } = useQuery({
     queryFn: async () => {
-      const { data } = await $apiElasticApi.elasticProductsList(10);
+      const { data } = await $apiProductsApi.productsCustomerProductsList(10);
       return data;
     },
-    queryKey: [''],
+    queryKey: ['productsCustomerProductsList'],
   });
   return (
     <>

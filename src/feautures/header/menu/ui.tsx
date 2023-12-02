@@ -11,11 +11,15 @@ import {
 import { AnimatePresence, motion } from 'framer-motion';
 import { MobileHeader } from './mobile';
 import { LoginModal, RegisterModal } from '../userInfo/modals';
-import { Button } from '@/shared/ui/buttons';
+import { Button, IconButton } from '@/shared/ui/buttons';
 import { BUTTON_STYLES } from '@/shared/lib/consts/styles';
 import Link from 'next/link';
 import { TActiveModalType, useActiveModal } from '@/entities/modals';
 import Cookies from 'js-cookie';
+import { useQuery } from '@tanstack/react-query';
+import { $apiProductsApi } from '@/shared/api';
+import { useUser } from '@/entities/user';
+import { useRouter } from 'next/router';
 
 interface FilterOption {
   value: string;
@@ -177,43 +181,59 @@ const categories = [
 
 export const MobileMenu = () => {
   const token = Cookies.get('refresh_token');
+  const isAuth = useUser((state) => state.isAuth);
+  const [modalActive, setModalActive] = useActiveModal((state) => [
+    state.modalActive,
+    state.setModalActive,
+  ]);
+  const { push, asPath } = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeFilter, setActiveFilter] = useState<string>(
     filterOptions[0].value,
   );
 
-  const [modalActive, setModalActive] = useActiveModal((state) => [
-    state.modalActive,
-    state.setModalActive,
-  ]);
+  const handleFavouriteClick = async () => {
+    if (isAuth) await push('/cart/favourites');
+    else setModalActive('login');
+  };
+
+  const { data } = useQuery({
+    queryFn: async () => {
+      const { data } = await $apiProductsApi.productsCustomerFavouritesList();
+      return data;
+    },
+    queryKey: ['productsCustomerFavouritesList', asPath],
+    enabled: isAuth,
+  });
 
   const handleOpenModalActive = (type: TActiveModalType) =>
     setModalActive(type);
   const handleFilterChange = (filter: string) => setActiveFilter(filter);
   const handleCloseModalActive = () => setModalActive('');
-
-  const handleOpenMenu = () => {
-    setIsMenuOpen(true);
-  };
-
-  const handleCloseMenu = () => {
-    setIsMenuOpen(false);
-  };
+  const handleOpenMenu = () => setIsMenuOpen(true);
+  const handleCloseMenu = () => setIsMenuOpen(false);
 
   return (
     <>
-      <div className="flex items-center justify-between py-[12px]">
-        <div className="flex items-center gap-5">
-          <Menu onClick={handleOpenMenu} />
-          <HeaderSearchPopup />
+      <div className="grid grid-cols-[68px_1fr_68px] items-center justify-items-center py-[12px]">
+        <div className="flex items-center gap-[4px]">
+          <IconButton onClick={handleOpenMenu}>
+            <Menu />
+          </IconButton>
+
+          <IconButton>
+            <HeaderSearchPopup />
+          </IconButton>
         </div>
 
         <Link href="/">
           <LogoIcon />
         </Link>
 
-        <div className="flex items-center gap-5">
-          <Heart />
+        <div className="flex items-center gap-[4px]">
+          <IconButton chip={data?.count} onClick={handleFavouriteClick}>
+            <Heart size={24} />
+          </IconButton>
           <HeaderShoppingBag />
         </div>
       </div>
