@@ -27,7 +27,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   }, []);
 
   return (
-    <div>
+    <div className="flex flex-col min-h-screen">
       <div className="w-full fixed z-[15] top-[0]">
         <motion.div animate={isStickyHeader ? { height: 0, opacity: 0 } : {}}>
           <div className="flex w-full justify-center items-center bg-blue-100 gap-1 p-2">
@@ -54,7 +54,9 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
         {children}
       </motion.div>
 
-      <MainFooter />
+      <div className="mt-auto">
+        <MainFooter />
+      </div>
     </div>
   );
 };

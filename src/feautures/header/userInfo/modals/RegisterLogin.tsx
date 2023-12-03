@@ -6,8 +6,6 @@ import * as yup from 'yup';
 import { Modal } from '../../../../shared/ui/modal-windows';
 import TextField from '@/shared/ui/inputs/textField';
 import { passwordLengthCheck } from '@/shared/lib/helpers';
-import Checkbox from '@/shared/ui/inputs/checkbox';
-import Image from 'next/image';
 import { Button } from '@/shared/ui/buttons';
 import {
   BUTTON_STYLES,
@@ -16,6 +14,7 @@ import {
   SUCCESS,
 } from '@/shared/lib/consts/styles';
 import { ShowAndHideIcon } from '@/shared/ui/templates';
+import { PreferenceSelector } from '@/shared/ui/selects';
 
 interface RegisterModalProps {
   open: boolean;
@@ -73,26 +72,6 @@ export const RegisterModal: FC<RegisterModalProps> = ({ open, onClose }) => {
       }
     },
   });
-
-  const handleCheckboxChange = (preferenceValue: string) => {
-    const isChecked =
-      formik.values.preferred_clothing.includes(preferenceValue);
-    const currentPreferences = formik.values.preferred_clothing;
-
-    const updatedPreferences = isChecked
-      ? currentPreferences.filter((value) => value !== preferenceValue)
-      : [...currentPreferences, preferenceValue];
-
-    formik.setFieldValue('preferred_clothing', updatedPreferences);
-  };
-
-  const handleSelectAllCheckbox = () => {
-    const isChecked =
-      formik.values.preferred_clothing.length === clothes.length;
-    const allPreferences = clothes.map((preference) => preference.value);
-
-    formik.setFieldValue('preferred_clothing', isChecked ? [] : allPreferences);
-  };
 
   return (
     <Modal open={open} onClose={onClose}>
@@ -159,46 +138,12 @@ export const RegisterModal: FC<RegisterModalProps> = ({ open, onClose }) => {
           </p>
         </div>
 
-        <Checkbox
-          label={'Выбрать все'}
-          checked={formik.values.preferred_clothing.length === clothes.length}
-          onChange={handleSelectAllCheckbox}
+        <PreferenceSelector
+          clothes={clothes}
+          onChange={(value) =>
+            formik.setFieldValue('preferred_clothing', value)
+          }
         />
-
-        <div className="w-full flex justify-between gap-4">
-          {clothes.map((preference) => (
-            <div
-              key={preference.id}
-              className={`max-w-[134px] w-full h-full relative border-[2px] ${
-                formik.values.preferred_clothing.includes(preference.value)
-                  ? 'border-[#171717]'
-                  : 'border-transparent'
-              }`}
-            >
-              <div className="absolute top-[10px] left-[10px]">
-                <Checkbox
-                  checked={formik.values.preferred_clothing.includes(
-                    preference.value,
-                  )}
-                  onChange={() => handleCheckboxChange(preference.value)}
-                />
-              </div>
-
-              <Image
-                src={preference.img}
-                width={134}
-                height={137}
-                alt={preference.title}
-                layout=""
-                className="h-[137px]"
-              />
-
-              <p className="text-[#fff] text-[14px] font-semibold absolute left-[10px] bottom-[10px]">
-                {preference.title}
-              </p>
-            </div>
-          ))}
-        </div>
 
         <Button
           variant={BUTTON_STYLES.primaryCta}
