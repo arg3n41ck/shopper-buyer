@@ -37,7 +37,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
   }, []);
 
   return (
-    <div>
+    <div className="flex flex-col min-h-screen">
       <div className="w-full fixed z-[15] top-[0]">
         <motion.div
           className="overflow-y-hidden"
@@ -67,7 +67,9 @@ const MainLayout = ({ children }: MainLayoutProps) => {
         {children}
       </motion.div>
 
-      <MainFooter />
+      <div className="mt-auto">
+        <MainFooter />
+      </div>
     </div>
   );
 };

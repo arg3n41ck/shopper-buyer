@@ -7,17 +7,19 @@ import { BUTTON_STYLES } from '@/shared/lib/consts/styles';
 import { Button, IconButton } from '@/shared/ui/buttons';
 import Cookies from 'js-cookie';
 import { TActiveModalType, useActiveModal } from '@/entities/modals';
+import { useRouter } from 'next/router';
 
 interface MenuItem {
   text: string;
   key: string;
+  path: string;
 }
 
 const menuItems: MenuItem[] = [
-  { text: 'Профиль', key: 'profile' },
-  { text: 'Заказы', key: 'orders' },
-  { text: 'Возврат товара', key: 'return' },
-  { text: 'Помощь и контакты', key: 'help' },
+  { text: 'Профиль', key: 'profile', path: '/profile/account' },
+  { text: 'Заказы', key: 'orders', path: '/profile/orders' },
+  { text: 'Возврат товара', key: 'return', path: '/' },
+  { text: 'Помощь и контакты', key: 'help', path: '/' },
 ];
 
 interface HeaderUserInfoProps {}
@@ -31,6 +33,7 @@ export const HeaderUserInfo: React.FC<HeaderUserInfoProps> = () => {
   ]);
 
   const userInfoRef = useRef<HTMLDivElement | null>(null);
+  const router = useRouter();
 
   const handleClickActive = () => setActive((prev) => !prev);
   const handleOpenModalActive = (type: TActiveModalType) => {
@@ -42,6 +45,8 @@ export const HeaderUserInfo: React.FC<HeaderUserInfoProps> = () => {
   useOutsideClick(userInfoRef, () => {
     setActive(false);
   });
+
+  const navigateToPath = (path: string) => router.push(path);
 
   return (
     <>
@@ -72,6 +77,7 @@ export const HeaderUserInfo: React.FC<HeaderUserInfoProps> = () => {
                   <div
                     key={item.key}
                     className="flex items-center justify-between p-[11px] cursor-pointer hover:bg-[#f5f5f5]"
+                    onClick={() => navigateToPath(item.path)}
                   >
                     <p className="text-[16px] font-normal">{item.text}</p>
                   </div>

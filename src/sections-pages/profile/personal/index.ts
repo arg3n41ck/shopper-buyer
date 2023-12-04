@@ -1,0 +1,1 @@
+export { ProfilePersonalSection } from './ui';
