@@ -23,7 +23,7 @@ export const ProfileTabs: React.FC<TabsProps> = ({ children }) => {
 
   return (
     <MainLayout>
-      <div className="flex gap-[52px] px-[48px] py-10">
+      <div className="flex gap-[52px] main-container py-10">
         <div className="flex flex-col w-1/4">
           {tabs.map((tab) => (
             <div
