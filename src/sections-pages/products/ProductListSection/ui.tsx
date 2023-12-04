@@ -1,7 +1,7 @@
 import React from 'react';
 import { FilterSidebar, ProductList } from '@/widgets/product';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { ElasticProductsList200Response } from '@/shared/api/gen';
+import { ProductsCustomerProductsList200Response } from '@/shared/api/gen';
 import { CloseIcon } from 'next/dist/client/components/react-dev-overlay/internal/icons/CloseIcon';
 import { Chip } from '@/shared/ui/buttons';
 import CustomSelect from '@/shared/ui/selects/default';
@@ -11,8 +11,9 @@ import InlineSVG from 'react-inlinesvg';
 export const ProductListSection = () => {
   const { data } = useInfiniteQuery({
     initialPageParam: 1,
-    queryKey: ['elasticProductsList'],
-    queryFn: async () => null as unknown as ElasticProductsList200Response,
+    queryKey: ['productsCustomerProductsList'],
+    queryFn: async () =>
+      null as unknown as ProductsCustomerProductsList200Response,
     getNextPageParam: () => null,
   });
 

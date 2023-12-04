@@ -2,20 +2,27 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { useProductVariant } from '@/entities/product';
 import { useQuery } from '@tanstack/react-query';
-import { $apiAccountsApi, $apiProductsApi } from '@/shared/api';
+import { $apiProductsApi } from '@/shared/api';
 import Image from 'next/image';
 import cn from 'classnames';
 import { Heart, ShoppingBag } from 'react-feather';
 import { Button } from '@/shared/ui/buttons';
 import { SizeChoose } from '@/feautures/product';
-import { User } from '@/shared/api/gen';
-import { toast } from 'react-toastify';
+import { Product, ProductVariant } from '@/shared/api/gen';
+import { useCart } from '@/entities/cart';
+import { useUser } from '@/entities/user';
+import { useCartQuery } from '@/feautures/cart';
+import { useFavouriteActions } from '@/entities/favourites';
 
 export const ProductVariantChoose = () => {
   const { query } = useRouter();
+  const isAuth = useUser((state) => state.isAuth);
   const [currentVariant, setVariant, currentSize] = useProductVariant(
     (state) => [state.currentVariant, state.setVariant, state.currentSize],
   );
+  const addToCart = useCart((state) => state.addProduct);
+  const { refetch, isFetching } = useCartQuery();
+
   const { data } = useQuery({
     queryKey: ['productsCustomerProductsRead', query],
     queryFn: async () => {
@@ -26,34 +33,33 @@ export const ProductVariantChoose = () => {
     },
   });
 
-  const { data: user } = useQuery({
-    queryKey: ['accountsUsersMeRead'],
-    queryFn: async () => {
-      const { data } = await $apiAccountsApi.accountsUsersMeRead();
-      return data as unknown as User;
-    },
-  });
-
-  const handleFavourite = async () => {
-    if (!user) {
-      toast.warning('Требуется авторизация для добавления товар в избранное');
-      return;
-    }
-    await toast.promise(
-      $apiProductsApi.productsCustomerFavouritesCreate({
-        product: data?.id as number,
-      }),
-      {
-        pending: 'Сохранение',
-        success: 'Товар успешно добавлен в избранное!',
-        error: 'Ошибка!',
-      },
-    );
-  };
+  const { favouriteToggle, isFavourite, favouritesQuery } = useFavouriteActions(
+    data as Product,
+  );
 
   React.useEffect(() => {
     setVariant(data?.variants?.[0] || null);
   }, [data]);
+
+  const currentPrice = data?.discount
+    ? Number(currentSize?.price) -
+      ((data?.discount || 0) / 100) * Number(currentSize?.price)
+    : currentSize?.price;
+
+  const handleAddToCart = async () => {
+    addToCart(
+      {
+        product_variant: currentVariant as ProductVariant,
+        total: currentPrice as unknown as string,
+        quantity: 1,
+        size: currentSize?.size as string,
+        id: currentVariant?.id,
+      },
+      isAuth,
+    );
+
+    await refetch();
+  };
 
   return (
     <div className="grid gap-[24px] md:gap-[16px] items-start content-start">
@@ -73,10 +79,7 @@ export const ProductVariantChoose = () => {
         )}
         <p className="text-[24px] text-red font-[500]">
           {currentSize?.price
-            ? data?.discount
-              ? +currentSize?.price -
-                (data?.discount / 100) * +currentSize?.price
-              : currentSize?.price
+            ? currentPrice
             : `от ${currentVariant?.price_min} до ${currentVariant?.price_max}`}{' '}
           сом
         </p>
@@ -117,18 +120,24 @@ export const ProductVariantChoose = () => {
       {/*actions*/}
       <div className="grid gap-[12px]">
         <Button
-          disabled={!(currentSize && currentSize.quantity)}
+          onClick={handleAddToCart}
+          disabled={!(currentSize && currentSize.quantity && !isFetching)}
           className="gap-[8px]"
           variant="PrimaryCTAButton"
         >
           <ShoppingBag /> В корзину
         </Button>
         <Button
-          onClick={handleFavourite}
+          onClick={() => favouriteToggle.mutate()}
+          disabled={favouriteToggle.isPending || favouritesQuery.isFetching}
           className="gap-[8px]"
           variant="WithoutBackgroundButton"
         >
-          <Heart /> В Избранное
+          <Heart
+            fill={isFavourite ? '#B91C1C' : 'none'}
+            color={isFavourite ? '#B91C1C' : '#676767'}
+          />{' '}
+          В Избранное
         </Button>
       </div>
     </div>

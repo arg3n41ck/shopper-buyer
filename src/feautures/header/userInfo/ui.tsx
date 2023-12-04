@@ -4,7 +4,9 @@ import { User } from 'react-feather';
 import useOutsideClick from '@/shared/lib/hooks/useOutsideClick';
 import { LoginModal, RegisterModal } from './modals';
 import { BUTTON_STYLES } from '@/shared/lib/consts/styles';
-import { Button } from '@/shared/ui/buttons';
+import { Button, IconButton } from '@/shared/ui/buttons';
+import Cookies from 'js-cookie';
+import { TActiveModalType, useActiveModal } from '@/entities/modals';
 import { useRouter } from 'next/router';
 
 interface MenuItem {
@@ -23,13 +25,18 @@ const menuItems: MenuItem[] = [
 interface HeaderUserInfoProps {}
 
 export const HeaderUserInfo: React.FC<HeaderUserInfoProps> = () => {
+  const token = Cookies.get('refresh_token');
   const [active, setActive] = useState(false);
-  const [modalActive, setModalActive] = useState('');
+  const [modalActive, setModalActive] = useActiveModal((state) => [
+    state.modalActive,
+    state.setModalActive,
+  ]);
+
   const userInfoRef = useRef<HTMLDivElement | null>(null);
   const router = useRouter();
 
   const handleClickActive = () => setActive((prev) => !prev);
-  const handleOpenModalActive = (type: string) => {
+  const handleOpenModalActive = (type: TActiveModalType) => {
     setModalActive(type);
     setActive(false);
   };
@@ -44,12 +51,9 @@ export const HeaderUserInfo: React.FC<HeaderUserInfoProps> = () => {
   return (
     <>
       <div className="relative" ref={userInfoRef}>
-        <div
-          className="flex items-center gap-[4px] cursor-pointer"
-          onClick={handleClickActive}
-        >
-          <User size={24} />
-        </div>
+        <IconButton>
+          <User size={24} onClick={handleClickActive} />
+        </IconButton>
 
         <AnimatePresence>
           {active && (
@@ -61,13 +65,14 @@ export const HeaderUserInfo: React.FC<HeaderUserInfoProps> = () => {
               transition={{ duration: 0.2 }}
             >
               <div className="flex flex-col gap-[12px] w-[295px]">
-                <Button
-                  variant={BUTTON_STYLES.primaryCta}
-                  onClick={() => handleOpenModalActive('login')}
-                >
-                  Войти
-                </Button>
-
+                {!token && (
+                  <Button
+                    variant={BUTTON_STYLES.primaryCta}
+                    onClick={() => handleOpenModalActive('login')}
+                  >
+                    Войти
+                  </Button>
+                )}
                 {menuItems.map((item) => (
                   <div
                     key={item.key}

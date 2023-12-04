@@ -3,12 +3,12 @@ import SwiperCore from 'swiper';
 import { SwiperSlide } from 'swiper/react';
 import { ChevronRight } from 'react-feather';
 import { Navigation, Pagination } from 'swiper/modules';
-import { ProductCard } from '@/entities/product';
+import { ProductCard } from '@/feautures/product';
 import 'swiper/css/bundle';
 import { Button } from '@/shared/ui/buttons';
 import { BUTTON_STYLES } from '@/shared/lib/consts/styles';
 import { HorizontalCarousel } from '@/shared/ui/carousels';
-import { Product, ProductDocument } from '@/shared/api/gen';
+import { Product } from '@/shared/api/gen';
 
 SwiperCore.use([Navigation, Pagination]);
 
@@ -20,7 +20,7 @@ interface ExtraInfo {
 }
 
 interface CarouselProductProps {
-  products: ProductDocument[] | undefined;
+  products: Product[] | undefined;
   uniqueCarouselId: string;
   extraInfo?: ExtraInfo;
 }
@@ -66,7 +66,7 @@ export const CarouselProducts: React.FC<CarouselProductProps> = ({
         <HorizontalCarousel uniqueCarouselId={uniqueCarouselId}>
           {products?.map((item, index) => (
             <SwiperSlide key={index}>
-              <ProductCard item={item as unknown as Product} />
+              <ProductCard item={item} />
             </SwiperSlide>
           ))}
         </HorizontalCarousel>

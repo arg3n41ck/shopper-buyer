@@ -1,7 +1,14 @@
-import { ChangeEvent, FC, ReactNode, useRef, useState } from 'react';
+import {
+  ChangeEvent,
+  ComponentPropsWithRef,
+  FC,
+  ReactNode,
+  useRef,
+  useState,
+} from 'react';
 import cn from 'classnames';
 
-interface TextAreaProps {
+interface TextAreaProps extends ComponentPropsWithRef<'textarea'> {
   startAdornment?: ReactNode;
   endAdornment?: ReactNode;
   value: string;
@@ -11,7 +18,6 @@ interface TextAreaProps {
   errorMessage?: any;
   helperText?: string;
   className?: string;
-  [x: string]: any;
 }
 
 const TextArea: FC<TextAreaProps> = ({

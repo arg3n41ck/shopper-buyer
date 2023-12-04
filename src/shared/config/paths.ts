@@ -1,4 +1,4 @@
-const AUTH_ROOT = '/auth';
+const AUTH_ROOT = '/active-modal';
 const LK_SELLER_ROOT = '/lk-seller';
 const LK_SELLER_CREATE_PRODUCT = '/lk-seller/products-list/create-product';
 // const MAIN_PAGE_ROOT = '/'

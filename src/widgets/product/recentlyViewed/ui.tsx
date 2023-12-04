@@ -1,6 +1,6 @@
 import React from 'react';
 import { useRecentlyViewedProducts } from '@/widgets/product/recentlyViewed/model';
-import { ProductCard } from '@/entities/product';
+import { ProductCard } from '@/feautures/product';
 import useIsClient from '@/shared/lib/hooks/useIsClient';
 
 export const RecentlyViewed = () => {
@@ -15,14 +15,17 @@ export const RecentlyViewed = () => {
       </h5>
       <div className="flex max-w-full overflow-x-auto hideScrollBar gap-[40px] md:gap-[16px]">
         {products.map((item) => (
-          <ProductCard
-            classNames={{
-              image: '!h-[288px] md:!h-[260px]',
-              wrapper: '!w-[288px] md:!w-[200px]',
-            }}
+          <div
+            className="min-w-[288px] md:min-w-[200px]"
             key={`RecentlyViewed ${item.slug}`}
-            item={item}
-          />
+          >
+            <ProductCard
+              classNames={{
+                image: '!h-[288px] md:!h-[260px]',
+              }}
+              item={item}
+            />
+          </div>
         ))}
       </div>
     </div>

@@ -3,6 +3,9 @@ import { AnimatePresence, motion } from 'framer-motion';
 import useOutsideClick from '@/shared/lib/hooks/useOutsideClick';
 import { X } from 'react-feather';
 import ProductItemInBag from './ProductItemInBag';
+import { useCartQuery } from '@/feautures/cart';
+import { LoaderIcon } from '@/shared/ui/loaders';
+import { useCart } from '@/entities/cart';
 
 interface MenuProps {
   isOpen: boolean;
@@ -11,14 +14,15 @@ interface MenuProps {
 
 const HeaderShoppingBagMenu: React.FC<MenuProps> = ({ isOpen, onClose }) => {
   const headerShoppingBugRef = useRef(null);
-
+  const cart = useCart((state) => state.cart);
   useOutsideClick(headerShoppingBugRef, () => {
     onClose();
   });
+  const { isFetching, refetch } = useCartQuery();
 
-  const productItems = Array.from({ length: 6 }, (_, index) => (
-    <ProductItemInBag key={index} />
-  ));
+  React.useEffect(() => {
+    refetch();
+  }, [isOpen]);
 
   return (
     <AnimatePresence>
@@ -51,7 +55,17 @@ const HeaderShoppingBagMenu: React.FC<MenuProps> = ({ isOpen, onClose }) => {
 
             <div className="p-5">
               <div className="h-[calc(100vh-300px)] overflow-y-scroll touch-none scrollbar-none">
-                <div className="flex flex-col gap-5">{productItems}</div>
+                <LoaderIcon loading={isFetching} />
+
+                <div className="flex flex-col gap-5">
+                  {!isFetching &&
+                    cart?.items?.map((item, index) => (
+                      <ProductItemInBag
+                        key={`cart ${item?.product_variant?.id} ${index}`}
+                        item={item}
+                      />
+                    ))}
+                </div>
               </div>
             </div>
 
@@ -66,7 +80,7 @@ const HeaderShoppingBagMenu: React.FC<MenuProps> = ({ isOpen, onClose }) => {
                     </p>
 
                     <p className="text-[#171717] text-[16px] font-normal">
-                      56 984 сом
+                      {cart?.total || 0} сом
                     </p>
                   </div>
 
@@ -86,7 +100,7 @@ const HeaderShoppingBagMenu: React.FC<MenuProps> = ({ isOpen, onClose }) => {
                     </p>
 
                     <p className="text-[#171717] text-[20px] font-semibold">
-                      58 184 сом
+                      {Number(cart?.total || 0) + 1200} сом
                     </p>
                   </div>
 

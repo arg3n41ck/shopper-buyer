@@ -1,3 +1,2 @@
-export * from './productCard';
-export * from './variantChoose';
-export * from './productInfo';
+export * from './model/variantChoose/model';
+export * from './ui/productInfo';

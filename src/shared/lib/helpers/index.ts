@@ -6,3 +6,5 @@ export * from './removeEmptyFields';
 export * from './truncateText';
 export * from './queryFormatter';
 export * from './offsetToPage';
+export * from './identifyContactType';
+export * from './getErrorMessage';

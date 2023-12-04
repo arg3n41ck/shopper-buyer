@@ -16,19 +16,22 @@ import { ShowAndHideIcon } from '@/shared/ui/templates';
 import { toast } from 'react-toastify';
 import { $apiAccountsApi } from '@/shared/api';
 import Cookies from 'js-cookie';
+import { TActiveModalType } from '@/entities/modals';
+import { useUser } from '@/entities/user';
+import { useCartQuery } from '@/feautures/cart';
 
 interface LoginModalProps {
   open: boolean;
   onClose: () => void;
-  onClickModal: (type: string) => void;
+  onClickModal: (type: TActiveModalType) => void;
 }
 
 const validationSchema = (t: (key: string) => string) =>
   yup.object({
     username: yup
       .string()
-      .email(t('auth.validation.email.invalid'))
-      .required(t('auth.validation.email.required')),
+      .email(t('active-modal.validation.email.invalid'))
+      .required(t('active-modal.validation.email.required')),
   });
 
 export const LoginModal: FC<LoginModalProps> = ({
@@ -36,8 +39,10 @@ export const LoginModal: FC<LoginModalProps> = ({
   onClose,
   onClickModal,
 }) => {
+  const { postCart } = useCartQuery();
   const { t } = useTranslation();
   const router = useRouter();
+  const setIsAuth = useUser((state) => state.setIsAuth);
   const [showPassword, setShowPassword] = useState(false);
 
   const handlePasswordToggle = () => {
@@ -56,6 +61,7 @@ export const LoginModal: FC<LoginModalProps> = ({
     onSubmit: async (values) => {
       const loginFetch = async () => {
         const { data } = await $apiAccountsApi.accountsAuthTokenCreate(values);
+        setIsAuth(true);
         Cookies.set('access_token', (data as any)?.access);
         Cookies.set('refresh_token', (data as any)?.refresh);
       };
@@ -66,6 +72,7 @@ export const LoginModal: FC<LoginModalProps> = ({
         error: 'Неверный логин или пароль',
       });
 
+      await postCart();
       await onClose();
     },
   });
@@ -80,43 +87,38 @@ export const LoginModal: FC<LoginModalProps> = ({
         <p className="text-[#000] text-[24px] font-semibold text-center">
           Добро пожаловать!
         </p>
+        <form onSubmit={formik.handleSubmit} className="flex flex-col gap-5">
+          <div className="w-full flex flex-col gap-3">
+            <TextField
+              value={formik.values.username}
+              onChange={formik.handleChange}
+              name="username"
+              placeholder={'Адрес электронной почты или номер телефона'}
+            />
 
-        <div className="w-full flex flex-col gap-3">
-          <TextField
-            value={formik.values.username}
-            onChange={formik.handleChange}
-            name="username"
-            placeholder={'Адрес электронной почты или номер телефона'}
-          />
+            <TextField
+              value={formik.values.password}
+              onChange={formik.handleChange}
+              name="password"
+              type={showPassword ? 'text' : 'password'}
+              endAdornment={ShowAndHideIcon({
+                show: showPassword,
+                onHide: handlePasswordToggle,
+                onShow: handlePasswordToggle,
+              })}
+              placeholder="Пароль"
+            />
 
-          <TextField
-            value={formik.values.password}
-            onChange={formik.handleChange}
-            name="password"
-            type={showPassword ? 'text' : 'password'}
-            endAdornment={ShowAndHideIcon({
-              show: showPassword,
-              onHide: handlePasswordToggle,
-              onShow: handlePasswordToggle,
-            })}
-            placeholder="Пароль"
-          />
+            <p
+              className="text-[#b91c1c] text-[16px] font-semibold text-right cursor-pointer"
+              onClick={navigateToResetPasswordPage}
+            >
+              Забыли пароль?
+            </p>
+          </div>
 
-          <p
-            className="text-[#b91c1c] text-[16px] font-semibold text-right cursor-pointer"
-            onClick={navigateToResetPasswordPage}
-          >
-            Забыли пароль?
-          </p>
-        </div>
-
-        <Button
-          variant={BUTTON_STYLES.primaryCTA}
-          onClick={() => formik.handleSubmit()}
-        >
-          Войти
-        </Button>
-
+          <Button variant={BUTTON_STYLES.primaryCTA}>Войти</Button>
+        </form>
         <div className="w-full flex flex-col gap-3">
           <div className="grid grid-cols-[1fr_221px_1fr] items-center gap-2">
             <div className="w-[95%] max-w-full h-[1px] border border-[#676767]" />

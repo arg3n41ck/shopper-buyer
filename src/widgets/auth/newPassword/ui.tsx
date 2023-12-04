@@ -17,27 +17,29 @@ import { ERROR, SUCCESS } from '@/shared/lib/consts/styles';
 
 interface FormValues {
   new_password: string;
-  repeat_password: string;
+  re_password: string;
 }
 
 const validationSchema = (t: (key: string) => string) =>
   yup.object({
     new_password: yup
       .string()
-      .required(t('auth.validation.password.newPassword.requiredNewPassword'))
-      .min(8, t('auth.validation.password.minLength')),
-    repeat_password: yup
+      .required(
+        t('active-modal.validation.password.newPassword.requiredNewPassword'),
+      )
+      .min(8, t('active-modal.validation.password.minLength')),
+    re_password: yup
       .string()
-      .required(t('auth.validation.password.newPassword.repeat'))
+      .required(t('active-modal.validation.password.newPassword.repeat'))
       .oneOf(
         [yup.ref('new_password')],
-        t('auth.validation.password.newPassword.doNotMatch'),
+        t('active-modal.validation.password.newPassword.doNotMatch'),
       ),
   });
 
 const initialValues: FormValues = {
   new_password: '',
-  repeat_password: '',
+  re_password: '',
 };
 
 // const authClient = new AuthClient();
@@ -51,10 +53,10 @@ export const NewPasswordPage: FC = () => {
 
   const [showPassword, setShowPassword] = useState<{
     new_password: boolean;
-    repeat_password: boolean;
+    re_password: boolean;
   }>({
     new_password: false,
-    repeat_password: false,
+    re_password: false,
   });
 
   const formik = useFormik({
@@ -73,7 +75,7 @@ export const NewPasswordPage: FC = () => {
         await router.push({
           pathname: PATH_AUTH.authSuccess,
           query: {
-            title: t('auth.resetPassword.successChangePassword'),
+            title: t('active-modal.resetPassword.successChangePassword'),
             path: PATH_AUTH.root,
           },
         });
@@ -92,7 +94,7 @@ export const NewPasswordPage: FC = () => {
     <AuthLayout>
       <div className="max-w-[436px] w-full mx-auto flex flex-col gap-5">
         <p className="font-semibold text-[32px] text-[#000] mb-5 text-center">
-          <Trans i18nKey={'auth.resetPassword.headTextNewPassword'} />
+          <Trans i18nKey={'active-modal.resetPassword.headTextNewPassword'} />
         </p>
 
         <form onSubmit={formik.handleSubmit}>
@@ -119,22 +121,19 @@ export const NewPasswordPage: FC = () => {
 
             <TextField
               error={
-                formik.touched.repeat_password &&
-                Boolean(formik.errors.repeat_password)
+                formik.touched.re_password && Boolean(formik.errors.re_password)
               }
               errorMessage={
-                formik.touched.repeat_password
-                  ? formik.errors.repeat_password
-                  : ''
+                formik.touched.re_password ? formik.errors.re_password : ''
               }
-              value={formik.values.repeat_password}
+              value={formik.values.re_password}
               onChange={formik.handleChange}
-              name="repeat_password"
-              type={showPassword.repeat_password ? 'text' : 'password'}
+              name="re_password"
+              type={showPassword.re_password ? 'text' : 'password'}
               endAdornment={ShowAndHideIcon({
-                show: showPassword.repeat_password,
-                onHide: () => handleShowPassword('repeat_password'),
-                onShow: () => handleShowPassword('repeat_password'),
+                show: showPassword.re_password,
+                onHide: () => handleShowPassword('re_password'),
+                onShow: () => handleShowPassword('re_password'),
               })}
               placeholder={'Повторите пароль'}
             />
@@ -159,7 +158,7 @@ export const NewPasswordPage: FC = () => {
           <div className="mt-5 mb-[62px] w-full flex justify-center">
             <Button type="submit" disabled={isLoading}>
               <div className="flex items-center gap-[10px]">
-                <Trans i18nKey={'auth.resetPassword.submit'} />{' '}
+                <Trans i18nKey={'active-modal.resetPassword.submit'} />{' '}
                 <LoaderIcon loading={isLoading} size={24} />
               </div>
             </Button>

@@ -122,9 +122,9 @@ const socialMediaIcons = (
 
 const MainFooter = () => {
   return (
-    <div className="w-full bg-[#f8f8f8] mt-[80px]">
+    <div className="w-full bg-[#f8f8f8] mt-[50px] md:mt-[20px] border-t border-[#dbdbdb]">
       <div className="main-container">
-        <div className="px-[28px] md:px-[20px] py-[52px] md:py-[20px] flex items-end flex-wrap gap-[40px] justify-between border-t border-[#dbdbdb] w-90% md:flex-col md:items-start md:gap-[20px]">
+        <div className="py-[52px] md:py-[20px] flex items-end flex-wrap gap-[40px] justify-between w-90% md:flex-col md:items-start md:gap-[20px]">
           <FooterSection title="Помощь">
             {footerTexts.map((item) => (
               <p
@@ -176,7 +176,7 @@ const MainFooter = () => {
           </div>
         </div>
 
-        <div className="py-[16px] px-[28px] md:py-[16px] md:px-[20px] flex justify-between  flex-wrap gap-[15px] border-t-1 border-[#dbdbdb]">
+        <div className="py-[16px] md:py-[16px] flex justify-between  flex-wrap gap-[15px] border-t-1 border-[#dbdbdb]">
           <LogoIcon />
           <p className="text-[#676767] text-[16px] font-400">
             © 2022 Shopper Inc. Все права защищены

@@ -14,7 +14,7 @@ interface ResetPasswordProps {}
 
 const validationSchema = (t: (key: string) => string) =>
   yup.object({
-    email: yup.string().email(t('auth.validation.email.invalid')),
+    email: yup.string().email(t('active-modal.validation.email.invalid')),
   });
 
 export const ResetPasswordPage: FC<ResetPasswordProps> = () => {
@@ -127,7 +127,7 @@ export const ResetPasswordPage: FC<ResetPasswordProps> = () => {
           <div className="mt-5 mb-[62px] w-full flex justify-center">
             <Button type="submit" disabled={isLoading}>
               <div className="flex items-center gap-[10px]">
-                <Trans i18nKey={'auth.resetPassword.submit'} />{' '}
+                <Trans i18nKey={'active-modal.resetPassword.submit'} />{' '}
                 <LoaderIcon loading={isLoading} size={24} />
               </div>
             </Button>

@@ -4,6 +4,7 @@ import { DefaultBreadcrumb } from '@/shared/ui/breadcrumbs';
 import {
   ProductVariantChoose,
   useRecentlyViewedProducts,
+  ProductReviews,
 } from '@/widgets/product';
 import { useRouter } from 'next/router';
 import { useQuery } from '@tanstack/react-query';
@@ -12,7 +13,6 @@ import Image from 'next/image';
 import { ProductInfo, useProductVariant } from '@/entities/product';
 import Link from 'next/link';
 import { DefaultTabs } from '@/shared/ui/tabs';
-import { ProductReviewCard, ProductReviewCreate } from '@/feautures/reviews';
 import { Accordion } from '@/shared/ui/accordions';
 
 export const ProductDetailSection = () => {
@@ -115,7 +115,11 @@ export const ProductDetailSection = () => {
                   },
                   {
                     label: `Отзывы (${data?.reviews?.length})`,
-                    content: <Reviews />,
+                    content: (
+                      <ProductReviews
+                        productSlug={data?.id as unknown as string}
+                      />
+                    ),
                   },
                 ]}
               />
@@ -138,37 +142,12 @@ export const ProductDetailSection = () => {
                   }}
                   title={`Отзывы (${data?.reviews?.length})`}
                 >
-                  <Reviews />
+                  <ProductReviews productSlug={data?.id as unknown as string} />
                 </Accordion>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  );
-};
-
-const Reviews = () => {
-  const { query } = useRouter();
-
-  const { data: product } = useQuery({
-    queryKey: ['productsCustomerProductsRead', query],
-    queryFn: async () => {
-      const { data } = await $apiProductsApi.productsCustomerProductsRead(
-        query?.slug as string,
-      );
-      return data;
-    },
-  });
-
-  return (
-    <div className="grid gap-[20px]">
-      <ProductReviewCreate productId={product?.id as number} />
-      <div className="grid gap-[1px]">
-        {product?.reviews?.map((review) => (
-          <ProductReviewCard key={review.id} review={review} />
-        ))}
       </div>
     </div>
   );

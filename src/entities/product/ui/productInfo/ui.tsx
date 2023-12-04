@@ -28,7 +28,9 @@ export const ProductInfo = () => {
         <div className="grid gap-[4px]">
           <h4 className="uppercase text-[16px] font-[600]">Состав</h4>
           <p className="text-[16px] text-gray">
-            Перерабатываемый Полиэстер 55%, Шерсть 41%, Спандекс/Эластан 4
+            {product?.specifications?.map(
+              (item) => `${item.title} ${item.value}`,
+            )}
           </p>
         </div>
         <div className="grid gap-[4px]">
@@ -40,9 +42,9 @@ export const ProductInfo = () => {
         <div className="grid gap-[4px]">
           <h4 className="uppercase text-[16px] font-[600]">Артикулы товара</h4>
           <p className="text-[16px] text-gray">Артикул: {product?.sku}</p>
-          <p className="text-[16px] text-gray">
-            Артикул бренда: {product?.shop?.id}
-          </p>
+          {/*<p className="text-[16px] text-gray">*/}
+          {/*  Артикул бренда: {product?.shop?.id}*/}
+          {/*</p>*/}
         </div>
       </div>
     </div>

@@ -15,8 +15,8 @@ $api.interceptors.request.use(
   async (config) => {
     const accessToken = Cookies.get('access_token');
 
-    if (accessToken) {
-      config.headers['Authorization'] = 'Bearer ' + accessToken;
+    if (accessToken?.length) {
+      config.headers['Authorization'] = `Bearer ${accessToken}`;
     }
     return config;
   },
@@ -42,21 +42,25 @@ $api.interceptors.response.use(
       try {
         const refreshToken = Cookies.get('refresh_token');
         if (!refreshToken) {
-          window.location.href = '/auth';
+          // window.location.href = '/active-modal';
           // No refresh token available, reject the promise
+
           return Promise.reject(error);
         }
 
         // Send a request to refresh tokens
-        const response = await axios.post(`${env.apiUrl}/auth/refresh-token/`, {
-          token: refreshToken,
-        });
+        const response = await axios.post(
+          `${process.env.NEXT_PUBLIC_API_URL}/accounts/auth/token/refresh/`,
+          {
+            refresh: refreshToken,
+          },
+        );
 
         if (response.status === 200) {
           // Update access_token and refresh_token in local storage
 
-          Cookies.set('access_token', response.data.access_token);
-          Cookies.set('refresh_token', response.data.refresh_token);
+          Cookies.set('access_token', response.data.access);
+          Cookies.set('refresh_token', response.data.refresh);
 
           // Update the Authorization header with the new access token
           originalRequest.headers['Authorization'] =
@@ -69,6 +73,8 @@ $api.interceptors.response.use(
           return Promise.reject(error);
         }
       } catch (err) {
+        Cookies.remove('access_token');
+        Cookies.remove('refresh_token');
         // An error occurred while refreshing tokens, reject the promise
         return Promise.reject(error);
       }

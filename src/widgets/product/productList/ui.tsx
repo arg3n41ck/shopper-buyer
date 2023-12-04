@@ -1,19 +1,18 @@
 import React from 'react';
-import { ProductCard } from '@/entities/product';
+import { ProductCard } from '@/feautures/product';
 import { Button } from '@/shared/ui/buttons';
 import { LoaderIcon } from '@/shared/ui/loaders';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { $apiElasticApi } from '@/shared/api';
+import { $apiProductsApi } from '@/shared/api';
 import { pageToOffset } from '@/shared/lib/helpers';
 import { PaginationProgressBar } from '@/shared/ui/templates';
-import { Product } from '@/shared/api/gen';
 
 export const ProductList = () => {
   const { data, fetchNextPage, hasNextPage, isFetching } = useInfiniteQuery({
     initialPageParam: 1,
-    queryKey: ['elasticProductsList'],
+    queryKey: ['productsCustomerProductsList'],
     queryFn: async ({ pageParam = 1 }) => {
-      const { data } = await $apiElasticApi.elasticProductsList(
+      const { data } = await $apiProductsApi.productsCustomerProductsList(
         16,
         pageToOffset(pageParam, 16),
       );
@@ -32,7 +31,7 @@ export const ProductList = () => {
 
   return (
     <div>
-      <div className="mt-[20px] grid grid-cols-4 gap-x-[40px] gap-y-[60px] xl:grid-cols-3 md:grid-cols-2">
+      <div className="mt-[20px] grid justify-items-center grid-cols-4 gap-x-[40px] md:gap-x-[16px] md:gap-y-[20px] gap-y-[60px] xl:grid-cols-3 md:grid-cols-2">
         {data?.pages.map(
           (page) =>
             page?.results?.map((product) => (
@@ -40,9 +39,9 @@ export const ProductList = () => {
                 imageSize={{ h: 220, w: 220 }}
                 classNames={{
                   wrapper: 'max-w-[220px]',
-                  image: 'max-h-[220px]',
+                  image: 'h-[220px]',
                 }}
-                item={product as unknown as Product}
+                item={product}
                 key={product.slug}
               />
             )),

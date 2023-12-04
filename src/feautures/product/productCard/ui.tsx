@@ -1,9 +1,10 @@
 import React from 'react';
 import Image from 'next/image';
 import { Heart } from 'react-feather';
-import { Product } from '@/shared/api/gen';
 import cn from 'classnames';
-import Link from 'next/link';
+import { Product } from '@/shared/api/gen';
+import { useRouter } from 'next/router';
+import { useFavouriteActions } from '@/entities/favourites';
 
 interface ProductCardProps {
   item: Product;
@@ -16,17 +17,31 @@ export const ProductCard = ({
   imageSize,
   classNames,
 }: ProductCardProps) => {
+  const { push } = useRouter();
+  const { favouriteToggle, isFavourite } = useFavouriteActions(item);
+
+  const handleProductRedirect = async () =>
+    await push(`/products/${item.slug}`);
+
   return (
-    <Link
-      href={`/products/${item.slug}`}
+    <div
       className={cn(
-        'relative grid justify-center grid-gap-[4px] grid-rows-[1fr_auto]',
+        'relative grid items-start content-start gap-[16px]',
         classNames?.wrapper,
       )}
     >
-      <div className="absolute right-[8px] top-[8px] cursor-pointer">
-        <Heart fill="#B91C1C" color="#B91C1C" />
-      </div>
+      <button
+        onClick={() => favouriteToggle.mutate()}
+        className={cn('absolute right-[8px] top-[8px] cursor-pointer z-[1]', {
+          ['cursor-wait']: favouriteToggle.isPending,
+        })}
+        disabled={favouriteToggle.isPending}
+      >
+        <Heart
+          fill={isFavourite ? '#B91C1C' : 'white'}
+          color={isFavourite ? '#B91C1C' : '#676767'}
+        />
+      </button>
 
       {item?.discount ? (
         <div className="absolute top-[3px] left-[0] bg-[#B91C1C] py-[2px] px-[8px] text-[#fff] text-sm font-medium">
@@ -35,13 +50,17 @@ export const ProductCard = ({
       ) : null}
 
       <Image
+        onClick={handleProductRedirect}
         src={
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           //@ts-ignore
           item?.variants?.[0]?.images?.[0].image ||
-          'https://www.gamewallpapers.com/members/getphonewallpaper.php?lowquality=1&titel=Sekiro%3A+Shadows+Die+Twice&nummer=04&phoneResId=3502&wallpaperType=vertical&qhdbeschikbaar=1&wallpaper_id=7036'
+          'https://w7.pngwing.com/pngs/365/575/png-transparent-hoodie-t-shirt-tracksuit-sweater-clothing-hoodie-white-hoodie-tracksuit.png'
         }
-        className={cn('h-full object-contain self-center', classNames?.image)}
+        className={cn(
+          'h-[220px] md:h-[200px] cursor-pointer object-contain object-center',
+          classNames?.image,
+        )}
         width={imageSize?.w || 288}
         height={imageSize?.h || 360}
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -50,10 +69,17 @@ export const ProductCard = ({
         priority
       />
 
-      <div className="flex self-end flex-col">
+      <div
+        onClick={handleProductRedirect}
+        className="flex flex-col cursor-pointer"
+      >
         {/*<p className="text-gray-600 text-sm font-normal">{item.title}</p>*/}
 
-        <p className="text-black text-xl font-semibold">{item.title}</p>
+        <p className="text-black text-[20px] md:text-[16px] font-mazzard font-semibold">
+          {item.title.length > 40
+            ? item.title.slice(0, 40) + '...'
+            : item.title}
+        </p>
 
         {/*<p className="text-gray-700 text-base font-normal">*/}
         {/*  {item.description}*/}
@@ -75,6 +101,6 @@ export const ProductCard = ({
           )}
         </div>
       </div>
-    </Link>
+    </div>
   );
 };
