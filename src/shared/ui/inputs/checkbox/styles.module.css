@@ -4,5 +4,5 @@
 
 .Check:after {
   @apply absolute left-[5px] top-[1px] hidden h-[11px] w-[6px] rotate-[45deg]
-  border-b-[2px] border-r-[2px] border-neutral-50 !content-[""];
+  border-b-[2px] border-r-[2px] border-neutral-50 content-[""];
 }

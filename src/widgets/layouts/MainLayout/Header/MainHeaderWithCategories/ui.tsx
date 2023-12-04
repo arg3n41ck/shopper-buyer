@@ -1,5 +1,5 @@
-import { HeaderCategories, HeaderSearchPopup } from '@/feautures/mainPage';
 import React from 'react';
+import { HeaderCategories, HeaderSearchPopup } from '@/feautures/header';
 
 const categories = [
   {
@@ -150,7 +150,7 @@ const categories = [
 
 export const MainHeaderWithCategories = () => {
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex items-center justify-between py-[10px]">
       <HeaderCategories categories={categories} />
       <HeaderSearchPopup />
     </div>

@@ -25,7 +25,7 @@ export const SuccessAction = () => {
       </div>
 
       <Button onClick={navigateToPersonalCabinet}>
-        <Trans i18nKey={'auth.authSuccessPage.toLKPage'} />
+        <Trans i18nKey={'active-modal.authSuccessPage.toLKPage'} />
       </Button>
     </div>
   );

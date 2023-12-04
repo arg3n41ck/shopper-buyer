@@ -45,8 +45,10 @@ code {
 }
 
 .main-container {
-  max-width: 1440px;
+  max-width: 1420px;
+  width: 100%;
   margin: 0 auto;
+  padding: 0 20px;
 }
 
 // scrollbar
@@ -97,4 +99,10 @@ input::-webkit-inner-spin-button {
 
 input[type='number'] {
   -moz-appearance: textfield;
+}
+
+.hideScrollBar::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  background-color: transparent;
 }

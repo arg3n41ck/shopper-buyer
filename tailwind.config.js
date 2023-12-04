@@ -9,6 +9,10 @@ module.exports = {
       maxWidth: {
         '8xl': '1920px',
       },
+      fontFamily: {
+        jost: 'var(--fontJost)',
+        mazzard: 'var(--fontMazzard)',
+      },
       colors: {
         black: 'var(--black)',
         white: 'var(--white)',
@@ -67,6 +71,7 @@ module.exports = {
     screens: {
       '2xl': { max: '1440px' },
       xl: { max: '1200px' },
+      '2lg': { max: '1108px' },
       lg: { max: '992px' },
       md: { max: '768px' },
       sm: { max: '576px' },

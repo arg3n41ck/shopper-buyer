@@ -1,0 +1,1 @@
+export { DefaultTabs } from './ui'
