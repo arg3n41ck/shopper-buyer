@@ -1,13 +1,28 @@
+import { $apiCustomersApi } from '@/shared/api';
 import VisaIcon from '@/shared/assets/icons/svg/VisaIcon';
 import { BUTTON_STYLES } from '@/shared/lib/consts/styles';
 import { Button } from '@/shared/ui/buttons';
+import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import React from 'react';
+import Cookies from 'js-cookie';
+import { useUser } from '@/entities/user';
 
 export const ProfileAccountSection = () => {
   const router = useRouter();
+  const token = Cookies.get('refresh_token');
+  const isAuth = useUser((state) => state.isAuth);
 
   const navigate = (path: string) => router.push(`/profile/${path}`);
+
+  const { data: addresses } = useQuery({
+    queryKey: ['customersAddressesList', isAuth],
+    queryFn: async () => {
+      if (!token && !isAuth) return;
+      const { data } = await $apiCustomersApi.customersAddressesList();
+      return data;
+    },
+  });
 
   return (
     <div className="flex flex-col justify-start items-start gap-5 w-full">
@@ -72,19 +87,30 @@ export const ProfileAccountSection = () => {
               Детали
             </Button>
           </div>
-          <div className="text-stone-500 text-base font-normal">
-            Акылай Нурбекова
-            <br />
-            Кыргызстан
-            <br />
-            Бишкек
-            <br />
-            ул. К. Акиева 23, кв. 123
-            <br />
-            230098
-            <br />
-            +996 703 454 109
-          </div>
+          {addresses?.results?.length ? (
+            <div className="text-stone-500 text-base font-normal">
+              <p className="m-0">Акылай Нурбекова</p>
+              <br />
+              <p className="m-0">Кыргызстан</p>
+              <br />
+              <p className="m-0">Бишкек</p>
+              <br />
+              <p className="m-0">ул. К. Акиева 23, кв. 123</p>
+              <br />
+              <p className="m-0">230098</p>
+              <br />
+              <p className="m-0">+996 703 454 109</p>
+            </div>
+          ) : (
+            <div className="text-stone-500 text-base font-normal flex">
+              <Button
+                variant={BUTTON_STYLES.withoutBackground}
+                onClick={() => navigate('addresses')}
+              >
+                Добавить адрес
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     </div>

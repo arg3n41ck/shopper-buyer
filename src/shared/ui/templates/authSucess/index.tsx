@@ -3,7 +3,7 @@ import { Check } from 'react-feather';
 import { Button } from '@/shared/ui/buttons';
 import { Trans } from 'react-i18next';
 import { SUCCESS } from '@/shared/lib/consts/styles';
-import { PATH_AUTH } from '@/shared/config';
+import { PATH } from '@/shared/config';
 import { useRouter } from 'next/router';
 
 export const SuccessAction = () => {
@@ -12,7 +12,7 @@ export const SuccessAction = () => {
   const path = (router.query?.path as string) || '';
 
   const navigateToPersonalCabinet = () =>
-    router.push({ pathname: path ? path : PATH_AUTH.root });
+    router.push({ pathname: path ? path : PATH.authRoot });
 
   return (
     <div className="mx-auto flex flex-col items-center justify-center">

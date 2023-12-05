@@ -5,3 +5,4 @@ export * from './useLocalStorage';
 export * from './useOutsideClick';
 export * from './useQuery';
 export * from './useDebounce';
+export * from './useOutTanstackQuery';

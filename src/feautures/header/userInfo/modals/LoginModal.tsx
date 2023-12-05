@@ -6,7 +6,7 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from 'next/router';
-import { PATH_AUTH } from '@/shared/config';
+import { PATH } from '@/shared/config';
 import TextField from '@/shared/ui/inputs/textField';
 import Image from 'next/image';
 import { Button } from '@/shared/ui/buttons';
@@ -19,6 +19,7 @@ import Cookies from 'js-cookie';
 import { TActiveModalType } from '@/entities/modals';
 import { useUser } from '@/entities/user';
 import { useCartQuery } from '@/feautures/cart';
+import { User, UserTypeEnum } from '@/shared/api/gen';
 
 interface LoginModalProps {
   open: boolean;
@@ -43,14 +44,14 @@ export const LoginModal: FC<LoginModalProps> = ({
   const { t } = useTranslation();
   const router = useRouter();
   const setIsAuth = useUser((state) => state.setIsAuth);
+  const logout = useUser((state) => state.logout);
   const [showPassword, setShowPassword] = useState(false);
 
   const handlePasswordToggle = () => {
     setShowPassword((prev) => !prev);
   };
 
-  const navigateToResetPasswordPage = () =>
-    router.push(PATH_AUTH.resetPassword);
+  const navigateToResetPasswordPage = () => router.push(PATH.resetPassword);
 
   const formik = useFormik({
     initialValues: {
@@ -71,6 +72,16 @@ export const LoginModal: FC<LoginModalProps> = ({
         success: 'Вход успешно выполнен!',
         error: 'Неверный логин или пароль',
       });
+
+      const { data } = await $apiAccountsApi.accountsUsersMeRead();
+      const _data = data as unknown;
+      const user = _data as User;
+
+      if (user.type === UserTypeEnum.Seller) {
+        logout();
+        window.location.href = 'https://shopper.kg/auth/log-in';
+        return;
+      }
 
       await postCart();
       await onClose();

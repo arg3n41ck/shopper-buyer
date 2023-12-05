@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 import { Clock, X } from 'react-feather';
 import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
-import { PATH_AUTH } from '@/shared/config';
+import { PATH } from '@/shared/config';
 import TextField from '@/shared/ui/inputs/textField';
 import { passwordLengthCheck } from '@/shared/lib/helpers';
 import { Button } from '@/shared/ui/buttons';
@@ -73,10 +73,10 @@ export const NewPasswordPage: FC = () => {
         // await authClient.resetPassword(body);
         setIsLoading(false);
         await router.push({
-          pathname: PATH_AUTH.authSuccess,
+          pathname: PATH.authSuccess,
           query: {
             title: t('active-modal.resetPassword.successChangePassword'),
-            path: PATH_AUTH.root,
+            path: PATH.authRoot,
           },
         });
       } catch (error) {

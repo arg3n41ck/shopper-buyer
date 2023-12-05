@@ -50,7 +50,7 @@ export const ResetPasswordPage: FC<ResetPasswordProps> = () => {
         setIsLoading(false);
         // if (user_exists)
         //   return router.push({
-        //     pathname: PATH_AUTH.newPassword,
+        //     pathname: PATH.newPassword,
         //     query: { email },
         //   });
       } catch (error) {
