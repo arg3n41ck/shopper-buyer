@@ -8,6 +8,17 @@ import { InputMask } from '@/shared/ui/inputs/input-mask/ui';
 import { useAddresses, useAddressesQuery } from '../..';
 import * as yup from 'yup';
 
+const validationSchema = () =>
+  yup.object({
+    full_name: yup.string().required('Заполните поле'),
+    zip_code: yup
+      .string()
+      .min(6, 'Почтовый индекс должен содержать как минимум 6 символов')
+      .required('Заполните поле'),
+    address: yup.string().required('Заполните поле'),
+    phone_number: yup.string().required('Заполните поле'),
+  });
+
 interface AddressForm {
   address?: CustomerAddress;
   onClose?: () => void;
@@ -15,17 +26,7 @@ interface AddressForm {
 
 export function AddressForm({ address, onClose }: AddressForm) {
   const [changeAddress] = useAddresses((state) => [state.changeAddress]);
-  const { refetch, isFetching } = useAddressesQuery();
-  const validationSchema = () =>
-    yup.object({
-      full_name: yup.string().required('Заполните поле'),
-      zip_code: yup
-        .string()
-        .min(6, 'Почтовый индекс должен содержать как минимум 6 символов')
-        .required('Заполните поле'),
-      address: yup.string().required('Заполните поле'),
-      phone_number: yup.string().required('Заполните поле'),
-    });
+  const { isFetching } = useAddressesQuery();
 
   const initialValues = {
     full_name: address?.full_name || '',
@@ -44,7 +45,7 @@ export function AddressForm({ address, onClose }: AddressForm) {
       } else {
         await changeAddress(values);
       }
-      refetch();
+      // await refetch();
       onClose && onClose();
     },
   });

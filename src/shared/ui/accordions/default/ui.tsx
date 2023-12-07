@@ -36,9 +36,9 @@ export const Accordion: React.FC<AccordionProps> = ({
         className={cn('flex cursor-pointer items-center', classNames?.label)}
         onClick={handleAccordionClick}
       >
-        <h3 className="m-0 flex-1 text-[18px] font-[600px] leading-[22px] text-neutral-900">
+        <div className="m-0 flex-1 text-[18px] font-[600px] leading-[22px] text-neutral-900">
           {title}
-        </h3>
+        </div>
         <div
           className={cn('ml-[16px] transition-all ease-in-out', {
             ['rotate-180']: isOpen,

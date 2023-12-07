@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import { AddressForm } from './address-form';
 import { AddressView } from './address-view';
-import { useAddresses, useAddressesQuery } from '..';
 import { Button } from '@/shared/ui/buttons';
 import { BUTTON_STYLES } from '@/shared/lib/consts/styles';
+import { useAddresses, useAddressesQuery } from '@/sections-pages/profile';
 
 export const ProfileAddressesSection = () => {
   const [openCreate, setOpenCreate] = useState(false);
   const addresses = useAddresses((state) => state.addresses);
-
   useAddressesQuery();
 
   return (

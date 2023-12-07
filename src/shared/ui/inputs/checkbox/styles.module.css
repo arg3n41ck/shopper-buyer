@@ -1,5 +1,5 @@
 .Check {
-  @apply relative mr-[8px] inline-block h-[20px] w-[20px] rounded-[50%] border-[2px] border-black;
+  @apply relative inline-block h-[20px] w-[20px] rounded-[50%] border-[2px] border-black;
 }
 
 .Check:after {

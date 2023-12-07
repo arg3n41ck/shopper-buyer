@@ -21,7 +21,7 @@ const Checkbox: FC<CustomCheckboxProps> = ({
   ...other
 }) => {
   return (
-    <>
+    <div>
       <label
         className={cn(
           'flex cursor-pointer w-full content-center text-[16px] font-[500] leading-[19px] text-black',
@@ -52,7 +52,7 @@ const Checkbox: FC<CustomCheckboxProps> = ({
           {helperText}
         </label>
       )}
-    </>
+    </div>
   );
 };
 

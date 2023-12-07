@@ -503,6 +503,12 @@ export interface Order {
      * @type {string}
      * @memberof Order
      */
+    'customer_full_name'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Order
+     */
     'address': string;
     /**
      * 
@@ -528,6 +534,12 @@ export interface Order {
      * @memberof Order
      */
     'payment_type'?: OrderPaymentTypeEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof Order
+     */
+    'status'?: OrderStatusEnum;
     /**
      * 
      * @type {string}
@@ -559,6 +571,13 @@ export const OrderPaymentTypeEnum = {
 } as const;
 
 export type OrderPaymentTypeEnum = typeof OrderPaymentTypeEnum[keyof typeof OrderPaymentTypeEnum];
+export const OrderStatusEnum = {
+    Pending: 'PENDING',
+    Refund: 'REFUND',
+    Delivered: 'DELIVERED'
+} as const;
+
+export type OrderStatusEnum = typeof OrderStatusEnum[keyof typeof OrderStatusEnum];
 
 /**
  * 
@@ -2349,6 +2368,25 @@ export interface UserSellerCreate {
      */
     'seller_key': SellerKey;
 }
+/**
+ * 
+ * @export
+ * @interface UserUpdate
+ */
+export interface UserUpdate {
+    /**
+     * 
+     * @type {string}
+     * @memberof UserUpdate
+     */
+    'first_name'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserUpdate
+     */
+    'last_name'?: string;
+}
 
 /**
  * AccountsApi - axios parameter creator
@@ -3405,7 +3443,7 @@ export const AccountsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async accountsUsersMePartialUpdate(data: User, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
+        async accountsUsersMePartialUpdate(data: User, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserUpdate>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.accountsUsersMePartialUpdate(data, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -3426,7 +3464,7 @@ export const AccountsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async accountsUsersMeUpdate(data: User, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
+        async accountsUsersMeUpdate(data: User, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserUpdate>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.accountsUsersMeUpdate(data, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -3635,7 +3673,7 @@ export const AccountsApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        accountsUsersMePartialUpdate(data: User, options?: any): AxiosPromise<User> {
+        accountsUsersMePartialUpdate(data: User, options?: any): AxiosPromise<UserUpdate> {
             return localVarFp.accountsUsersMePartialUpdate(data, options).then((request) => request(axios, basePath));
         },
         /**
@@ -3654,7 +3692,7 @@ export const AccountsApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        accountsUsersMeUpdate(data: User, options?: any): AxiosPromise<User> {
+        accountsUsersMeUpdate(data: User, options?: any): AxiosPromise<UserUpdate> {
             return localVarFp.accountsUsersMeUpdate(data, options).then((request) => request(axios, basePath));
         },
         /**
@@ -3855,7 +3893,7 @@ export interface AccountsApiInterface {
      * @throws {RequiredError}
      * @memberof AccountsApiInterface
      */
-    accountsUsersMePartialUpdate(data: User, options?: AxiosRequestConfig): AxiosPromise<User>;
+    accountsUsersMePartialUpdate(data: User, options?: AxiosRequestConfig): AxiosPromise<UserUpdate>;
 
     /**
      * 
@@ -3874,7 +3912,7 @@ export interface AccountsApiInterface {
      * @throws {RequiredError}
      * @memberof AccountsApiInterface
      */
-    accountsUsersMeUpdate(data: User, options?: AxiosRequestConfig): AxiosPromise<User>;
+    accountsUsersMeUpdate(data: User, options?: AxiosRequestConfig): AxiosPromise<UserUpdate>;
 
     /**
      * 

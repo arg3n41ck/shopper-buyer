@@ -34,7 +34,10 @@ const TextField = ({
     <div className={cn('relative w-full', className)}>
       {label && (
         <label
-          className={cn('text-[13.33px] font-[400] text-neutral-900', isActive)}
+          className={cn(
+            'text-[13.33px] px-[12px] font-[400] text-gray',
+            isActive,
+          )}
         >
           {label}
         </label>
