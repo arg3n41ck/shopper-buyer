@@ -1,0 +1,1 @@
+export { ProfilePasswordModal } from './ui';

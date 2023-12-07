@@ -5,8 +5,8 @@ import Checkbox from '@/shared/ui/inputs/checkbox';
 import TextField from '@/shared/ui/inputs/textField';
 import { useFormik } from 'formik';
 import { InputMask } from '@/shared/ui/inputs/input-mask/ui';
-import { useAddresses, useAddressesQuery } from '../..';
 import * as yup from 'yup';
+import { useAddressesQuery } from '@/sections-pages/profile';
 
 interface AddressForm {
   address?: CustomerAddress;
@@ -14,8 +14,7 @@ interface AddressForm {
 }
 
 export function AddressForm({ address, onClose }: AddressForm) {
-  const [changeAddress] = useAddresses((state) => [state.changeAddress]);
-  const { refetch, isFetching } = useAddressesQuery();
+  const { refetch, isFetching, changeAddress } = useAddressesQuery();
   const validationSchema = () =>
     yup.object({
       full_name: yup.string().required('Заполните поле'),
@@ -40,9 +39,9 @@ export function AddressForm({ address, onClose }: AddressForm) {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       if (address?.id) {
-        await changeAddress({ id: address.id, ...values });
+        await changeAddress.mutate({ id: address.id, ...values });
       } else {
-        await changeAddress(values);
+        await changeAddress.mutate(values);
       }
       refetch();
       onClose && onClose();

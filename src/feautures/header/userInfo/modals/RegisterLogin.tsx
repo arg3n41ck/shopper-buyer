@@ -177,7 +177,13 @@ export const RegisterModal: FC<RegisterModalProps> = ({ open, onClose }) => {
               <AlertCircle size={16} />
             )}
 
-            <p className={`text-[${ERROR[700]}]`}>
+            <p
+              className={`text-[${
+                passwordLengthCheck({ password: formik.values.password })
+                  ? SUCCESS[900]
+                  : ERROR[700]
+              }]`}
+            >
               Ваш пароль должен содержать мин. 8 букв
             </p>
           </div>
