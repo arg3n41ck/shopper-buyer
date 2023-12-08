@@ -2,8 +2,8 @@ import { CustomerAddress } from '@/shared/api/gen';
 import { BUTTON_STYLES } from '@/shared/lib/consts/styles';
 import { Button } from '@/shared/ui/buttons';
 import { useState } from 'react';
-import { AddressForm } from '@/feautures/addresses';
-import { useAddresses, useAddressesQuery } from '@/entities/addresses';
+import { AddressForm } from '../address-form';
+import { useAddressesQuery } from '@/sections-pages/profile';
 
 interface AddressView {
   address: CustomerAddress;
@@ -11,14 +11,13 @@ interface AddressView {
 
 export function AddressView({ address }: AddressView) {
   const [editMode, setEditMode] = useState(false);
-  const { refetch } = useAddressesQuery();
-  const [deleteAddress] = useAddresses((state) => [state.deleteAddress]);
+  const { refetch, deleteAddress } = useAddressesQuery();
 
   const handleAddressDeletion = async () => {
-    if (address) {
-      await deleteAddress(address.id);
-      refetch();
+    if (address?.id) {
+      deleteAddress.mutate(address.id);
       setEditMode(false);
+      refetch();
     }
   };
 

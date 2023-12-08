@@ -6,18 +6,19 @@ import TextField from '@/shared/ui/inputs/textField';
 import { useFormik } from 'formik';
 import { InputMask } from '@/shared/ui/inputs/input-mask/ui';
 import * as yup from 'yup';
-import { useAddresses, useAddressesQuery } from '@/entities/addresses';
+import { useAddressesQuery } from '@/sections-pages/profile';
+
 
 const validationSchema = () =>
-  yup.object({
-    full_name: yup.string().required('Заполните поле'),
-    zip_code: yup
-      .string()
-      .min(6, 'Почтовый индекс должен содержать как минимум 6 символов')
-      .required('Заполните поле'),
-    address: yup.string().required('Заполните поле'),
-    phone_number: yup.string().required('Заполните поле'),
-  });
+    yup.object({
+      full_name: yup.string().required('Заполните поле'),
+      zip_code: yup
+          .string()
+          .min(6, 'Почтовый индекс должен содержать как минимум 6 символов')
+          .required('Заполните поле'),
+      address: yup.string().required('Заполните поле'),
+      phone_number: yup.string().required('Заполните поле'),
+    });
 
 interface AddressForm {
   address?: CustomerAddress;
@@ -25,8 +26,7 @@ interface AddressForm {
 }
 
 export function AddressForm({ address, onClose }: AddressForm) {
-  const [changeAddress] = useAddresses((state) => [state.changeAddress]);
-  const { isFetching } = useAddressesQuery();
+  const { refetch, isFetching, changeAddress } = useAddressesQuery();
 
   const initialValues = {
     full_name: address?.full_name || '',
@@ -41,9 +41,9 @@ export function AddressForm({ address, onClose }: AddressForm) {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       if (address?.id) {
-        await changeAddress({ id: address.id, ...values });
+        await changeAddress.mutate({ id: address.id, ...values });
       } else {
-        await changeAddress(values);
+        await changeAddress.mutate(values);
       }
       // await refetch();
       onClose && onClose();
@@ -136,11 +136,12 @@ export function AddressForm({ address, onClose }: AddressForm) {
         <Button
           type="submit"
           disabled={isFetching}
+          onClick={() => formik.handleSubmit()}
           variant={BUTTON_STYLES.primaryCta}
         >
           Сохранить
         </Button>
       </div>
-    </form>
+    </>
   );
 }

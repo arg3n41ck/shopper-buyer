@@ -11,16 +11,16 @@ export const HomeMainSection = () => {
   const { data } = useQuery({
     queryFn: async () => {
       const { data } = await $apiProductsApi.productsCustomerProductsList(
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
+        'MALE', //gender
+        undefined, //forkids
+        undefined, // category
+        undefined, //status
+        undefined, //pubish date
+        undefined, //colors
+        undefined, //sizes
+        undefined, //ids
+        undefined, //search
+        undefined, //ordering
         10,
       );
       return data;
