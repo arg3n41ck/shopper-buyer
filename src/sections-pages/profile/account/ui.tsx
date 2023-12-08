@@ -3,12 +3,13 @@ import { BUTTON_STYLES } from '@/shared/lib/consts/styles';
 import { Button } from '@/shared/ui/buttons';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { useAddressesQuery, useProfileQuery } from '..';
+import { useAddressesQuery } from '@/entities/addresses';
+import { useUserQuery } from '@/entities/user';
 
 export const ProfileAccountSection = () => {
   const router = useRouter();
 
-  const { data: profile } = useProfileQuery();
+  const { data: profile } = useUserQuery();
   const { mainAddress } = useAddressesQuery();
 
   const navigate = (path: string) => router.push(`/profile/${path}`);

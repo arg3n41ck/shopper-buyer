@@ -2,8 +2,8 @@ import { CustomerAddress } from '@/shared/api/gen';
 import { BUTTON_STYLES } from '@/shared/lib/consts/styles';
 import { Button } from '@/shared/ui/buttons';
 import { useState } from 'react';
-import { AddressForm } from '../address-form';
-import { useAddressesQuery } from '@/sections-pages/profile';
+import { useAddressesQuery } from '@/entities/addresses';
+import { AddressForm } from '@/feautures/addresses';
 
 interface AddressView {
   address: CustomerAddress;
@@ -47,8 +47,11 @@ export function AddressView({ address }: AddressView) {
           </Button>
         )}
       </div>
+
       {editMode ? (
-        <AddressForm address={address} onClose={() => setEditMode(false)} />
+        <div className="w-full">
+          <AddressForm address={address} onClose={() => setEditMode(false)} />
+        </div>
       ) : (
         <div className="text-stone-500 text-base font-normal">
           {address?.full_name}

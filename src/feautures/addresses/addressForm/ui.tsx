@@ -6,19 +6,18 @@ import TextField from '@/shared/ui/inputs/textField';
 import { useFormik } from 'formik';
 import { InputMask } from '@/shared/ui/inputs/input-mask/ui';
 import * as yup from 'yup';
-import { useAddressesQuery } from '@/sections-pages/profile';
-
+import { useAddressesQuery } from '@/entities/addresses';
 
 const validationSchema = () =>
-    yup.object({
-      full_name: yup.string().required('Заполните поле'),
-      zip_code: yup
-          .string()
-          .min(6, 'Почтовый индекс должен содержать как минимум 6 символов')
-          .required('Заполните поле'),
-      address: yup.string().required('Заполните поле'),
-      phone_number: yup.string().required('Заполните поле'),
-    });
+  yup.object({
+    full_name: yup.string().required('Заполните поле'),
+    zip_code: yup
+      .string()
+      .min(6, 'Почтовый индекс должен содержать как минимум 6 символов')
+      .required('Заполните поле'),
+    address: yup.string().required('Заполните поле'),
+    phone_number: yup.string().required('Заполните поле'),
+  });
 
 interface AddressForm {
   address?: CustomerAddress;
@@ -45,7 +44,7 @@ export function AddressForm({ address, onClose }: AddressForm) {
       } else {
         await changeAddress.mutate(values);
       }
-      // await refetch();
+      await refetch();
       onClose && onClose();
     },
   });
@@ -136,12 +135,11 @@ export function AddressForm({ address, onClose }: AddressForm) {
         <Button
           type="submit"
           disabled={isFetching}
-          onClick={() => formik.handleSubmit()}
           variant={BUTTON_STYLES.primaryCta}
         >
           Сохранить
         </Button>
       </div>
-    </>
+    </form>
   );
 }

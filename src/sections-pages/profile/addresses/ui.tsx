@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { AddressForm } from './address-form';
-import { AddressView } from './address-view';
 import { Button } from '@/shared/ui/buttons';
 import { BUTTON_STYLES } from '@/shared/lib/consts/styles';
-import { useAddressesQuery } from '../..';
+import { useAddressesQuery } from '@/entities/addresses';
+import { AddressForm, AddressView } from '@/feautures/addresses';
 
 export const ProfileAddressesSection = () => {
   const [openCreate, setOpenCreate] = useState(false);
@@ -17,7 +16,7 @@ export const ProfileAddressesSection = () => {
       </div>
       <div className="self-stretch flex-col justify-start items-start gap-3 flex">
         {!addresses?.length || openCreate ? (
-          <div className="self-stretch justify-start items-center gap-3 flex flex-col">
+          <div className="self-stretch">
             <AddressForm onClose={() => setOpenCreate(false)} />
           </div>
         ) : (

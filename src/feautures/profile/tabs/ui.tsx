@@ -15,7 +15,7 @@ const tabs: Tab[] = [
   { label: 'Ваш аккаунт', path: '/profile/account' },
   { label: 'Личные данные', path: '/profile/personal' },
   { label: 'Заказы', path: '/profile/orders' },
-  { label: 'Адреса', path: '/profile/addressesActions' },
+  { label: 'Адреса', path: '/profile/addresses' },
 ];
 
 export const ProfileTabs: React.FC<TabsProps> = ({ children }) => {

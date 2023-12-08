@@ -10,7 +10,7 @@ import { fetchWithErrorMessage } from '@/shared/lib/helpers';
 import { Modal } from '@/shared/ui/modal-windows';
 import { Button } from '@/shared/ui/buttons';
 import { User } from '@/shared/api/gen';
-import { useProfileQuery } from '@/sections-pages/profile';
+import { useUserQuery } from '@/entities/user';
 
 interface IFormValues {
   first_name: string;
@@ -36,7 +36,7 @@ interface Props {
 export const ProfileFullNameModal: FC<Props> = ({ open, onClose }) => {
   const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
-  const { data: profile, refetch } = useProfileQuery();
+  const { data: profile, refetch } = useUserQuery();
 
   const initialValues = useMemo(() => {
     return {

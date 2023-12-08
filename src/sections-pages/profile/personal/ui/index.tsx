@@ -7,10 +7,10 @@ import { PreferenceSelector } from '@/shared/ui/selects';
 import React, { useState } from 'react';
 import { Lock, Plus } from 'react-feather';
 import { ProfilePassword } from './password';
-import { useProfileQuery } from '../..';
 import { ProfileEmail } from './email';
 import { ProfilePhoneNumber } from './phone-number';
 import { ProfileFullName } from './full-name';
+import { useUserQuery } from '@/entities/user';
 
 interface ActiveFields {
   name: boolean;
@@ -45,7 +45,7 @@ export const ProfilePersonalSection = () => {
     payment_method: false,
   });
 
-  useProfileQuery();
+  useUserQuery();
 
   const toggleField = (fieldName: keyof ActiveFields) => {
     setActiveFields((prevFields) => ({

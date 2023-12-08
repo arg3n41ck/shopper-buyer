@@ -2,12 +2,12 @@ import { BUTTON_STYLES } from '@/shared/lib/consts/styles';
 import { Button } from '@/shared/ui/buttons';
 import { useState } from 'react';
 import { ProfilePhoneNumberModal } from './phone-number-modal';
-import { useProfileQuery } from '@/sections-pages/profile';
+import { useUserQuery } from '@/entities/user';
 
 export const ProfilePhoneNumber = () => {
   const [openForm, setOpenForm] = useState(false);
 
-  const { data: profile } = useProfileQuery();
+  const { data: profile } = useUserQuery();
 
   return (
     <div className="w-full">

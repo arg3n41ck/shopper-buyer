@@ -1,28 +1,21 @@
 import React, { useRef } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { $apiCustomersApi } from '@/shared/api';
 import cn from 'classnames';
 import { Check, ChevronDown, Plus } from 'react-feather';
 import { CustomerAddress } from '@/shared/api/gen';
 import useOutsideClick from '@/shared/lib/hooks/useOutsideClick';
 import { Modal } from '@/shared/ui/modal-windows';
 import { AddressForm } from '@/feautures/addresses';
+import { useAddressesQuery } from '@/entities/addresses';
 
 export const AddressesInput = () => {
+  const { data } = useAddressesQuery();
+
+  const [isOpen, setIsOpen] = React.useState(false);
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
   const selectRef = useRef(null);
   const [activeAddress, setActiveAddress] = React.useState<
     CustomerAddress | undefined
   >();
-  const [isOpen, setIsOpen] = React.useState(false);
-  const [isModalOpen, setIsModalOpen] = React.useState(false);
-
-  const { data, refetch } = useQuery({
-    queryKey: ['customersAddressesList'],
-    queryFn: async () => {
-      const { data } = await $apiCustomersApi.customersAddressesList();
-      return data;
-    },
-  });
 
   useOutsideClick(selectRef, () => {
     setIsOpen(false);
@@ -52,7 +45,7 @@ export const AddressesInput = () => {
             'absolute mt-[-1px] left-0 z-[1000] m-0 max-h-[500px] w-full list-none overflow-y-auto border-[1px] border-neutral-300 bg-white p-0',
           )}
         >
-          {data?.results.map((address) => (
+          {data?.map((address) => (
             <li
               key={address.id}
               onClick={() => {
@@ -101,12 +94,7 @@ export const AddressesInput = () => {
           <h4 className="mb-[20px] text-[24px] text-center text-black font-jost font-[500]">
             Новый адрес доставки
           </h4>
-          <AddressForm
-            onClose={async () => {
-              setIsModalOpen(false);
-              await refetch();
-            }}
-          />
+          <AddressForm onClose={() => setIsModalOpen(false)} />
         </div>
       </Modal>
     </div>

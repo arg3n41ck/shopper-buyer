@@ -11,7 +11,7 @@ import { ShowAndHideIcon } from '@/shared/ui/templates';
 import { Button } from '@/shared/ui/buttons';
 import { InputMask } from '@/shared/ui/inputs/input-mask';
 import TextField from '@/shared/ui/inputs/textField';
-import { useProfileQuery } from '@/sections-pages/profile';
+import { useUserQuery } from '@/entities/user';
 
 interface IFormValues {
   password: string;
@@ -43,7 +43,7 @@ export const ProfilePhoneNumberModal: FC<Props> = ({ open, onClose }) => {
   const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const { refetch } = useProfileQuery();
+  const { refetch } = useUserQuery();
 
   const formik = useFormik<IFormValues>({
     initialValues: {
