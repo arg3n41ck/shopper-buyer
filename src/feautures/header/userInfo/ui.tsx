@@ -8,19 +8,8 @@ import { Button, IconButton } from '@/shared/ui/buttons';
 import Cookies from 'js-cookie';
 import { TActiveModalType, useActiveModal } from '@/entities/modals';
 import { useRouter } from 'next/router';
-
-interface MenuItem {
-  text: string;
-  key: string;
-  path: string;
-}
-
-const menuItems: MenuItem[] = [
-  { text: 'Профиль', key: 'profile', path: '/profile/account' },
-  { text: 'Заказы', key: 'orders', path: '/profile/orders' },
-  { text: 'Возврат товара', key: 'return', path: '/' },
-  { text: 'Помощь и контакты', key: 'help', path: '/' },
-];
+import { menuItems } from '.';
+import { useUser } from '@/entities/user';
 
 interface HeaderUserInfoProps {}
 
@@ -34,6 +23,8 @@ export const HeaderUserInfo: React.FC<HeaderUserInfoProps> = () => {
 
   const userInfoRef = useRef<HTMLDivElement | null>(null);
   const router = useRouter();
+
+  const logout = useUser((state) => state.logout);
 
   const handleClickActive = () => setActive((prev) => !prev);
   const handleOpenModalActive = (type: TActiveModalType) => {
@@ -51,8 +42,8 @@ export const HeaderUserInfo: React.FC<HeaderUserInfoProps> = () => {
   return (
     <>
       <div className="relative" ref={userInfoRef}>
-        <IconButton>
-          <User size={24} onClick={handleClickActive} />
+        <IconButton onClick={handleClickActive}>
+          <User size={24} />
         </IconButton>
 
         <AnimatePresence>
@@ -65,43 +56,62 @@ export const HeaderUserInfo: React.FC<HeaderUserInfoProps> = () => {
               transition={{ duration: 0.2 }}
             >
               <div className="flex flex-col gap-[12px] w-[295px]">
-                {!token && (
+                {menuItems
+                  .filter((item) => (!token ? !item.isAuth : item))
+                  .map((item) => (
+                    <div
+                      key={item.key}
+                      className="flex items-center justify-between p-[11px] cursor-pointer hover:bg-[#f5f5f5]"
+                      onClick={() => navigateToPath(item.path)}
+                    >
+                      <p className="text-[16px] font-normal">{item.text}</p>
+                    </div>
+                  ))}
+
+                {!token ? (
                   <Button
                     variant={BUTTON_STYLES.primaryCta}
                     onClick={() => handleOpenModalActive('login')}
                   >
                     Войти
                   </Button>
-                )}
-                {menuItems.map((item) => (
+                ) : (
                   <div
-                    key={item.key}
-                    className="flex items-center justify-between p-[11px] cursor-pointer hover:bg-[#f5f5f5]"
-                    onClick={() => navigateToPath(item.path)}
+                    className="flex items-center justify-between p-[11px] cursor-pointer hover:bg-[#f5f5f5] text-[#B91C1C]"
+                    onClick={() => {
+                      logout();
+                      navigateToPath('/');
+                    }}
                   >
-                    <p className="text-[16px] font-normal">{item.text}</p>
+                    <p className="text-[16px] font-normal">Выйти</p>
                   </div>
-                ))}
+                )}
               </div>
             </motion.div>
           )}
         </AnimatePresence>
       </div>
-
-      {modalActive === 'login' && (
-        <LoginModal
-          open={modalActive === 'login'}
-          onClose={handleCloseModalActive}
-          onClickModal={handleOpenModalActive}
-        />
-      )}
-
-      {modalActive === 'register' && (
-        <RegisterModal
-          open={modalActive === 'register'}
-          onClose={handleCloseModalActive}
-        />
-      )}
+      {(function () {
+        switch (modalActive) {
+          case 'login':
+            return (
+              <LoginModal
+                open={modalActive === 'login'}
+                onClose={handleCloseModalActive}
+                onClickModal={handleOpenModalActive}
+              />
+            );
+          case 'register':
+            return (
+              <RegisterModal
+                open={modalActive === 'register'}
+                onClose={handleCloseModalActive}
+              />
+            );
+          default:
+            break;
+        }
+      })()}
     </>
   );
 };

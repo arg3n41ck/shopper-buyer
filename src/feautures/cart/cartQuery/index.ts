@@ -1,1 +1,0 @@
-export { useCartQuery } from './query';

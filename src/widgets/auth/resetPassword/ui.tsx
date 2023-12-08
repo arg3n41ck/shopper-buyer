@@ -9,6 +9,10 @@ import TextField from '@/shared/ui/inputs/textField';
 import Checkbox from '@/shared/ui/inputs/checkbox';
 import { Button } from '@/shared/ui/buttons';
 import { LoaderIcon } from '@/shared/ui/loaders';
+import { InputMask } from '@/shared/ui/inputs/input-mask';
+import { $apiAccountsApi } from '@/shared/api';
+import { toast } from 'react-toastify';
+import { getErrorMessage } from '@/shared/lib/helpers';
 
 interface ResetPasswordProps {}
 
@@ -22,43 +26,43 @@ export const ResetPasswordPage: FC<ResetPasswordProps> = () => {
   const { t } = useTranslation();
   const email = (router.query?.email as string) || '';
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [checkedSMS, setCheckedSMS] = useState<boolean>(false);
+  const [byPhoneNumber, setByPhoneNumber] = useState<boolean>(false);
   const [smsSent, setSmsSent] = useState<boolean>(false);
   const [timeLeft, setTimeLeft] = useState<number>(0);
 
-  const handleChangeSMS = () => setCheckedSMS((prev) => !prev);
-
   const formik = useFormik({
     initialValues: {
-      email: email || '',
-      phoneNumber: '',
+      field: email || '',
     },
     validationSchema: validationSchema(t),
-    onSubmit: async (values) => {
-      // const email = values.email;
+    onSubmit: async ({ field }) => {
       setIsLoading(true);
 
-      if (values.phoneNumber) {
-        setTimeLeft(180);
-        setSmsSent(true);
-      }
-
       try {
-        // console.log(values);
-        // const { user_exists } =
-        //   await authClient.checkUserByEmailForResetPassword({ email });
         setIsLoading(false);
-        // if (user_exists)
-        //   return router.push({
-        //     pathname: PATH_AUTH.newPassword,
-        //     query: { email },
-        //   });
+        if (byPhoneNumber) {
+          await $apiAccountsApi.accountsUsersResetPasswordRequestPhoneNumber({
+            phone_number: field,
+          });
+          setTimeLeft(180);
+          setSmsSent(true);
+        } else {
+          await $apiAccountsApi.accountsUsersResetPasswordRequestEmail({
+            email: field,
+          });
+          toast.success('Письмо для сброса пароля успешно отправлено!');
+        }
       } catch (error) {
         setIsLoading(false);
-        // console.log(error);
+        toast.error(getErrorMessage(error));
       }
     },
   });
+
+  const handleToggleFeild = () => {
+    formik.setValues({ field: '' });
+    setByPhoneNumber((prev) => !prev);
+  };
 
   useEffect(() => {
     if (timeLeft <= 0) {
@@ -80,6 +84,8 @@ export const ResetPasswordPage: FC<ResetPasswordProps> = () => {
       .padStart(2, '0')}`;
   };
 
+  const Field = byPhoneNumber ? InputMask : TextField;
+
   return (
     <AuthLayout>
       <div className="max-w-[436px] w-full mx-auto flex flex-col gap-5">
@@ -88,20 +94,14 @@ export const ResetPasswordPage: FC<ResetPasswordProps> = () => {
             Восстановление пароля
           </p>
           <div className="relative mx-auto w-full flex flex-col gap-5">
-            <TextField
-              error={formik.touched.email && Boolean(formik.errors.email)}
-              errorMessage={
-                formik.touched.email && formik.errors.email
-                  ? formik.errors.email
-                  : ''
-              }
-              value={
-                checkedSMS ? formik.values.phoneNumber : formik.values.email
-              }
+            <Field
+              error={formik.touched.field && Boolean(formik.errors.field)}
+              errorMessage={formik.touched.field && formik.errors.field}
+              value={formik.values.field}
               onChange={formik.handleChange}
-              name={checkedSMS ? 'phoneNumber' : 'email'}
+              name={'field'}
               placeholder={
-                checkedSMS ? t('+996') : t('Адрес электронной почты ')
+                byPhoneNumber ? t('+996') : t('Адрес электронной почты ')
               }
             />
 
@@ -118,16 +118,16 @@ export const ResetPasswordPage: FC<ResetPasswordProps> = () => {
               </p>
             ) : (
               <Checkbox
-                label={'Отправить SMS'}
-                checked={checkedSMS}
-                onChange={() => handleChangeSMS()}
+                label={'Используя номер телефона'}
+                checked={byPhoneNumber}
+                onChange={() => handleToggleFeild()}
               />
             )}
           </div>
           <div className="mt-5 mb-[62px] w-full flex justify-center">
             <Button type="submit" disabled={isLoading}>
               <div className="flex items-center gap-[10px]">
-                <Trans i18nKey={'active-modal.resetPassword.submit'} />{' '}
+                <Trans i18nKey={'auth.logIn.submit'} />{' '}
                 <LoaderIcon loading={isLoading} size={24} />
               </div>
             </Button>

@@ -3,9 +3,8 @@ import { AnimatePresence, motion } from 'framer-motion';
 import useOutsideClick from '@/shared/lib/hooks/useOutsideClick';
 import { X } from 'react-feather';
 import ProductItemInBag from './ProductItemInBag';
-import { useCartQuery } from '@/feautures/cart';
 import { LoaderIcon } from '@/shared/ui/loaders';
-import { useCart } from '@/entities/cart';
+import { useCart, useCartQuery } from '@/entities/cart';
 
 interface MenuProps {
   isOpen: boolean;

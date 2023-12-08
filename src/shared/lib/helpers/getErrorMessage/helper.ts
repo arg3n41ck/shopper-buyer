@@ -14,11 +14,13 @@ export const getErrorMessage = (e: any) => {
 
 export const fetchWithErrorMessage = async (
   fetch: Promise<unknown>,
-  messages: { pending?: string; success?: string } = {},
+  messages: { pending?: string; success?: string } = {
+    pending: 'Загрузка...',
+  },
 ) => {
   try {
     await toast.promise(fetch, messages);
   } catch (e) {
-    toast.error(getErrorMessage(e));
+    await toast.error(getErrorMessage(e));
   }
 };

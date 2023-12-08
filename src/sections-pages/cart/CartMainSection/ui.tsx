@@ -1,6 +1,5 @@
 import React from 'react';
-import { useCart } from '@/entities/cart';
-import { useCartQuery } from '@/feautures/cart';
+import { useCart, useCartQuery } from '@/entities/cart';
 import { useIsClient } from '@/shared/lib/hooks';
 import ProductItemInBag from '@/feautures/header/shoppingBag/ProductItemInBag';
 import { Button } from '@/shared/ui/buttons';

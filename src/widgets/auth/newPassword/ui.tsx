@@ -1,87 +1,79 @@
 import React, { FC, useState } from 'react';
 import { AuthLayout } from '@/widgets/layouts/authLayout';
-// import { AuthClient } from '@/shared/apis/authClient';
-// import { TypeResetPassword } from '@/shared/lib/types/authTypes';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
-import { Clock, X } from 'react-feather';
+import { Check, X } from 'react-feather';
 import { Trans, useTranslation } from 'react-i18next';
 import * as yup from 'yup';
-import { PATH_AUTH } from '@/shared/config';
 import TextField from '@/shared/ui/inputs/textField';
-import { passwordLengthCheck } from '@/shared/lib/helpers';
+import { getErrorMessage, passwordLengthCheck } from '@/shared/lib/helpers';
 import { Button } from '@/shared/ui/buttons';
 import { LoaderIcon } from '@/shared/ui/loaders';
 import { ShowAndHideIcon } from '@/shared/ui/templates';
 import { ERROR, SUCCESS } from '@/shared/lib/consts/styles';
+import { $apiAccountsApi } from '@/shared/api';
+import { toast } from 'react-toastify';
+import { PATH } from '@/shared/config';
 
 interface FormValues {
-  new_password: string;
+  password: string;
   re_password: string;
 }
 
 const validationSchema = (t: (key: string) => string) =>
   yup.object({
-    new_password: yup
+    password: yup
       .string()
-      .required(
-        t('active-modal.validation.password.newPassword.requiredNewPassword'),
-      )
-      .min(8, t('active-modal.validation.password.minLength')),
+      .required(t('auth.validation.password.newPassword.requiredNewPassword'))
+      .min(8, t('auth.validation.password.minLength')),
     re_password: yup
       .string()
-      .required(t('active-modal.validation.password.newPassword.repeat'))
+      .required(t('auth.validation.password.newPassword.repeat'))
       .oneOf(
-        [yup.ref('new_password')],
-        t('active-modal.validation.password.newPassword.doNotMatch'),
+        [yup.ref('password')],
+        t('auth.validation.password.newPassword.doNotMatch'),
       ),
   });
 
 const initialValues: FormValues = {
-  new_password: '',
+  password: '',
   re_password: '',
 };
 
-// const authClient = new AuthClient();
-
 export const NewPasswordPage: FC = () => {
-  const router = useRouter();
+  const { query, push } = useRouter();
   const { t } = useTranslation();
-
-  // const token = (router.query.token as string) || '';
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const [showPassword, setShowPassword] = useState<{
-    new_password: boolean;
+    password: boolean;
     re_password: boolean;
   }>({
-    new_password: false,
+    password: false,
     re_password: false,
   });
 
   const formik = useFormik({
     initialValues,
     validationSchema: validationSchema(t),
-    onSubmit: async () => {
+    onSubmit: async ({ password, re_password }) => {
       setIsLoading(true);
-      // const body: TypeResetPassword = {
-      //   token,
-      //   new_password,
-      // };
 
-      try {
-        // await authClient.resetPassword(body);
-        setIsLoading(false);
-        await router.push({
-          pathname: PATH_AUTH.authSuccess,
-          query: {
-            title: t('active-modal.resetPassword.successChangePassword'),
-            path: PATH_AUTH.root,
-          },
-        });
-      } catch (error) {
-        setIsLoading(false);
-        // console.log(error);
+      if (query?.uid && query?.['token']) {
+        try {
+          await $apiAccountsApi.accountsUsersResetPasswordConfirm({
+            password,
+            re_password,
+            uid: String(query.uid),
+            token: String(query['token']),
+          });
+          toast.success('');
+          setIsLoading(false);
+          push(PATH.newPasswordSuccess);
+        } catch (error) {
+          setIsLoading(false);
+          toast.error(getErrorMessage(error));
+        }
       }
     },
   });
@@ -94,27 +86,24 @@ export const NewPasswordPage: FC = () => {
     <AuthLayout>
       <div className="max-w-[436px] w-full mx-auto flex flex-col gap-5">
         <p className="font-semibold text-[32px] text-[#000] mb-5 text-center">
-          <Trans i18nKey={'active-modal.resetPassword.headTextNewPassword'} />
+          <Trans i18nKey={'auth.resetPassword.headTextNewPassword'} />
         </p>
 
         <form onSubmit={formik.handleSubmit}>
           <div className="mx-auto w-full flex flex-col gap-5">
             <TextField
-              error={
-                formik.touched.new_password &&
-                Boolean(formik.errors.new_password)
-              }
+              error={formik.touched.password && Boolean(formik.errors.password)}
               errorMessage={
-                formik.touched.new_password ? formik.errors.new_password : ''
+                formik.touched.password ? formik.errors.password : ''
               }
-              value={formik.values.new_password}
+              value={formik.values.password}
               onChange={formik.handleChange}
-              name="new_password"
-              type={showPassword.new_password ? 'text' : 'password'}
+              name="password"
+              type={showPassword.password ? 'text' : 'password'}
               endAdornment={ShowAndHideIcon({
-                show: showPassword.new_password,
-                onHide: () => handleShowPassword('new_password'),
-                onShow: () => handleShowPassword('new_password'),
+                show: showPassword.password,
+                onHide: () => handleShowPassword('password'),
+                onShow: () => handleShowPassword('password'),
               })}
               placeholder={'Новый пароль'}
             />
@@ -141,13 +130,13 @@ export const NewPasswordPage: FC = () => {
             <div
               className={`
             flex items-center gap-[5px] text-[${
-              passwordLengthCheck({ password: formik.values.new_password })
+              passwordLengthCheck({ password: formik.values.password })
                 ? SUCCESS[700]
                 : ERROR[500]
             }]`}
             >
-              {passwordLengthCheck({ password: formik.values.new_password }) ? (
-                <Clock size={18} />
+              {passwordLengthCheck({ password: formik.values.password }) ? (
+                <Check size={18} />
               ) : (
                 <X size={18} />
               )}
@@ -158,7 +147,7 @@ export const NewPasswordPage: FC = () => {
           <div className="mt-5 mb-[62px] w-full flex justify-center">
             <Button type="submit" disabled={isLoading}>
               <div className="flex items-center gap-[10px]">
-                <Trans i18nKey={'active-modal.resetPassword.submit'} />{' '}
+                <Trans i18nKey={'auth.resetPassword.submit'} />{' '}
                 <LoaderIcon loading={isLoading} size={24} />
               </div>
             </Button>

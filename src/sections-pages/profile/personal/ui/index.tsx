@@ -6,6 +6,11 @@ import TextField from '@/shared/ui/inputs/textField';
 import { PreferenceSelector } from '@/shared/ui/selects';
 import React, { useState } from 'react';
 import { Lock, Plus } from 'react-feather';
+import { ProfilePassword } from './password';
+import { ProfileEmail } from './email';
+import { ProfilePhoneNumber } from './phone-number';
+import { ProfileFullName } from './full-name';
+import { useUserQuery } from '@/entities/user';
 
 interface ActiveFields {
   name: boolean;
@@ -40,6 +45,8 @@ export const ProfilePersonalSection = () => {
     payment_method: false,
   });
 
+  useUserQuery();
+
   const toggleField = (fieldName: keyof ActiveFields) => {
     setActiveFields((prevFields) => ({
       ...prevFields,
@@ -49,190 +56,15 @@ export const ProfilePersonalSection = () => {
 
   return (
     <div className="w-full flex-col justify-start items-start gap-5 inline-flex">
-      <div className="text-neutral-900 text-[28px] font-medium">
+      <div className="text-neutral-900 text-2xl md:text-[28px] font-medium">
         Личные данные
       </div>
       <div className="self-stretch flex-col justify-start items-start gap-3 flex">
-        <div className="w-full">
-          <div
-            className={`self-stretch p-5 ${
-              !activeFields.name && 'border-b'
-            } border-zinc-300 flex-col justify-start items-start gap-3 flex`}
-          >
-            <div className="self-stretch justify-start items-center gap-3 inline-flex">
-              <div className="grow shrink basis-0 text-neutral-900 text-lg font-medium">
-                Имя
-              </div>
+        <ProfileFullName />
 
-              {!activeFields.name && (
-                <Button
-                  onClick={() => toggleField('name')}
-                  variant={BUTTON_STYLES.onlyText}
-                  className="max-w-max !p-0"
-                >
-                  Изменить
-                </Button>
-              )}
-            </div>
-            <div className="text-stone-500 text-base font-normal">
-              Akylai Nurbekova
-            </div>
-          </div>
+        <ProfileEmail />
 
-          {activeFields.name && (
-            <div className="w-full p-5 border-b border-zinc-300 flex-col justify-start items-start gap-3 inline-flex">
-              <TextField
-                value={''}
-                onChange={() => {}}
-                placeholder={`Имя`}
-                label="Имя"
-              />
-
-              <TextField
-                value={''}
-                onChange={() => {}}
-                placeholder={`Фамилия`}
-                label="Фамилия"
-              />
-
-              <div className="self-stretch justify-start items-start gap-3 inline-flex">
-                <Button
-                  onClick={() => toggleField('name')}
-                  variant={BUTTON_STYLES.withoutBackground}
-                >
-                  Отмена
-                </Button>
-
-                <Button
-                  onClick={() => toggleField('name')}
-                  variant={BUTTON_STYLES.primaryCta}
-                >
-                  Сохранить
-                </Button>
-              </div>
-            </div>
-          )}
-        </div>
-
-        <div className="w-full">
-          <div
-            className={`self-stretch p-5 ${
-              !activeFields.email && 'border-b'
-            } border-zinc-300 flex-col justify-start items-start gap-3 flex`}
-          >
-            <div className="self-stretch justify-start items-center gap-3 inline-flex">
-              <div className="grow shrink basis-0 text-neutral-900 text-lg font-medium">
-                Email
-              </div>
-              {!activeFields.email && (
-                <Button
-                  onClick={() => toggleField('email')}
-                  variant={BUTTON_STYLES.onlyText}
-                  className="max-w-max !p-0"
-                >
-                  Изменить
-                </Button>
-              )}
-            </div>
-            <div className="text-stone-500 text-base font-normal">
-              njwn5jукjz@privaterelay.appleid.com
-            </div>
-          </div>
-
-          {activeFields.email && (
-            <div className="w-full p-5 border-b border-zinc-300 flex-col justify-start items-start gap-3 inline-flex">
-              <TextField
-                value={''}
-                onChange={() => {}}
-                placeholder={`Новый адрес почты`}
-                label="Адрес электронной почты"
-              />
-
-              <TextField
-                value={''}
-                onChange={() => {}}
-                placeholder={`Введите пароль`}
-                label="Пароль"
-              />
-
-              <div className="self-stretch justify-start items-start gap-3 inline-flex">
-                <Button
-                  onClick={() => toggleField('email')}
-                  variant={BUTTON_STYLES.withoutBackground}
-                >
-                  Отмена
-                </Button>
-
-                <Button
-                  onClick={() => toggleField('email')}
-                  variant={BUTTON_STYLES.primaryCta}
-                >
-                  Сохранить
-                </Button>
-              </div>
-            </div>
-          )}
-        </div>
-
-        <div className="w-full">
-          <div
-            className={`self-stretch p-5 ${
-              !activeFields.phone_number && 'border-b'
-            } border-zinc-300 flex-col justify-start items-start gap-3 flex`}
-          >
-            <div className="self-stretch justify-start items-center gap-3 inline-flex">
-              <div className="grow shrink basis-0 text-neutral-900 text-lg font-medium">
-                Номер телефона
-              </div>
-              {!activeFields.phone_number && (
-                <Button
-                  onClick={() => toggleField('phone_number')}
-                  variant={BUTTON_STYLES.onlyText}
-                  className="max-w-max !p-0"
-                >
-                  Изменить
-                </Button>
-              )}
-            </div>
-            <div className="text-stone-500 text-base font-normal">
-              +996 998 554 331
-            </div>
-          </div>
-
-          {activeFields.phone_number && (
-            <div className="w-full p-5 border-b border-zinc-300 flex-col justify-start items-start gap-3 inline-flex">
-              <TextField
-                value={''}
-                onChange={() => {}}
-                placeholder={`Новый номер телефона`}
-                label="Новый номер телефона"
-              />
-
-              <TextField
-                value={''}
-                onChange={() => {}}
-                placeholder={`Введите пароль`}
-                label="Пароль"
-              />
-
-              <div className="self-stretch justify-start items-start gap-3 inline-flex">
-                <Button
-                  onClick={() => toggleField('phone_number')}
-                  variant={BUTTON_STYLES.withoutBackground}
-                >
-                  Отмена
-                </Button>
-
-                <Button
-                  onClick={() => toggleField('phone_number')}
-                  variant={BUTTON_STYLES.primaryCta}
-                >
-                  Сохранить
-                </Button>
-              </div>
-            </div>
-          )}
-        </div>
+        <ProfilePhoneNumber />
 
         <div className="w-full">
           <div
@@ -294,76 +126,7 @@ export const ProfilePersonalSection = () => {
           )}
         </div>
 
-        <div className="w-full">
-          <div
-            className={`self-stretch p-5 ${
-              !activeFields.password && 'border-b'
-            } border-zinc-300 flex-col justify-start items-start gap-3 flex`}
-          >
-            <div className="self-stretch justify-start items-center gap-3 inline-flex">
-              <div className="grow shrink basis-0 text-neutral-900 text-lg font-medium">
-                Пароль
-              </div>
-              {!activeFields.password && (
-                <Button
-                  onClick={() => toggleField('password')}
-                  variant={BUTTON_STYLES.onlyText}
-                  className="max-w-max !p-0"
-                >
-                  Изменить
-                </Button>
-              )}
-            </div>
-            <div className="text-stone-500 text-base font-normal">
-              • • • • • • • • • • • •
-            </div>
-          </div>
-
-          {activeFields.password && (
-            <div className="w-full p-5 border-b border-zinc-300 flex-col justify-start items-start gap-3 inline-flex">
-              <TextField
-                value={''}
-                onChange={() => {}}
-                placeholder={`Пароль`}
-                label="Пароль"
-              />
-
-              <div className="grow shrink basis-0 text-neutral-900 text-lg font-medium">
-                Новый пароль
-              </div>
-
-              <TextField
-                value={''}
-                onChange={() => {}}
-                placeholder={`Новый пароль`}
-                label="Новый пароль"
-              />
-
-              <TextField
-                value={''}
-                onChange={() => {}}
-                placeholder={`Подтвердите пароль`}
-                label="Подтвердите пароль"
-              />
-
-              <div className="self-stretch justify-start items-start gap-3 inline-flex">
-                <Button
-                  onClick={() => toggleField('password')}
-                  variant={BUTTON_STYLES.withoutBackground}
-                >
-                  Отмена
-                </Button>
-
-                <Button
-                  onClick={() => toggleField('password')}
-                  variant={BUTTON_STYLES.primaryCta}
-                >
-                  Сохранить
-                </Button>
-              </div>
-            </div>
-          )}
-        </div>
+        <ProfilePassword />
 
         <div className="w-full">
           {!newPaymentMethod && (

@@ -21,10 +21,10 @@ const Checkbox: FC<CustomCheckboxProps> = ({
   ...other
 }) => {
   return (
-    <>
+    <div>
       <label
         className={cn(
-          'flex cursor-pointer w-full content-center text-[16px] font-[500] leading-[19px] text-black',
+          'flex cursor-pointer items-center gap-[12px] w-full content-center text-[16px] font-[500] leading-[19px] text-black',
           className,
         )}
       >
@@ -35,6 +35,7 @@ const Checkbox: FC<CustomCheckboxProps> = ({
             ['!border-error500']: error,
           })}
         ></span>
+
         {label && (
           <div className="flex w-full items-center justify-between">
             <p>{label}</p>
@@ -52,7 +53,7 @@ const Checkbox: FC<CustomCheckboxProps> = ({
           {helperText}
         </label>
       )}
-    </>
+    </div>
   );
 };
 

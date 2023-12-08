@@ -11,7 +11,7 @@ export const ProfileOrdersSection = () => {
     router.push('/profile/orders/detail/slugggg');
 
   return (
-    <div className="flex flex-col justify-start items-start gap-5 w-full mx-auto p-5">
+    <div className="flex flex-col justify-start items-start gap-5 w-full mx-auto">
       <div className="text-neutral-900 text-2xl md:text-[28px] font-medium">
         Заказы
       </div>

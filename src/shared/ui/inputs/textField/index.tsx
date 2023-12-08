@@ -9,6 +9,8 @@ interface TextFieldProps extends ComponentPropsWithRef<'input'> {
   error?: boolean;
   errorMessage?: any;
   helperText?: string;
+  // Арго творение
+  disableAutoFill?: boolean;
 }
 
 const TextField = ({
@@ -21,6 +23,7 @@ const TextField = ({
   errorMessage,
   helperText,
   className,
+  disableAutoFill = true,
   ...others
 }: TextFieldProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -31,7 +34,10 @@ const TextField = ({
     <div className={cn('relative w-full', className)}>
       {label && (
         <label
-          className={cn('text-[13.33px] font-[400] text-neutral-900', isActive)}
+          className={cn(
+            'text-[13.33px] px-[12px] font-[400] text-gray',
+            isActive,
+          )}
         >
           {label}
         </label>
@@ -50,14 +56,13 @@ const TextField = ({
       >
         {startAdornment && startAdornment}
 
-        <input hidden autoComplete="" />
+        {disableAutoFill && <input hidden autoComplete="" />}
         <input
           ref={inputRef}
           onFocus={() => setFocus(true)}
           onBlur={() => setFocus(false)}
           value={value}
           onChange={onChange}
-          autoComplete="new-password"
           className={cn(
             'w-full border-none bg-transparent text-[16px] font-[600] leading-[19px] text-neutral-900 outline-none placeholder:text-[16px] placeholder:font-[400]',
             { ['text-[#B91C1C]']: error },

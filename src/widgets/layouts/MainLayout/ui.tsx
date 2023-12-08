@@ -8,11 +8,18 @@ import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
 
 interface MainLayoutProps {
+  isOnlyAuth?: boolean;
+  hidden?: {
+    topBar?: boolean;
+    categories?: boolean;
+    botBar?: boolean;
+    footer?: boolean;
+  };
   children: ReactNode;
 }
 
-const MainLayout = ({ children }: MainLayoutProps) => {
-  const { asPath } = useRouter();
+const MainLayout = ({ children, hidden, isOnlyAuth }: MainLayoutProps) => {
+  const { asPath, replace } = useRouter();
   const setIsAuth = useUser((state) => state.setIsAuth);
   const [isStickyHeader, setIsStickyHeader] = useState(false);
   const token = Cookies.get('refresh_token');
@@ -36,25 +43,31 @@ const MainLayout = ({ children }: MainLayoutProps) => {
     };
   }, []);
 
+  useEffect(() => {
+    if (isOnlyAuth && !token) replace('/');
+  }, [asPath]);
+
   return (
     <div className="flex flex-col min-h-screen">
       <div className="w-full fixed z-[15] top-[0]">
-        <motion.div
-          className="overflow-y-hidden"
-          animate={isStickyHeader ? { height: 0, opacity: 0 } : {}}
-        >
-          <div className="flex w-full justify-center items-center bg-blue-100 gap-1 p-2">
-            <p className="text-[#171717] text-[14px] font-normal">
-              Время шоппинга!
-            </p>
-            <p className="text-[#171717] text-[14px] font-normal underline">
-              Лучшее из новых коллекций
-            </p>
-          </div>
-        </motion.div>
+        {!hidden?.topBar && (
+          <motion.div
+            className="overflow-y-hidden"
+            animate={isStickyHeader ? { height: 0, opacity: 0 } : {}}
+          >
+            <div className="flex w-full justify-center items-center bg-blue-100 gap-1 p-2">
+              <p className="text-[#171717] text-[14px] font-normal">
+                Время шоппинга!
+              </p>
+              <p className="text-[#171717] text-[14px] font-normal underline">
+                Лучшее из новых коллекций
+              </p>
+            </div>
+          </motion.div>
+        )}
 
         <div>
-          <MainHeader />
+          <MainHeader hidden={hidden} />
         </div>
       </div>
 
@@ -67,9 +80,11 @@ const MainLayout = ({ children }: MainLayoutProps) => {
         {children}
       </motion.div>
 
-      <div className="mt-auto">
-        <MainFooter />
-      </div>
+      {!hidden?.footer && (
+        <div className="mt-auto">
+          <MainFooter />
+        </div>
+      )}
     </div>
   );
 };

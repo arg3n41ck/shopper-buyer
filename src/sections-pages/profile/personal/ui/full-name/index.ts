@@ -1,0 +1,1 @@
+export { ProfileFullName } from './ui';

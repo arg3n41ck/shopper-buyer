@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import HeaderShoppingBagMenu from './HeaderShoppingBagMenu';
 import { ShoppingBag } from 'react-feather';
 import { IconButton } from '@/shared/ui/buttons/iconButton';
-import { useCartQuery } from '@/feautures/cart';
-import { useCart } from '@/entities/cart';
+import { useCart, useCartQuery } from '@/entities/cart';
 import { useIsClient } from '@/shared/lib/hooks';
 
 export const HeaderShoppingBag = () => {

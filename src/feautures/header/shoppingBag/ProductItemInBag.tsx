@@ -10,9 +10,13 @@ import { $apiOrdersApi } from '@/shared/api';
 interface IProductItemInBagProps {
   item: CartItem;
   handleDelete?: (id: number) => void;
+  canChange?: boolean;
 }
 
-const ProductItemInBag = ({ item }: IProductItemInBagProps) => {
+const ProductItemInBag = ({
+  item,
+  canChange = true,
+}: IProductItemInBagProps) => {
   const isAuth = useUser((state) => state.isAuth);
   const [deleteItem, setQty] = useCart((state) => [
     state.deleteProduct,
@@ -75,20 +79,25 @@ const ProductItemInBag = ({ item }: IProductItemInBagProps) => {
 
         <div className="flex items-center gap-1">
           <div className="text-[#676767] text-[16px] font-normal gap-[8px] flex items-center">
-            <p>Кол-во:</p>{' '}
-            <Plus
-              size={20}
-              color="white"
-              className="bg-black cursor-pointer rounded-full p-[2px]"
-              onClick={() => handleQtyChange('increment')}
-            />
+            <p>Кол-во:</p>
+            {canChange && (
+              <Plus
+                size={20}
+                color="white"
+                className="bg-black cursor-pointer rounded-full p-[2px]"
+                onClick={() => handleQtyChange('increment')}
+              />
+            )}
+
             <p className="text-black">{item?.quantity}</p>
-            <Minus
-              size={20}
-              color="white"
-              className="bg-black cursor-pointer rounded-full p-[2px]"
-              onClick={() => handleQtyChange('decrement')}
-            />
+            {canChange && (
+              <Minus
+                size={20}
+                color="white"
+                className="bg-black cursor-pointer rounded-full p-[2px]"
+                onClick={() => handleQtyChange('decrement')}
+              />
+            )}
           </div>
         </div>
 
@@ -108,7 +117,13 @@ const ProductItemInBag = ({ item }: IProductItemInBagProps) => {
         </div>
       </div>
 
-      <Trash2 size={24} cursor="pointer" onClick={() => deleteItem(item?.id)} />
+      {canChange && (
+        <Trash2
+          size={24}
+          cursor="pointer"
+          onClick={() => deleteItem(item?.id)}
+        />
+      )}
     </div>
   );
 };

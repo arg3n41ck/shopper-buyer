@@ -21,7 +21,11 @@ const filterOptions = [
   { value: 'for-children', label: 'Для Детей' },
 ];
 
-export const MainTopHeader = () => {
+interface IMainTopHeaderProps {
+  hidden?: { topBar?: boolean; categories?: boolean; botBar?: boolean };
+}
+
+export const MainTopHeader = ({ hidden }: IMainTopHeaderProps) => {
   const isAuth = useUser((state) => state.isAuth);
   const setModalActive = useActiveModal((state) => state.setModalActive);
   const { push, asPath } = useRouter();
@@ -46,20 +50,22 @@ export const MainTopHeader = () => {
   });
 
   return (
-    <div className="w-full py-3 flex items-center justify-between">
+    <div className="w-full py-3 grid grid-cols-3 items-center justify-between">
       <div>
-        <ForSomeoneFilter
-          activeOption={activeOption}
-          options={filterOptions}
-          handleChange={handleFilterChange}
-        />
+        {!hidden?.categories && (
+          <ForSomeoneFilter
+            activeOption={activeOption}
+            options={filterOptions}
+            handleChange={handleFilterChange}
+          />
+        )}
       </div>
 
-      <Link href="/">
+      <Link className="justify-self-center" href="/">
         <LogoIcon />
       </Link>
 
-      <div className={'flex gap-[4px] items-center'}>
+      <div className={'flex gap-[4px]  justify-self-end items-center'}>
         <HeaderChangeLanguage />
         <HeaderUserInfo />
 

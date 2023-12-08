@@ -3,16 +3,21 @@ import { BUTTON_STYLES } from '@/shared/lib/consts/styles';
 import { Button } from '@/shared/ui/buttons';
 import { useRouter } from 'next/router';
 import React from 'react';
+import { useAddressesQuery } from '@/entities/addresses';
+import { useUserQuery } from '@/entities/user';
 
 export const ProfileAccountSection = () => {
   const router = useRouter();
+
+  const { data: profile } = useUserQuery();
+  const { mainAddress } = useAddressesQuery();
 
   const navigate = (path: string) => router.push(`/profile/${path}`);
 
   return (
     <div className="flex flex-col justify-start items-start gap-5 w-full">
       <div className="flex flex-col justify-start items-start gap-2">
-        <div className="text-neutral-900 text-[28px] font-medium">
+        <div className="text-neutral-900 text-2xl md:text-[28px] font-medium">
           Ваш личный кабинет
         </div>
         <div className="text-neutral-500 text-base font-normal">
@@ -38,14 +43,12 @@ export const ProfileAccountSection = () => {
           </div>
           <div className="flex flex-col justify-start items-start">
             <div className="text-stone-500 text-base font-normal">
-              Akylai Nurbekova
-              <br />
-              njwn5jукjz@privaterelay.appleid.com
-              <br />
-              +996 998 554 331
-              <br />
-              Женская одежда
-              <br />• • • • • • • • • • • •{' '}
+              <p className="m-0">
+                {profile?.first_name} {profile?.last_name}
+              </p>
+              <p className="m-0">{profile?.email}</p>
+              <p className="m-0">{profile?.phone_number}</p>
+              <p className="m-0">• • • • • • • • • • • •</p>
             </div>
             <div className="flex items-start gap-3">
               <VisaIcon />
@@ -72,19 +75,23 @@ export const ProfileAccountSection = () => {
               Детали
             </Button>
           </div>
-          <div className="text-stone-500 text-base font-normal">
-            Акылай Нурбекова
-            <br />
-            Кыргызстан
-            <br />
-            Бишкек
-            <br />
-            ул. К. Акиева 23, кв. 123
-            <br />
-            230098
-            <br />
-            +996 703 454 109
-          </div>
+          {mainAddress ? (
+            <div className="text-stone-500 text-base font-normal">
+              <p className="m-0">{mainAddress.full_name}</p>
+              <p className="m-0">{mainAddress.address}</p>
+              <p className="m-0">{mainAddress.zip_code}</p>
+              <p className="m-0">{mainAddress.phone_number}</p>
+            </div>
+          ) : (
+            <div className="w-full text-stone-500 text-base font-normal flex">
+              <Button
+                variant={BUTTON_STYLES.withoutBackground}
+                onClick={() => navigate('addresses')}
+              >
+                Добавить адрес
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     </div>
