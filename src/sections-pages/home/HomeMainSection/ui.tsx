@@ -10,7 +10,19 @@ const images = ['/213.webp', '/12.jpg'];
 export const HomeMainSection = () => {
   const { data } = useQuery({
     queryFn: async () => {
-      const { data } = await $apiProductsApi.productsCustomerProductsList(10);
+      const { data } = await $apiProductsApi.productsCustomerProductsList(
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        10,
+      );
       return data;
     },
     queryKey: ['productsCustomerProductsList'],

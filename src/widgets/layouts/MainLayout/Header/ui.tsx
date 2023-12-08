@@ -4,7 +4,7 @@ import { MainHeaderWithCategories } from './MainHeaderWithCategories';
 import { MobileMenu } from '@/feautures/header';
 
 interface IMainHeaderProps {
-  hidden: { topBar?: boolean; categories?: boolean; botBar?: boolean };
+  hidden?: { topBar?: boolean; categories?: boolean; botBar?: boolean };
 }
 export const MainHeader = ({ hidden }: IMainHeaderProps) => {
   return (

@@ -8,12 +8,18 @@ import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
 
 interface MainLayoutProps {
-  hidden: { topBar?: boolean; categories?: boolean; botBar?: boolean };
+  isOnlyAuth?: boolean;
+  hidden?: {
+    topBar?: boolean;
+    categories?: boolean;
+    botBar?: boolean;
+    footer?: boolean;
+  };
   children: ReactNode;
 }
 
-const MainLayout = ({ children, hidden }: MainLayoutProps) => {
-  const { asPath } = useRouter();
+const MainLayout = ({ children, hidden, isOnlyAuth }: MainLayoutProps) => {
+  const { asPath, replace } = useRouter();
   const setIsAuth = useUser((state) => state.setIsAuth);
   const [isStickyHeader, setIsStickyHeader] = useState(false);
   const token = Cookies.get('refresh_token');
@@ -36,6 +42,10 @@ const MainLayout = ({ children, hidden }: MainLayoutProps) => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
+
+  useEffect(() => {
+    if (isOnlyAuth && !token) replace('/');
+  }, [asPath]);
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -70,9 +80,11 @@ const MainLayout = ({ children, hidden }: MainLayoutProps) => {
         {children}
       </motion.div>
 
-      <div className="mt-auto">
-        <MainFooter />
-      </div>
+      {!hidden?.footer && (
+        <div className="mt-auto">
+          <MainFooter />
+        </div>
+      )}
     </div>
   );
 };

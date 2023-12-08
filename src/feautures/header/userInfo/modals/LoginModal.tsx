@@ -18,7 +18,7 @@ import { $apiAccountsApi } from '@/shared/api';
 import Cookies from 'js-cookie';
 import { TActiveModalType } from '@/entities/modals';
 import { useUser } from '@/entities/user';
-import { useCartQuery } from '@/feautures/cart';
+import { useCartQuery } from '@/entities/cart';
 import { User, UserTypeEnum } from '@/shared/api/gen';
 
 interface LoginModalProps {

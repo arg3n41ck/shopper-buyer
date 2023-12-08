@@ -22,6 +22,16 @@ export const getServerSideProps: GetServerSideProps = async () => {
     queryKey: ['productsCustomerProductsList'],
     queryFn: async ({ pageParam = 1 }) => {
       const { data } = await $apiProductsApi.productsCustomerProductsList(
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
         16,
         pageToOffset(pageParam, 16),
       );

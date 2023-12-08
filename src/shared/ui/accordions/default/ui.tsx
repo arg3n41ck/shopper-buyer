@@ -53,7 +53,6 @@ export const Accordion: React.FC<AccordionProps> = ({
             initial={{ height: 0, opacity: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ height: 0, opacity: 0 }}
-            className="overflow-hidden"
           >
             <div className={cn('pt-[10px]', classNames?.content)}>
               {children}

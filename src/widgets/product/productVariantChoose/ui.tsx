@@ -9,9 +9,8 @@ import { Heart, ShoppingBag } from 'react-feather';
 import { Button } from '@/shared/ui/buttons';
 import { SizeChoose } from '@/feautures/product';
 import { Product, ProductVariant } from '@/shared/api/gen';
-import { useCart } from '@/entities/cart';
+import { useCart, useCartQuery } from '@/entities/cart';
 import { useUser } from '@/entities/user';
-import { useCartQuery } from '@/feautures/cart';
 import { useFavouriteActions } from '@/entities/favourites';
 
 export const ProductVariantChoose = () => {

@@ -22,7 +22,7 @@ const filterOptions = [
 ];
 
 interface IMainTopHeaderProps {
-  hidden: { topBar?: boolean; categories?: boolean; botBar?: boolean };
+  hidden?: { topBar?: boolean; categories?: boolean; botBar?: boolean };
 }
 
 export const MainTopHeader = ({ hidden }: IMainTopHeaderProps) => {
